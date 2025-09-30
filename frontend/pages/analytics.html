@@ -1,0 +1,191 @@
+<div class="tabs">
+    <div class="tab active" data-tab="overview">Overview</div>
+    <div class="tab" data-tab="perModule">Per-Module Analytics</div>
+    <div class="tab" data-tab="perStudent">Per-Student Analytics</div>
+</div>
+
+<div id="overview" class="tab-content active">
+    <div class="stat-cards">
+        <div class="stat-card">
+            <h3>Total Students</h3>
+            <div class="stat-value">47</div>
+            <div class="stat-change">↑ +3 this week</div>
+        </div>
+        <div class="stat-card">
+            <h3>Active Conversations</h3>
+            <div class="stat-value">89</div>
+            <div class="stat-change">Currently ongoing</div>
+        </div>
+        <div class="stat-card">
+            <h3>Completed Modules</h3>
+            <div class="stat-value">312</div>
+            <div class="stat-change">↑ +12 today</div>
+        </div>
+        <div class="stat-card">
+            <h3>Avg Completion Time</h3>
+            <div class="stat-value">45 min</div>
+            <div class="stat-change">Per module</div>
+        </div>
+        <div class="stat-card">
+            <h3>Avg Grade</h3>
+            <div class="stat-value">B+</div>
+            <div class="stat-change">Across all modules</div>
+        </div>
+        <div class="stat-card">
+            <h3>Completion Rate</h3>
+            <div class="stat-value">87%</div>
+            <div class="stat-change">↑ +2% this week</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Engagement Trends (Last 30 Days)</div>
+        </div>
+        <div class="card-body">
+            <canvas id="engagementTrendsChart" height="80"></canvas>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Grade Distribution</div>
+        </div>
+        <div class="card-body">
+            <canvas id="gradeDistributionChart" height="60"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="perModule" class="tab-content">
+    <div class="field">
+        <label>Select Module</label>
+        <select style="max-width: 500px;">
+            <option>Module 1: Introduction to Communication Theory</option>
+            <option>Module 2: History of Mass Communication</option>
+            <option>Module 3: Media Theory and Effects</option>
+        </select>
+    </div>
+
+    <div class="stat-cards">
+        <div class="stat-card">
+            <h3>Students Enrolled</h3>
+            <div class="stat-value">47</div>
+        </div>
+        <div class="stat-card">
+            <h3>Completion Rate</h3>
+            <div class="stat-value">92%</div>
+        </div>
+        <div class="stat-card">
+            <h3>Avg Grade</h3>
+            <div class="stat-value">A-</div>
+        </div>
+        <div class="stat-card">
+            <h3>Avg Time</h3>
+            <div class="stat-value">42 min</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Conversation Quality Metrics</div>
+        </div>
+        <div class="card-body">
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Socratic Engagement</span>
+                    <span>8.5/10</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 85%; background: var(--success-color);"></div>
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Concept Mastery</span>
+                    <span>7.8/10</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 78%; background: var(--success-color);"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Student Engagement</span>
+                    <span>9.2/10</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 92%; background: var(--success-color);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="perStudent" class="tab-content">
+    <div class="field">
+        <label>Search Student</label>
+        <input type="text" placeholder="Enter student name or email..." style="max-width: 500px;">
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Student: Sarah Chen (sarah@university.edu)</div>
+        </div>
+        <div class="card-body">
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <h3>Modules Completed</h3>
+                    <div class="stat-value">8/16</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Grade</h3>
+                    <div class="stat-value">A-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Time</h3>
+                    <div class="stat-value">6.2 hrs</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Last Active</h3>
+                    <div class="stat-value">5 min ago</div>
+                </div>
+            </div>
+
+            <table style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Status</th>
+                        <th>Grade</th>
+                        <th>Time Spent</th>
+                        <th>Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Module 1</td>
+                        <td><span class="badge badge-active">Completed</span></td>
+                        <td>A</td>
+                        <td>42 min</td>
+                        <td>3 days ago</td>
+                    </tr>
+                    <tr>
+                        <td>Module 2</td>
+                        <td><span class="badge badge-active">Completed</span></td>
+                        <td>A-</td>
+                        <td>48 min</td>
+                        <td>2 days ago</td>
+                    </tr>
+                    <tr>
+                        <td>Module 3</td>
+                        <td><span class="badge badge-warning">In Progress</span></td>
+                        <td>-</td>
+                        <td>15 min</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

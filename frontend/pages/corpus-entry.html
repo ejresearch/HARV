@@ -1,0 +1,113 @@
+<div class="alert alert-info">
+    Create detailed knowledge entries for specific modules. These entries are retrieved contextually during student conversations.
+</div>
+
+<div class="field">
+    <label>Select Module *</label>
+    <select style="max-width: 500px;">
+        <option value="">-- Choose a module --</option>
+        <option value="1">Module 1: Introduction to Communication Theory</option>
+        <option value="2">Module 2: History of Mass Communication</option>
+        <option value="3">Module 3: Media Theory and Effects</option>
+        <option value="4">Module 4: Print Media and Journalism</option>
+        <option value="5">Module 5: Broadcasting</option>
+    </select>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Create New Corpus Entry</div>
+    </div>
+    <div class="card-body">
+        <div class="field">
+            <label>Entry Title *</label>
+            <input type="text" placeholder="e.g., Agenda-Setting Theory Case Study">
+        </div>
+
+        <div class="field">
+            <label>Content Type *</label>
+            <select>
+                <option value="">-- Select type --</option>
+                <option value="theory">Theory / Concept</option>
+                <option value="case_study">Case Study</option>
+                <option value="example">Example</option>
+                <option value="exercise">Exercise / Activity</option>
+                <option value="reading">Reading Material</option>
+                <option value="definition">Definition</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Content *</label>
+            <textarea rows="12" placeholder="Enter the detailed content for this corpus entry...
+
+For case studies, include:
+- Background/context
+- Key data points
+- Discussion questions
+- Connection to theory
+
+For exercises, include:
+- Clear instructions
+- Expected outcomes
+- Guiding questions"></textarea>
+        </div>
+
+        <div class="field">
+            <label>Order Index</label>
+            <input type="number" value="1" min="1">
+            <div class="helper-text">Determines the order in which content is retrieved (lower numbers first)</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="button button-primary">Save Entry</button>
+            <button class="button button-secondary">Clear Form</button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Existing Corpus Entries for Module 3</div>
+        <button class="button button-secondary button-small">Filter by Type</button>
+    </div>
+    <div class="card-body">
+        <div class="corpus-entry" style="border: 1px solid var(--border-color); padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <div>
+                    <strong>Agenda-Setting Case Study: 2016 Election</strong>
+                    <span class="badge badge-active" style="margin-left: 10px;">case_study</span>
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <button class="button button-secondary button-small">Edit</button>
+                    <button class="button button-danger button-small">Delete</button>
+                </div>
+            </div>
+            <div class="corpus-entry-content">
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    Media coverage frequency analysis showing how news outlets set public agenda through story selection and prominence. CNN focused 40% coverage on email scandal, Fox News 35% on immigration. This demonstrates McCombs & Shaw's agenda-setting theory in practice...
+                </p>
+            </div>
+            <button class="button button-secondary button-small" style="margin-top: 10px;" onclick="HarvApp.toggleExpand(event)">Expand</button>
+        </div>
+
+        <div class="corpus-entry" style="border: 1px solid var(--border-color); padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <div>
+                    <strong>Cultivation Theory Exercise</strong>
+                    <span class="badge badge-active" style="margin-left: 10px;">exercise</span>
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <button class="button button-secondary button-small">Edit</button>
+                    <button class="button button-danger button-small">Delete</button>
+                </div>
+            </div>
+            <div class="corpus-entry-content">
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    Compare crime statistics vs. TV crime portrayal. Ask students: How might heavy TV viewing affect fear of crime? What does data show about actual crime rates vs. perceived rates?
+                </p>
+            </div>
+            <button class="button button-secondary button-small" style="margin-top: 10px;" onclick="HarvApp.toggleExpand(event)">Expand</button>
+        </div>
+    </div>
+</div>

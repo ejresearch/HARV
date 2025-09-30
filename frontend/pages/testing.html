@@ -1,0 +1,199 @@
+<div class="alert alert-info">
+    Test your module configuration before deploying to students. Validate prompts, knowledge retrieval, and Socratic teaching quality.
+</div>
+
+<div class="tabs">
+    <div class="tab active" data-tab="healthCheck">Health Check</div>
+    <div class="tab" data-tab="simulator">Test Simulator</div>
+    <div class="tab" data-tab="automated">Automated Scenarios</div>
+</div>
+
+<div id="healthCheck" class="tab-content active">
+    <div class="field">
+        <label>Select Module to Test</label>
+        <select style="max-width: 500px;">
+            <option>Module 1: Introduction to Communication Theory</option>
+            <option>Module 2: History of Mass Communication</option>
+            <option>Module 3: Media Theory and Effects</option>
+        </select>
+    </div>
+
+    <button class="button button-primary">Run Health Check</button>
+
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-header">
+            <div class="card-title">Configuration Health Results</div>
+        </div>
+        <div class="card-body">
+            <div style="padding: 15px; background: var(--success-bg); border-radius: 4px; margin-bottom: 10px; border-left: 3px solid var(--success-color);">
+                <strong style="color: var(--success-color);">✓ System Prompt</strong>
+                <div style="font-size: 14px; margin-top: 5px; color: var(--text-secondary);">
+                    Well-defined, includes Socratic teaching guidelines
+                </div>
+            </div>
+
+            <div style="padding: 15px; background: var(--success-bg); border-radius: 4px; margin-bottom: 10px; border-left: 3px solid var(--success-color);">
+                <strong style="color: var(--success-color);">✓ Module Prompt</strong>
+                <div style="font-size: 14px; margin-top: 5px; color: var(--text-secondary);">
+                    Contains clear learning objectives and module-specific guidance
+                </div>
+            </div>
+
+            <div style="padding: 15px; background: var(--warning-bg); border-radius: 4px; margin-bottom: 10px; border-left: 3px solid var(--warning-color);">
+                <strong style="color: var(--warning-color);">⚠ System Corpus</strong>
+                <div style="font-size: 14px; margin-top: 5px; color: var(--text-secondary);">
+                    Adequate but could benefit from more examples (current: 850 words, recommended: 1200+)
+                </div>
+            </div>
+
+            <div style="padding: 15px; background: var(--danger-bg); border-radius: 4px; border-left: 3px solid var(--danger-color);">
+                <strong style="color: var(--danger-color);">✗ Module Corpus Entries</strong>
+                <div style="font-size: 14px; margin-top: 5px; color: var(--text-secondary);">
+                    Only 2 entries found. Recommended: 5-10 case studies/examples for optimal teaching
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="simulator" class="tab-content">
+    <div class="field">
+        <label>Select Module</label>
+        <select style="max-width: 500px;">
+            <option>Module 1: Introduction to Communication Theory</option>
+            <option>Module 2: History of Mass Communication</option>
+            <option>Module 3: Media Theory and Effects</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Interactive Test Conversation</div>
+        </div>
+        <div class="card-body">
+            <div style="height: 400px; overflow-y: auto; background: var(--bg-tertiary); border-radius: 4px; padding: 15px; margin-bottom: 15px;">
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">AI Tutor</div>
+                    <div style="background: var(--bg-secondary); padding: 10px; border-radius: 4px;">
+                        Hello! I'm here to help you explore communication theory through guided discovery. What aspect of communication theory interests you most?
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; text-align: right;">You</div>
+                    <div style="background: var(--accent-bg); padding: 10px; border-radius: 4px; text-align: right;">
+                        Can you explain the Shannon-Weaver model?
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">AI Tutor</div>
+                    <div style="background: var(--bg-secondary); padding: 10px; border-radius: 4px;">
+                        Great question! Before I explain, let me ask you: When you think about how people communicate, what steps do you imagine are involved? Think about sending a text message to a friend - what has to happen?
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Your Test Message</label>
+                <input type="text" placeholder="Type a message to test the AI's Socratic response...">
+            </div>
+            <button class="button button-primary">Send</button>
+            <button class="button button-secondary">Reset Conversation</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Conversation Quality Analysis</div>
+        </div>
+        <div class="card-body">
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Socratic Question Rate</span>
+                    <span>85%</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 85%; background: var(--success-color);"></div>
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Corpus Retrieval Accuracy</span>
+                    <span>92%</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 92%; background: var(--success-color);"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Learning Objective Alignment</span>
+                    <span>78%</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 78%; background: var(--warning-color);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="automated" class="tab-content">
+    <div class="field">
+        <label>Select Module</label>
+        <select style="max-width: 500px;">
+            <option>Module 1: Introduction to Communication Theory</option>
+            <option>Module 2: History of Mass Communication</option>
+            <option>Module 3: Media Theory and Effects</option>
+        </select>
+    </div>
+
+    <div class="field">
+        <label>Test Scenario</label>
+        <select style="max-width: 500px;">
+            <option>Beginner Student (no prior knowledge)</option>
+            <option>Intermediate Student (some background)</option>
+            <option>Advanced Student (strong foundation)</option>
+            <option>Struggling Student (confused, needs guidance)</option>
+            <option>Challenging Student (asks difficult questions)</option>
+        </select>
+    </div>
+
+    <button class="button button-primary">Run Automated Test</button>
+
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-header">
+            <div class="card-title">Test Results: Beginner Student Scenario</div>
+        </div>
+        <div class="card-body">
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <h3>Overall Quality</h3>
+                    <div class="stat-value" style="color: var(--success-color);">A-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Socratic Method</h3>
+                    <div class="stat-value">8.5/10</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Knowledge Coverage</h3>
+                    <div class="stat-value">92%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Conversation Length</h3>
+                    <div class="stat-value">18 exchanges</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <strong>Recommendations:</strong>
+                <ul style="margin: 10px 0 0 20px; color: var(--text-secondary);">
+                    <li>Add more concrete examples for complex theories</li>
+                    <li>Increase scaffolding for struggling students</li>
+                    <li>Enhance retrieval of case studies from module corpus</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

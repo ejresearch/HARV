@@ -1,0 +1,185 @@
+<!-- Create Module Modal -->
+<div id="createModuleModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Create New Module</div>
+            <span class="modal-close" onclick="HarvApp.closeModal('createModuleModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="field">
+                <label>Module Title *</label>
+                <input type="text" placeholder="e.g., Introduction to Communication Theory">
+            </div>
+            <div class="field">
+                <label>Description</label>
+                <textarea placeholder="Brief overview of what this module covers..."></textarea>
+            </div>
+            <div class="field">
+                <label>Learning Objectives</label>
+                <textarea placeholder="What should students learn from this module?"></textarea>
+                <div class="helper-text">One objective per line</div>
+            </div>
+            <div class="field">
+                <label>Status</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="newModuleStatus" value="draft" id="newModuleDraft" checked>
+                        <label for="newModuleDraft">Draft</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="newModuleStatus" value="active" id="newModuleActive">
+                        <label for="newModuleActive">Active</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="HarvApp.closeModal('createModuleModal')">Cancel</button>
+            <button class="button button-primary">Create Module</button>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Document Modal -->
+<div id="uploadDocumentModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Upload Document</div>
+            <span class="modal-close" onclick="HarvApp.closeModal('uploadDocumentModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="field">
+                <label>Select Module</label>
+                <select>
+                    <option value="">Global (All Modules)</option>
+                    <option value="1">Module 1: Introduction to Communication Theory</option>
+                    <option value="2">Module 2: History of Mass Communication</option>
+                    <option value="3">Module 3: Media Theory and Effects</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Document File *</label>
+                <input type="file" accept=".pdf,.doc,.docx,.txt">
+                <div class="helper-text">Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)</div>
+            </div>
+            <div class="field">
+                <label>Document Title</label>
+                <input type="text" placeholder="Optional - will use filename if empty">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="HarvApp.closeModal('uploadDocumentModal')">Cancel</button>
+            <button class="button button-primary">Upload</button>
+        </div>
+    </div>
+</div>
+
+<!-- Conversation Detail Modal -->
+<div id="conversationDetailModal" class="modal">
+    <div class="modal-content" style="max-width: 1000px;">
+        <div class="modal-header">
+            <div class="modal-title">Conversation: Sarah Chen - Module 3</div>
+            <span class="modal-close" onclick="HarvApp.closeModal('conversationDetailModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Status</div>
+                    <span class="badge badge-active">Completed</span>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Grade</div>
+                    <div style="font-weight: 500;">A</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Messages</div>
+                    <div style="font-weight: 500;">24</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Duration</div>
+                    <div style="font-weight: 500;">42 min</div>
+                </div>
+                <div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Quality Score</div>
+                    <div style="font-weight: 500;">8.5/10</div>
+                </div>
+            </div>
+
+            <div style="height: 400px; overflow-y: auto; background: var(--bg-tertiary); border-radius: 4px; padding: 15px; margin-bottom: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">AI Tutor • 2:15 PM</div>
+                    <div style="background: var(--bg-secondary); padding: 12px; border-radius: 4px;">
+                        Hello! I'm here to help you explore media theory through guided discovery. What aspect of media effects would you like to explore today?
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; text-align: right;">Sarah Chen • 2:16 PM</div>
+                    <div style="background: var(--accent-bg); padding: 12px; border-radius: 4px; text-align: right;">
+                        I'd like to understand agenda-setting theory. Can you explain it?
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">AI Tutor • 2:16 PM</div>
+                    <div style="background: var(--bg-secondary); padding: 12px; border-radius: 4px;">
+                        Great choice! Before I explain, let me ask: When you read news headlines or see what's trending on social media, who do you think decides which stories get the most attention?
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; text-align: right;">Sarah Chen • 2:18 PM</div>
+                    <div style="background: var(--accent-bg); padding: 12px; border-radius: 4px; text-align: right;">
+                        I guess the media organizations? They choose what to cover and how much attention to give each story.
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">AI Tutor • 2:18 PM</div>
+                    <div style="background: var(--bg-secondary); padding: 12px; border-radius: 4px;">
+                        Exactly! You've just described the core of agenda-setting theory. Now, think about this: if media constantly covers certain topics, what effect might that have on what people think is important?
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Conversation Analysis</div>
+                </div>
+                <div class="card-body">
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Socratic Question Rate</span>
+                            <span>85%</span>
+                        </div>
+                        <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: 85%; background: var(--success-color);"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Student Engagement</span>
+                            <span>92%</span>
+                        </div>
+                        <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: 92%; background: var(--success-color);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Learning Objective Coverage</span>
+                            <span>78%</span>
+                        </div>
+                        <div style="height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: 78%; background: var(--warning-color);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary">Export Conversation</button>
+            <button class="button button-secondary" onclick="HarvApp.closeModal('conversationDetailModal')">Close</button>
+        </div>
+    </div>
+</div>

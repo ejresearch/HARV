@@ -1,0 +1,102 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="color: var(--text-secondary); font-size: 14px;">
+        Upload and manage course documents (PDFs, readings, reference materials)
+    </div>
+    <button class="button button-primary" data-modal="uploadDocumentModal">Upload Document</button>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">All Documents (12)</div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" placeholder="Search documents..." style="width: 250px;">
+            <select style="width: 150px;">
+                <option>All Modules</option>
+                <option>Global Documents</option>
+                <option>Module 1</option>
+                <option>Module 2</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Module</th>
+                    <th>Size</th>
+                    <th>Uploaded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📄 shannon_weaver_model.pdf</td>
+                    <td>Global</td>
+                    <td>2.4 MB</td>
+                    <td>3 days ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Preview</button>
+                        <button class="button button-secondary button-small">Download</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📄 media_effects_research.pdf</td>
+                    <td>Module 3</td>
+                    <td>5.1 MB</td>
+                    <td>1 week ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Preview</button>
+                        <button class="button button-secondary button-small">Download</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📄 history_of_journalism.pdf</td>
+                    <td>Module 2</td>
+                    <td>3.8 MB</td>
+                    <td>2 weeks ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Preview</button>
+                        <button class="button button-secondary button-small">Download</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📄 cultivation_theory_case_studies.pdf</td>
+                    <td>Module 3</td>
+                    <td>1.9 MB</td>
+                    <td>3 weeks ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Preview</button>
+                        <button class="button button-secondary button-small">Download</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Document Analytics</div>
+    </div>
+    <div class="card-body">
+        <div class="stat-cards">
+            <div class="stat-card">
+                <h3>Total Documents</h3>
+                <div class="stat-value">12</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Size</h3>
+                <div class="stat-value">24.7 MB</div>
+            </div>
+            <div class="stat-card">
+                <h3>Most Viewed</h3>
+                <div class="stat-value">shannon_weaver_model.pdf</div>
+            </div>
+        </div>
+    </div>
+</div>

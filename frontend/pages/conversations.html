@@ -1,0 +1,144 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="color: var(--text-secondary); font-size: 14px;">
+        Browse and review student-AI conversations
+    </div>
+    <button class="button button-secondary">Export Conversations</button>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Filter Conversations</div>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div class="field" style="margin-bottom: 0;">
+                <label>Module</label>
+                <select>
+                    <option>All Modules</option>
+                    <option>Module 1</option>
+                    <option>Module 2</option>
+                    <option>Module 3</option>
+                </select>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+                <label>Status</label>
+                <select>
+                    <option>All Status</option>
+                    <option>Active</option>
+                    <option>Completed</option>
+                </select>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+                <label>Grade</label>
+                <select>
+                    <option>All Grades</option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D/F</option>
+                </select>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+                <label>Search</label>
+                <input type="text" placeholder="Student name...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">All Conversations (89)</div>
+    </div>
+    <div class="card-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Module</th>
+                    <th>Messages</th>
+                    <th>Status</th>
+                    <th>Grade</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="cursor: pointer;" onclick="HarvApp.showModal('conversationDetailModal')">
+                    <td>Sarah Chen</td>
+                    <td>Module 3</td>
+                    <td>24 messages</td>
+                    <td><span class="badge badge-active">Completed</span></td>
+                    <td>A</td>
+                    <td>5 min ago</td>
+                    <td>
+                        <button class="button button-secondary button-small" data-modal="conversationDetailModal">View</button>
+                        <button class="button button-secondary button-small">Export</button>
+                    </td>
+                </tr>
+                <tr style="cursor: pointer;">
+                    <td>Mike Rodriguez</td>
+                    <td>Module 7</td>
+                    <td>8 messages</td>
+                    <td><span class="badge badge-warning">Active</span></td>
+                    <td>-</td>
+                    <td>12 min ago</td>
+                    <td>
+                        <button class="button button-secondary button-small" data-modal="conversationDetailModal">View</button>
+                        <button class="button button-secondary button-small">Export</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Emma Wilson</td>
+                    <td>Module 1</td>
+                    <td>18 messages</td>
+                    <td><span class="badge badge-active">Completed</span></td>
+                    <td>B+</td>
+                    <td>23 min ago</td>
+                    <td>
+                        <button class="button button-secondary button-small" data-modal="conversationDetailModal">View</button>
+                        <button class="button button-secondary button-small">Export</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>John Smith</td>
+                    <td>Module 2</td>
+                    <td>12 messages</td>
+                    <td><span class="badge badge-warning">Active</span></td>
+                    <td>-</td>
+                    <td>1 hour ago</td>
+                    <td>
+                        <button class="button button-secondary button-small" data-modal="conversationDetailModal">View</button>
+                        <button class="button button-secondary button-small">Export</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Conversation Quality Insights</div>
+    </div>
+    <div class="card-body">
+        <div class="stat-cards">
+            <div class="stat-card">
+                <h3>Avg Messages per Conversation</h3>
+                <div class="stat-value">18</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Conversation Duration</h3>
+                <div class="stat-value">42 min</div>
+            </div>
+            <div class="stat-card">
+                <h3>High Quality Conversations</h3>
+                <div class="stat-value">73%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Socratic Method Score</h3>
+                <div class="stat-value">8.2/10</div>
+            </div>
+        </div>
+    </div>
+</div>

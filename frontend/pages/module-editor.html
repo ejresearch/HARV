@@ -1,0 +1,144 @@
+<div class="alert alert-info">
+    Select a module from the dropdown below to begin editing, or create a new module.
+</div>
+
+<div class="field">
+    <label>Select Module to Edit</label>
+    <select id="moduleSelect" style="max-width: 500px;">
+        <option value="">-- Choose a module --</option>
+        <option value="1">Module 1: Introduction to Communication Theory</option>
+        <option value="2">Module 2: History of Mass Communication</option>
+        <option value="3">Module 3: Media Theory and Effects</option>
+        <option value="4">Module 4: Print Media and Journalism</option>
+        <option value="5">Module 5: Broadcasting</option>
+    </select>
+</div>
+
+<div class="tabs">
+    <div class="tab active" data-tab="basicInfo">Basic Information</div>
+    <div class="tab" data-tab="teachingStrategy">Teaching Strategy</div>
+    <div class="tab" data-tab="knowledgeBase">Knowledge Base</div>
+    <div class="tab" data-tab="preview">Preview & Test</div>
+</div>
+
+<div id="basicInfo" class="tab-content active">
+    <div class="field">
+        <label>Module Title *</label>
+        <input type="text" placeholder="e.g., Introduction to Communication Theory">
+    </div>
+
+    <div class="field">
+        <label>Description</label>
+        <textarea placeholder="Brief overview of what this module covers..."></textarea>
+    </div>
+
+    <div class="field">
+        <label>Learning Objectives</label>
+        <textarea placeholder="What should students learn from this module?"></textarea>
+        <div class="helper-text">One objective per line</div>
+    </div>
+
+    <div class="field">
+        <label>Resources (URLs, readings)</label>
+        <textarea placeholder="Additional learning resources..."></textarea>
+    </div>
+
+    <div class="field">
+        <label>Status</label>
+        <div class="radio-group">
+            <div class="radio-option">
+                <input type="radio" name="status" value="draft" id="statusDraft">
+                <label for="statusDraft">Draft</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="status" value="active" id="statusActive" checked>
+                <label for="statusActive">Active</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="teachingStrategy" class="tab-content">
+    <div class="field">
+        <label>System Prompt</label>
+        <textarea rows="6" placeholder="Global instructions for Socratic teaching approach..."></textarea>
+        <div class="helper-text">This defines how the AI should teach across all modules</div>
+    </div>
+
+    <div class="field">
+        <label>Module Prompt</label>
+        <textarea rows="6" placeholder="Module-specific teaching instructions..."></textarea>
+        <div class="helper-text">Specific guidance for this module's content and learning objectives</div>
+    </div>
+
+    <div class="field">
+        <label>Socratic Method Configuration</label>
+        <div class="checkbox-group">
+            <div class="checkbox-option">
+                <input type="checkbox" id="askQuestions" checked>
+                <label for="askQuestions">Ask probing questions before giving answers</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="encourageDiscovery" checked>
+                <label for="encourageDiscovery">Encourage student-led discovery</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="provideExamples">
+                <label for="provideExamples">Provide examples when student is stuck</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="gradualHints" checked>
+                <label for="gradualHints">Give graduated hints (easier → harder)</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="knowledgeBase" class="tab-content">
+    <div class="field">
+        <label>System Corpus (Core Knowledge)</label>
+        <textarea rows="8" placeholder="Foundational theories, definitions, and concepts..."></textarea>
+        <div class="helper-text">This content is always available to the AI when teaching this module</div>
+    </div>
+
+    <div class="field">
+        <label>Module Corpus (Specific Content)</label>
+        <textarea rows="8" placeholder="Module-specific case studies, examples, exercises..."></textarea>
+        <div class="helper-text">Content specific to this module's learning objectives</div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button class="button button-secondary">Manage Corpus Entries →</button>
+    </div>
+</div>
+
+<div id="preview" class="tab-content">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">AI Response Preview</div>
+        </div>
+        <div class="card-body">
+            <p style="color: var(--text-secondary);">
+                Test your module configuration by asking a sample question below. The AI will respond using your current configuration.
+            </p>
+            <div class="field" style="margin-top: 20px;">
+                <label>Test Question</label>
+                <input type="text" placeholder="e.g., What is the Shannon-Weaver model?">
+            </div>
+            <button class="button button-primary">Send Test Question</button>
+
+            <div style="margin-top: 20px; padding: 15px; background: var(--bg-tertiary); border-radius: 4px; min-height: 100px;">
+                <strong>AI Response:</strong>
+                <p style="margin-top: 10px; color: var(--text-secondary);">
+                    Click "Send Test Question" to see how the AI responds with your current configuration.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; gap: 10px;">
+    <button class="button button-primary">Save Changes</button>
+    <button class="button button-secondary">Save as Draft</button>
+    <button class="button button-secondary">Cancel</button>
+</div>

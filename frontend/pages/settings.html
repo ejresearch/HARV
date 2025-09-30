@@ -1,0 +1,134 @@
+<div class="alert alert-info">
+    Configure your LLM provider settings. Harv supports OpenAI, Anthropic Claude, Google Gemini, and xAI Grok.
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Current Configuration</div>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">Provider</div>
+                <div style="font-size: 16px; font-weight: 500;" id="currentProvider">OpenAI</div>
+            </div>
+            <div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">Model</div>
+                <div style="font-size: 16px; font-weight: 500;" id="currentModel">GPT-4 Turbo</div>
+            </div>
+            <div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">Status</div>
+                <div><span class="badge badge-active">Connected</span></div>
+            </div>
+            <div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 5px;">Last Test</div>
+                <div style="font-size: 14px;">2 hours ago</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">LLM Provider Configuration</div>
+    </div>
+    <div class="card-body">
+        <div class="field">
+            <label>Select Provider *</label>
+            <select id="llmProvider" onchange="HarvApp.updateAPIKeyLabel()" style="max-width: 400px;">
+                <option value="openai">OpenAI (GPT-4, GPT-3.5)</option>
+                <option value="anthropic">Anthropic (Claude 3)</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="grok">xAI Grok</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label id="apiKeyLabel">OpenAI API Key *</label>
+            <input type="password" placeholder="sk-...">
+            <div class="helper-text">Your API key is encrypted and stored securely</div>
+        </div>
+
+        <div class="field">
+            <label>Select Model *</label>
+            <select id="modelSelect" style="max-width: 400px;">
+                <option value="gpt-4">GPT-4</option>
+                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Temperature (Creativity)</label>
+            <input type="number" value="0.7" min="0" max="2" step="0.1" style="max-width: 150px;">
+            <div class="helper-text">0 = deterministic, 2 = very creative. Recommended: 0.7</div>
+        </div>
+
+        <div class="field">
+            <label>Max Tokens per Response</label>
+            <input type="number" value="1000" min="100" max="4000" step="100" style="max-width: 150px;">
+            <div class="helper-text">Maximum length of AI responses</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="button button-primary" onclick="HarvApp.saveAPIConfig()">Save Configuration</button>
+            <button class="button button-secondary" onclick="HarvApp.testConnection()">Test Connection</button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Advanced Settings</div>
+    </div>
+    <div class="card-body">
+        <div class="checkbox-group">
+            <div class="checkbox-option">
+                <input type="checkbox" id="enableCaching" checked>
+                <label for="enableCaching">Enable response caching (improves performance)</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="enableLogging" checked>
+                <label for="enableLogging">Log all conversations for quality review</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="enableGrading">
+                <label for="enableGrading">Automatically grade completed conversations</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="enableMemorySummaries" checked>
+                <label for="enableMemorySummaries">Generate memory summaries after conversations</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Usage & Billing</div>
+    </div>
+    <div class="card-body">
+        <div class="stat-cards">
+            <div class="stat-card">
+                <h3>This Month</h3>
+                <div class="stat-value">$127.40</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Tokens</h3>
+                <div class="stat-value">2.4M</div>
+            </div>
+            <div class="stat-card">
+                <h3>Avg Cost/Student</h3>
+                <div class="stat-value">$2.71</div>
+            </div>
+            <div class="stat-card">
+                <h3>Projected Monthly</h3>
+                <div class="stat-value">$185.00</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="button button-secondary">View Detailed Usage Report</button>
+        </div>
+    </div>
+</div>

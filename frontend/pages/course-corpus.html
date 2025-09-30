@@ -1,0 +1,124 @@
+<div class="alert alert-info">
+    The Course Corpus contains global knowledge shared across ALL modules. Add foundational theories, definitions, and concepts here.
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Create New Global Corpus Entry</div>
+    </div>
+    <div class="card-body">
+        <div class="field">
+            <label>Entry Title *</label>
+            <input type="text" placeholder="e.g., Shannon-Weaver Communication Model">
+        </div>
+
+        <div class="field">
+            <label>Content Type *</label>
+            <select>
+                <option value="">-- Select type --</option>
+                <option value="theory">Theory / Framework</option>
+                <option value="definition">Definition</option>
+                <option value="historical_context">Historical Context</option>
+                <option value="methodology">Methodology</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Content *</label>
+            <textarea rows="10" placeholder="Enter the detailed content...
+
+Include:
+- Clear explanation
+- Key components/concepts
+- Relevant examples
+- Citations/sources
+- Connection to broader field"></textarea>
+        </div>
+
+        <div class="field">
+            <label>Order Index</label>
+            <input type="number" value="1" min="1">
+            <div class="helper-text">Lower numbers appear first in retrieval</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="button button-primary">Add to Course Corpus</button>
+            <button class="button button-secondary">Clear Form</button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Global Corpus Entries (24)</div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" placeholder="Search..." style="width: 250px;">
+            <select style="width: 150px;">
+                <option>All Types</option>
+                <option>Theory</option>
+                <option>Definition</option>
+                <option>Historical Context</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Order</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Shannon-Weaver Model</td>
+                    <td><span class="badge badge-active">theory</span></td>
+                    <td>1</td>
+                    <td>2 days ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Edit</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cultivation Theory</td>
+                    <td><span class="badge badge-active">theory</span></td>
+                    <td>2</td>
+                    <td>5 days ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Edit</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Agenda-Setting Theory</td>
+                    <td><span class="badge badge-active">theory</span></td>
+                    <td>3</td>
+                    <td>1 week ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Edit</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gatekeeping Definition</td>
+                    <td><span class="badge badge-draft">definition</span></td>
+                    <td>4</td>
+                    <td>1 week ago</td>
+                    <td>
+                        <button class="button button-secondary button-small">Edit</button>
+                        <button class="button button-danger button-small">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <button class="button button-secondary">Export Course Corpus (JSON)</button>
+    <button class="button button-secondary">Import from File</button>
+</div>

@@ -1,0 +1,131 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="color: var(--text-secondary); font-size: 14px;">
+        Last updated: 2 minutes ago
+    </div>
+    <button class="button button-secondary button-small">Refresh</button>
+</div>
+
+<div class="stat-cards">
+    <div class="stat-card">
+        <h3>Total Students</h3>
+        <div class="stat-value">47</div>
+        <div class="stat-change">↑ +3 this week</div>
+    </div>
+    <div class="stat-card">
+        <h3>Active Conversations</h3>
+        <div class="stat-value">89</div>
+        <div class="stat-change" style="color: var(--danger-color);">↓ -5 today</div>
+    </div>
+    <div class="stat-card">
+        <h3>Modules Completed</h3>
+        <div class="stat-value">312</div>
+        <div class="stat-change">↑ +12 today</div>
+    </div>
+    <div class="stat-card">
+        <h3>Avg Grade</h3>
+        <div class="stat-value">B+</div>
+        <div class="stat-change">Across all modules</div>
+    </div>
+    <div class="stat-card">
+        <h3>Avg Time</h3>
+        <div class="stat-value">45min</div>
+        <div class="stat-change">Per module</div>
+    </div>
+    <div class="stat-card">
+        <h3>Completion Rate</h3>
+        <div class="stat-value">87%</div>
+        <div class="stat-change">↑ +2% this week</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Module Performance</div>
+        <button class="button button-secondary button-small">View All</button>
+    </div>
+    <div class="card-body">
+        <canvas id="modulePerformanceChart" height="80"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Modules Needing Attention</div>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <strong>Module 5: Broadcasting</strong>
+            <ul style="margin: 10px 0 10px 20px;">
+                <li>Low completion rate (55%)</li>
+                <li>Below-average grade (C+)</li>
+                <li>Long avg time (78 min vs 45 min avg)</li>
+            </ul>
+            <div style="margin-top: 10px;">
+                <button class="button button-secondary button-small">View Details</button>
+                <button class="button button-secondary button-small">Edit Module</button>
+            </div>
+        </div>
+        <div class="alert alert-warning">
+            <strong>Module 4: Print Media</strong>
+            <ul style="margin: 10px 0 10px 20px;">
+                <li>12 students stuck (no progress over 7 days)</li>
+                <li>High dropout rate at 40% completion point</li>
+            </ul>
+            <div style="margin-top: 10px;">
+                <button class="button button-secondary button-small">View Conversations</button>
+                <button class="button button-secondary button-small">Edit Module</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Recent Activity</div>
+        <button class="button button-secondary button-small">View All</button>
+    </div>
+    <div class="card-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Activity</th>
+                    <th>Module</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sarah Chen</td>
+                    <td>Completed Module (Grade: A)</td>
+                    <td>Module 3</td>
+                    <td>5 min ago</td>
+                </tr>
+                <tr>
+                    <td>Mike Rodriguez</td>
+                    <td>Started conversation</td>
+                    <td>Module 7</td>
+                    <td>12 min ago</td>
+                </tr>
+                <tr>
+                    <td>Emma Wilson</td>
+                    <td>Completed Module (Grade: B+)</td>
+                    <td>Module 1</td>
+                    <td>23 min ago</td>
+                </tr>
+                <tr>
+                    <td>John Smith</td>
+                    <td>New student enrolled</td>
+                    <td>-</td>
+                    <td>45 min ago</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+    <button class="button button-primary" data-modal="createModuleModal">Create Module</button>
+    <button class="button button-secondary" data-modal="uploadDocumentModal">Upload Document</button>
+    <button class="button button-secondary">Export Report</button>
+</div>
