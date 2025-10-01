@@ -50,8 +50,10 @@ async function loadPage(pageId) {
         });
         document.querySelector(`[data-page="${pageId}"]`)?.classList.add('active');
 
-        // Initialize page-specific functionality
-        initPageScripts(pageId);
+        // Wait a tick for DOM to settle before initializing scripts
+        setTimeout(() => {
+            initPageScripts(pageId);
+        }, 0);
     } catch (error) {
         console.error('Error loading page:', error);
         document.getElementById('mainContent').innerHTML = '<p>Error loading page content.</p>';
@@ -75,9 +77,39 @@ function initPageScripts(pageId) {
         });
     });
 
+    // Load page-specific JavaScript
+    loadPageSpecificScript(pageId);
+
     // Initialize charts if charts.js is loaded
     if (window.HarvCharts) {
         window.HarvCharts.initChartsForPage(pageId);
+    }
+}
+
+function loadPageSpecificScript(pageId) {
+    // Remove old page script if exists
+    const oldScript = document.getElementById('page-script');
+    if (oldScript) {
+        oldScript.remove();
+    }
+
+    // Map of pages to their script files
+    const pageScripts = {
+        'dashboard': 'dashboard.js',
+        'analytics': 'analytics.js',
+        'course-corpus': 'course-corpus.js',
+        'corpus-entry': 'corpus-entry.js',
+        'documents': 'documents.js',
+        'modules': 'modules.js'
+    };
+
+    const scriptFile = pageScripts[pageId];
+    if (scriptFile) {
+        const script = document.createElement('script');
+        script.id = 'page-script';
+        script.src = `js/${scriptFile}`;
+        script.onerror = () => console.warn(`Failed to load ${scriptFile}`);
+        document.body.appendChild(script);
     }
 }
 

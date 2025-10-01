@@ -234,6 +234,40 @@ def get_current_user_optional():
     """Optional user dependency (alias for compatibility)"""
     return get_optional_user()
 
+def require_admin():
+    """Dependency to require admin privileges"""
+    from app.database import get_db
+
+    def _require_admin(
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+        db: Session = Depends(get_db)
+    ):
+        token_data = verify_token(credentials.credentials)
+        if not token_data:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        user = get_user_by_id(db, token_data["user_id"])
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        if not user.is_admin:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Admin privileges required"
+            )
+
+        return user
+
+    return _require_admin
+
 # ===== ADDITIONAL UTILITY FUNCTIONS =====
 
 def validate_email(email: str) -> bool:

@@ -23,6 +23,31 @@ from app.auth import (
 # Import all endpoint routers
 from app.endpoints.modules import router as modules_router
 
+# Import new admin routers
+try:
+    from app.endpoints.analytics import router as analytics_router
+    print("✅ Analytics router loaded")
+except ImportError:
+    print("⚠️ Analytics router not found")
+    from fastapi import APIRouter
+    analytics_router = APIRouter()
+
+try:
+    from app.endpoints.corpus import router as corpus_router
+    print("✅ Corpus router loaded")
+except ImportError:
+    print("⚠️ Corpus router not found")
+    from fastapi import APIRouter
+    corpus_router = APIRouter()
+
+try:
+    from app.endpoints.documents import router as documents_router
+    print("✅ Documents router loaded")
+except ImportError:
+    print("⚠️ Documents router not found")
+    from fastapi import APIRouter
+    documents_router = APIRouter()
+
 # Import chat router with fallback
 try:
     from app.endpoints.chat import router as chat_router
@@ -110,6 +135,11 @@ app.include_router(chat_router, prefix="", tags=["chat"])  # No prefix so /chat/
 app.include_router(memory_router, prefix="", tags=["memory"])
 app.include_router(conversations_router, prefix="/conversations", tags=["conversations"])
 # app.include_router(auth_router, prefix="", tags=["auth"])  # Temporarily disabled to use inline auth
+
+# Include admin routers
+app.include_router(analytics_router, prefix="", tags=["analytics"])
+app.include_router(corpus_router, prefix="", tags=["corpus"])
+app.include_router(documents_router, prefix="", tags=["documents"])
 
 # Create tables on startup
 @app.on_event("startup")

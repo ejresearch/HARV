@@ -38,13 +38,12 @@ const api = {
 
     // Authentication
     async login(email, password) {
-        const formData = new FormData();
-        formData.append('username', email);
-        formData.append('password', password);
-
-        const response = await fetch(`${API_BASE_URL}/auth/token`, {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
         });
 
         if (!response.ok) {
@@ -53,6 +52,8 @@ const api = {
 
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('is_admin', data.user.is_admin || false);
         return data;
     },
 
@@ -196,9 +197,17 @@ const api = {
         });
     },
 
-    // Analytics
+    // Analytics (Admin)
     async getDashboardStats() {
         return this.request('/analytics/dashboard');
+    },
+
+    async getModulesPerformance() {
+        return this.request('/analytics/modules/performance');
+    },
+
+    async getAnalyticsAlerts() {
+        return this.request('/analytics/alerts');
     },
 
     async getModuleAnalytics(moduleId) {
@@ -218,6 +227,22 @@ const api = {
     // User Progress
     async getUserProgress(userId) {
         return this.request(`/progress/${userId}`);
+    },
+
+    // Corpus Types (Admin)
+    async getCorpusTypes() {
+        return this.request('/corpus/types');
+    },
+
+    // Auth Helper
+    isAdmin() {
+        return localStorage.getItem('is_admin') === 'true';
+    },
+
+    logout() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('is_admin');
     }
 };
 

@@ -14,12 +14,13 @@ Base = declarative_base()
 # User model (matches your existing database)
 class User(Base):
     __tablename__ = "users"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     name = Column(String)
     onboarding_data = Column(Text)
+    is_admin = Column(Boolean, default=False)
     # Note: created_at, updated_at don't exist in your DB yet
     
     # Relationships
