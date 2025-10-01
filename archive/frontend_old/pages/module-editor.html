@@ -24,23 +24,23 @@
 <div id="basicInfo" class="tab-content active">
     <div class="field">
         <label>Module Title *</label>
-        <input type="text" placeholder="e.g., Introduction to Communication Theory">
+        <input type="text" id="moduleTitle" placeholder="e.g., Introduction to Communication Theory">
     </div>
 
     <div class="field">
         <label>Description</label>
-        <textarea placeholder="Brief overview of what this module covers..."></textarea>
+        <textarea id="moduleDescription" placeholder="Brief overview of what this module covers..."></textarea>
     </div>
 
     <div class="field">
         <label>Learning Objectives</label>
-        <textarea placeholder="What should students learn from this module?"></textarea>
+        <textarea id="moduleLearningObjectives" placeholder="What should students learn from this module?"></textarea>
         <div class="helper-text">One objective per line</div>
     </div>
 
     <div class="field">
         <label>Resources (URLs, readings)</label>
-        <textarea placeholder="Additional learning resources..."></textarea>
+        <textarea id="moduleResources" placeholder="Additional learning resources..."></textarea>
     </div>
 
     <div class="field">
@@ -61,13 +61,13 @@
 <div id="teachingStrategy" class="tab-content">
     <div class="field">
         <label>System Prompt</label>
-        <textarea rows="6" placeholder="Global instructions for Socratic teaching approach..."></textarea>
+        <textarea id="systemPrompt" rows="6" placeholder="Global instructions for Socratic teaching approach..."></textarea>
         <div class="helper-text">This defines how the AI should teach across all modules</div>
     </div>
 
     <div class="field">
         <label>Module Prompt</label>
-        <textarea rows="6" placeholder="Module-specific teaching instructions..."></textarea>
+        <textarea id="modulePrompt" rows="6" placeholder="Module-specific teaching instructions..."></textarea>
         <div class="helper-text">Specific guidance for this module's content and learning objectives</div>
     </div>
 
@@ -97,13 +97,13 @@
 <div id="knowledgeBase" class="tab-content">
     <div class="field">
         <label>System Corpus (Core Knowledge)</label>
-        <textarea rows="8" placeholder="Foundational theories, definitions, and concepts..."></textarea>
+        <textarea id="systemCorpus" rows="8" placeholder="Foundational theories, definitions, and concepts..."></textarea>
         <div class="helper-text">This content is always available to the AI when teaching this module</div>
     </div>
 
     <div class="field">
         <label>Module Corpus (Specific Content)</label>
-        <textarea rows="8" placeholder="Module-specific case studies, examples, exercises..."></textarea>
+        <textarea id="moduleCorpus" rows="8" placeholder="Module-specific case studies, examples, exercises..."></textarea>
         <div class="helper-text">Content specific to this module's learning objectives</div>
     </div>
 
@@ -123,7 +123,7 @@
             </p>
             <div class="field" style="margin-top: 20px;">
                 <label>Test Question</label>
-                <input type="text" placeholder="e.g., What is the Shannon-Weaver model?">
+                <input type="text" id="testQuestion" placeholder="e.g., What is the Shannon-Weaver model?">
             </div>
             <button class="button button-primary">Send Test Question</button>
 
@@ -138,7 +138,7 @@
 </div>
 
 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; gap: 10px;">
-    <button class="button button-primary">Save Changes</button>
+    <button class="button button-primary" id="saveModuleBtn">Save Changes</button>
     <button class="button button-secondary">Save as Draft</button>
-    <button class="button button-secondary">Cancel</button>
+    <button class="button button-secondary" onclick="window.HarvApp.loadPage('modules')">Cancel</button>
 </div>

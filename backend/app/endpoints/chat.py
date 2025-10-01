@@ -10,7 +10,16 @@ from openai import OpenAI
 import os
 import json
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Dict
+
+# Import multi-provider AI service
+try:
+    from app.ai_providers import AIProviderManager
+    MULTI_PROVIDER_AVAILABLE = True
+    print("✅ Multi-provider AI service loaded")
+except ImportError:
+    MULTI_PROVIDER_AVAILABLE = False
+    print("⚠️ Multi-provider AI service not available")
 
 # Try to import enhanced memory system
 try:
@@ -30,6 +39,7 @@ class ChatRequest(BaseModel):
     module_id: int
     message: str
     conversation_id: Optional[str] = None
+    provider: Optional[str] = "openai-gpt4"  # Default to GPT-4
 
 class ChatResponse(BaseModel):
     reply: str
@@ -128,30 +138,82 @@ async def enhanced_chat(
             conversation_id=request.conversation_id
         )
         
-        # Use the assembled prompt for OpenAI
+        # Use the assembled prompt for AI provider
         optimized_prompt = memory_context['assembled_prompt']
-        
-        # Send to OpenAI with dynamic context
-        api_key = os.getenv("OPENAI_API_KEY")
-        if api_key and not api_key.startswith("sk-proj-fake"):
-            response = openai_client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": optimized_prompt},
-                    {"role": "user", "content": request.message}
-                ]
-            )
-            reply = response.choices[0].message.content
-        else:
-            reply = f"Enhanced memory system ready! I have {memory_context['context_metrics']['total_chars']} characters of context about your learning journey. However, I need an OpenAI API key to provide intelligent responses. What would you like to explore?"
+
+        # Send to selected AI provider with dynamic context
+        try:
+            if MULTI_PROVIDER_AVAILABLE:
+                # Use multi-provider system
+                messages = [{"role": "user", "content": request.message}]
+                reply = AIProviderManager.chat(
+                    provider_id=request.provider,
+                    messages=messages,
+                    system_prompt=optimized_prompt
+                )
+            else:
+                # Fallback to OpenAI only
+                api_key = os.getenv("OPENAI_API_KEY")
+                if api_key and not api_key.startswith("sk-proj-fake"):
+                    response = openai_client.chat.completions.create(
+                        model="gpt-4",
+                        messages=[
+                            {"role": "system", "content": optimized_prompt},
+                            {"role": "user", "content": request.message}
+                        ]
+                    )
+                    reply = response.choices[0].message.content
+                else:
+                    reply = f"Enhanced memory system ready! I have {memory_context['context_metrics']['total_chars']} characters of context. However, I need an API key to provide responses."
+        except Exception as provider_error:
+            reply = f"Error with {request.provider}: {str(provider_error)}. Please check API key configuration."
         
         # Log memory metrics
-        metrics = memory_context['context_metrics'] 
+        metrics = memory_context['context_metrics']
         print(f"📊 Enhanced context: {metrics['total_chars']} chars, {metrics['optimization_score']}/100 score")
-        
+
+        # Save conversation to database
+        conversation_id_str = memory_context['conversation_id'] or f"enhanced_{request.user_id}_{request.module_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        # Get or create conversation
+        conversation = None
+        if request.conversation_id:
+            conversation = db.query(Conversation).filter(
+                Conversation.id == request.conversation_id
+            ).first()
+
+        if not conversation:
+            # Create new conversation
+            conversation = Conversation(
+                user_id=request.user_id,
+                module_id=request.module_id,
+                title=f"Chat - {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+                messages_json=json.dumps([]),
+                created_at=datetime.now(),
+                updated_at=datetime.now()
+            )
+            db.add(conversation)
+            db.flush()  # Get the ID
+
+        # Load existing messages
+        messages = json.loads(conversation.messages_json) if conversation.messages_json else []
+
+        # Add new messages
+        messages.append({"role": "user", "content": request.message})
+        messages.append({"role": "assistant", "content": reply})
+
+        # Update conversation
+        conversation.messages_json = json.dumps(messages)
+        conversation.updated_at = datetime.now()
+
+        db.commit()
+        db.refresh(conversation)
+
+        print(f"💾 Conversation saved: ID {conversation.id}, {len(messages)} messages")
+
         return ChatResponse(
             reply=reply,
-            conversation_id=memory_context['conversation_id'] or f"enhanced_{request.user_id}_{request.module_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            conversation_id=str(conversation.id),
             memory_metrics=metrics,
             enhanced=True
         )
@@ -270,12 +332,33 @@ async def get_basic_memory(
         print(f"❌ Basic memory error: {e}")
         raise HTTPException(status_code=500, detail=f"Memory error: {str(e)}")
 
+@router.get("/providers")
+async def list_providers():
+    """List all available AI providers"""
+    if not MULTI_PROVIDER_AVAILABLE:
+        return {
+            "providers": [
+                {
+                    "id": "openai-gpt4",
+                    "name": "OpenAI GPT-4",
+                    "model": "gpt-4",
+                    "available": bool(os.getenv("OPENAI_API_KEY")),
+                    "error": None if os.getenv("OPENAI_API_KEY") else "OPENAI_API_KEY not configured"
+                }
+            ]
+        }
+
+    providers = AIProviderManager.list_providers()
+    return {"providers": providers}
+
+
 @router.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
         "enhanced_memory": ENHANCED_MEMORY_AVAILABLE,
+        "multi_provider": MULTI_PROVIDER_AVAILABLE,
         "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
         "timestamp": datetime.now().isoformat()
     }

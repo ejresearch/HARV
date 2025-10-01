@@ -3,7 +3,8 @@
  * Connects to backend FastAPI endpoints
  */
 
-const API_BASE_URL = 'http://localhost:8000';
+// Use configured API URL from config.js
+const API_BASE_URL = window.HarvConfig?.API_URL || 'http://localhost:8000';
 
 // API Helper Functions
 const api = {
@@ -53,7 +54,7 @@ const api = {
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('user_id', data.user_id);
-        localStorage.setItem('is_admin', data.user.is_admin || false);
+        localStorage.setItem('is_admin', String(data.user.is_admin));
         return data;
     },
 

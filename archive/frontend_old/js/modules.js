@@ -3,6 +3,9 @@
  * Displays modules with analytics enhancements
  */
 
+(function() {
+console.log('✅ modules.js loading... v20251001131400');
+
 let modulesCache = [];
 let performanceCache = {};
 
@@ -128,7 +131,10 @@ function setupEventListeners() {
     const createBtn = document.querySelector('.button-primary[data-modal="createModuleModal"]');
     if (createBtn) {
         createBtn.addEventListener('click', () => {
-            window.location.href = 'module-editor.html';
+            if (window.HarvApp && window.HarvApp.loadPage) {
+                window.HarvApp.loadPage('module-editor');
+                sessionStorage.removeItem('editingModuleId'); // Clear any stored ID for new module
+            }
         });
     }
 }
@@ -154,15 +160,28 @@ function filterModules() {
 }
 
 function editModule(moduleId) {
-    window.location.href = `module-editor.html?id=${moduleId}`;
+    // Use SPA navigation instead of full page reload
+    if (window.HarvApp && window.HarvApp.loadPage) {
+        window.HarvApp.loadPage('module-editor');
+        // Store module ID for the editor to pick up
+        sessionStorage.setItem('editingModuleId', moduleId);
+    }
 }
 
 function testModule(moduleId) {
-    window.location.href = `testing.html?module=${moduleId}`;
+    // Use SPA navigation
+    if (window.HarvApp && window.HarvApp.loadPage) {
+        window.HarvApp.loadPage('testing');
+        sessionStorage.setItem('testingModuleId', moduleId);
+    }
 }
 
 function viewModuleAnalytics(moduleId) {
-    window.location.href = `analytics.html?module=${moduleId}`;
+    // Use SPA navigation
+    if (window.HarvApp && window.HarvApp.loadPage) {
+        window.HarvApp.loadPage('analytics');
+        sessionStorage.setItem('analyticsModuleId', moduleId);
+    }
 }
 
 async function deleteModule(moduleId, moduleTitle) {
@@ -209,3 +228,7 @@ window.editModule = editModule;
 window.testModule = testModule;
 window.viewModuleAnalytics = viewModuleAnalytics;
 window.deleteModule = deleteModule;
+
+console.log('✅ Module navigation functions exported to window');
+
+})(); // Close IIFE

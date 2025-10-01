@@ -3,6 +3,9 @@ Complete FastAPI Main Application with Enhanced Memory System Integration
 Replace your entire backend/app/main.py with this file
 """
 
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -83,6 +86,14 @@ except ImportError:
     conversations_router = APIRouter()
 
 try:
+    from app.endpoints.progress import router as progress_router
+    print("✅ Progress router loaded")
+except ImportError:
+    print("⚠️ Progress router not found, creating fallback")
+    from fastapi import APIRouter
+    progress_router = APIRouter()
+
+try:
     from app.endpoints.auth import router as auth_router
     print("✅ Auth router loaded from endpoints")
 except ImportError:
@@ -93,6 +104,15 @@ except ImportError:
         print("⚠️ Auth router not found, will use inline auth")
         from fastapi import APIRouter
         auth_router = APIRouter()
+
+# Import ASHER testing router
+try:
+    from app.endpoints.asher import router as asher_router
+    print("✅ ASHER testing router loaded")
+except ImportError:
+    print("⚠️ ASHER testing router not found")
+    from fastapi import APIRouter
+    asher_router = APIRouter()
 
 # Check for enhanced memory system
 try:
@@ -116,13 +136,14 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000", 
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
         "http://localhost:3001",
         "http://127.0.0.1:3001",
         "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "http://localhost:8080",
-        "http://127.0.0.1:5173"
+        "http://127.0.0.1:8080"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -133,13 +154,17 @@ app.add_middleware(
 app.include_router(modules_router, prefix="", tags=["modules"])
 app.include_router(chat_router, prefix="", tags=["chat"])  # No prefix so /chat/ works
 app.include_router(memory_router, prefix="", tags=["memory"])
-app.include_router(conversations_router, prefix="/conversations", tags=["conversations"])
+app.include_router(conversations_router, prefix="", tags=["conversations"])
+app.include_router(progress_router, prefix="", tags=["progress"])
 # app.include_router(auth_router, prefix="", tags=["auth"])  # Temporarily disabled to use inline auth
 
 # Include admin routers
 app.include_router(analytics_router, prefix="", tags=["analytics"])
 app.include_router(corpus_router, prefix="", tags=["corpus"])
 app.include_router(documents_router, prefix="", tags=["documents"])
+
+# Include ASHER testing router
+app.include_router(asher_router, prefix="", tags=["asher-testing"])
 
 # Create tables on startup
 @app.on_event("startup")
@@ -367,13 +392,13 @@ def simple_login(request: SimpleLoginRequest, db: Session = Depends(get_db)):
         user = authenticate_user(db, request.email, request.password)
         if not user:
             raise HTTPException(status_code=401, detail="Invalid credentials")
-        
+
         tokens = create_user_tokens(user.id)
-        
+
         return {
             "success": True,
             "user_id": user.id,
-            "user": {"id": user.id, "email": user.email, "name": user.name},
+            "user": {"id": user.id, "email": user.email, "name": user.name, "is_admin": user.is_admin},
             "access_token": tokens["access_token"],
             "refresh_token": tokens["refresh_token"],
             "token_type": tokens["token_type"]
@@ -389,23 +414,23 @@ def simple_register(request: SimpleRegisterRequest, db: Session = Depends(get_db
     """Simplified registration endpoint for frontend compatibility"""
     try:
         user = create_user_account(
-            db=db, 
-            email=request.email, 
-            password=request.password, 
+            db=db,
+            email=request.email,
+            password=request.password,
             name=request.name,
-            reason=request.reason, 
+            reason=request.reason,
             familiarity=request.familiarity,
-            learning_style=request.learning_style, 
+            learning_style=request.learning_style,
             goals=request.goals,
             background=request.background
         )
-        
+
         tokens = create_user_tokens(user.id)
-        
+
         return {
             "success": True,
             "user_id": user.id,
-            "user": {"id": user.id, "email": user.email, "name": user.name},
+            "user": {"id": user.id, "email": user.email, "name": user.name, "is_admin": user.is_admin},
             "access_token": tokens["access_token"],
             "refresh_token": tokens["refresh_token"],
             "token_type": tokens["token_type"]
@@ -417,6 +442,22 @@ def simple_register(request: SimpleRegisterRequest, db: Session = Depends(get_db
         raise HTTPException(status_code=500, detail="Registration failed")
 
 # Additional endpoints for enhanced memory system
+@app.get("/users")
+def get_users(db: Session = Depends(get_db)):
+    """Get all users (admin only in production)"""
+    users = db.query(User).all()
+    return {
+        "users": [
+            {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "is_admin": user.is_admin
+            }
+            for user in users
+        ]
+    }
+
 @app.get("/system/status")
 def system_status():
     """Get detailed system status"""

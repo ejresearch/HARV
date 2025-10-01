@@ -6,7 +6,7 @@ Fixed: Registration field mismatches and timestamp issues
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 import jwt
-from passlib.context import CryptContext
+import bcrypt
 import os
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Depends
@@ -19,19 +19,20 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 
 # Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify password with timing attack protection"""
     try:
-        return pwd_context.verify(plain_password, hashed_password)
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
     except Exception:
         return False
 
 def get_password_hash(password: str) -> str:
     """Hash password securely"""
-    return pwd_context.hash(password)
+    # Truncate password to 72 bytes for bcrypt compatibility
+    password_truncated = password[:72] if isinstance(password, str) else password
+    return bcrypt.hashpw(password_truncated.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 def create_access_token(data: Dict[str, Any]) -> str:
     """Create JWT access token with 24-hour expiration"""

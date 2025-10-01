@@ -60,7 +60,7 @@ def get_dashboard_analytics(
         UserProgress.time_spent.isnot(None),
         UserProgress.time_spent > 0
     ).scalar()
-    avg_time_minutes = int(time_data) if time_data else 45
+    avg_time_minutes = int(time_data) if time_data else 0
 
     # Calculate completion rate
     started = db.query(UserProgress).count()

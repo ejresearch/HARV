@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from app.models import Module
+from app.models import Module, User
 from app.database import get_db
+from app.auth import require_admin
 from typing import Optional
 
 router = APIRouter()
@@ -15,10 +16,22 @@ class ModuleConfig(BaseModel):
     dynamic_corpus: Optional[str] = None
     api_endpoint: Optional[str] = None
 
+class ModuleCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    resources: Optional[str] = None
+    system_prompt: Optional[str] = None
+    module_prompt: Optional[str] = None
+    system_corpus: Optional[str] = None
+    module_corpus: Optional[str] = None
+    dynamic_corpus: Optional[str] = None
+    api_endpoint: Optional[str] = "https://api.openai.com/v1/chat/completions"
+    learning_objectives: Optional[str] = None
+
 @router.get("/modules")
 def get_modules(db: Session = Depends(get_db)):
     modules = db.query(Module).all()
-    return modules
+    return {"modules": modules}
 
 @router.get("/modules/{module_id}")
 def get_module_config(module_id: int, db: Session = Depends(get_db)):
@@ -92,11 +105,63 @@ def test_module_config(module_id: int, db: Session = Depends(get_db)):
     module = db.query(Module).filter(Module.id == module_id).first()
     if not module:
         raise HTTPException(status_code=404, detail="Module not found")
-    
+
     return {
         "module_id": module_id,
         "title": module.title,
         "config_status": "loaded",
         "has_prompts": bool(module.system_prompt and module.module_prompt),
         "has_corpus": bool(module.system_corpus or module.module_corpus)
+    }
+
+@router.post("/modules")
+def create_module(
+    module_data: ModuleCreate,
+    admin_user: User = Depends(require_admin()),
+    db: Session = Depends(get_db)
+):
+    """Create a new module"""
+
+    # Create new module
+    new_module = Module(
+        title=module_data.title,
+        description=module_data.description,
+        resources=module_data.resources or "",
+        system_prompt=module_data.system_prompt,
+        module_prompt=module_data.module_prompt,
+        system_corpus=module_data.system_corpus,
+        module_corpus=module_data.module_corpus,
+        dynamic_corpus=module_data.dynamic_corpus,
+        api_endpoint=module_data.api_endpoint,
+        learning_objectives=module_data.learning_objectives
+    )
+
+    db.add(new_module)
+    db.commit()
+    db.refresh(new_module)
+
+    return {
+        "message": "Module created successfully",
+        "module": new_module
+    }
+
+@router.delete("/modules/{module_id}")
+def delete_module(
+    module_id: int,
+    admin_user: User = Depends(require_admin()),
+    db: Session = Depends(get_db)
+):
+    """Delete a module and all associated data"""
+
+    module = db.query(Module).filter(Module.id == module_id).first()
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found")
+
+    module_title = module.title
+    db.delete(module)
+    db.commit()
+
+    return {
+        "message": f"Module '{module_title}' deleted successfully",
+        "module_id": module_id
     }

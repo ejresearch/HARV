@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARV - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>HARV</h1>
+                <div class="logo-subtitle">Developed by YT Research</div>
+            </div>
+            <nav class="nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Overview</div>
+                    <div class="nav-item active" data-page="dashboard">
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Content Management</div>
+                    <div class="nav-item" data-page="modules">
+                        <span>Module Management</span>
+                    </div>
+                    <div class="nav-item" data-page="module-editor">
+                        <span>Module Editor</span>
+                    </div>
+                    <div class="nav-item" data-page="corpus-entry">
+                        <span>Module Corpus</span>
+                    </div>
+                    <div class="nav-item" data-page="course-corpus">
+                        <span>Course Corpus</span>
+                    </div>
+                    <div class="nav-item" data-page="documents">
+                        <span>Document Management</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Analytics</div>
+                    <div class="nav-item" data-page="analytics">
+                        <span>Analytics Overview</span>
+                    </div>
+                    <div class="nav-item" data-page="conversations">
+                        <span>Conversation Browser</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Testing</div>
+                    <div class="nav-item" data-page="testing">
+                        <span>Module Testing</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Settings</div>
+                    <div class="nav-item" data-page="settings">
+                        <span>LLM Configuration</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main">
+            <div class="topbar">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="user-menu">
+                    <button class="theme-toggle" id="themeToggle">
+                        <div class="theme-toggle-slider" id="themeIcon">☀️</div>
+                    </button>
+                    <div class="user-avatar" id="userAvatar" title="Click to logout">AD</div>
+                </div>
+            </div>
+
+            <div class="content" id="mainContent">
+                <!-- Page content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals Container -->
+    <div id="modals-container"></div>
+
+    <!-- Load Modals -->
+    <script>
+        // Load modal components on page load
+        fetch('components/modals.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modals-container').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading modals:', error));
+    </script>
+
+    <script src="js/config.js?v=20251001134000"></script>
+    <script src="js/api.js?v=20251001134000"></script>
+    <script src="js/charts.js?v=20251001134000"></script>
+    <script src="js/app.js?v=20251001134000"></script>
+</body>
+</html>

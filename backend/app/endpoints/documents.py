@@ -4,11 +4,13 @@ Handles file uploads and document storage
 """
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from typing import List, Optional
 from datetime import datetime
 import os
+import base64
 
 from app.database import get_db
 from app.models import Document, Module, User
@@ -100,8 +102,9 @@ async def upload_document(
         except UnicodeDecodeError:
             raise HTTPException(status_code=400, detail="Unable to decode text file")
     elif file_ext == '.pdf':
-        # For PDF, store raw content and note that it needs processing
-        text_content = f"[PDF FILE: {file.filename}]\nContent requires PDF processing library to extract text."
+        # For PDF, store base64 encoded content
+        import base64
+        text_content = f"[PDF_BASE64]{base64.b64encode(content).decode('utf-8')}"
     else:
         # For other file types, store metadata
         text_content = f"[DOCUMENT FILE: {file.filename}]\nContent type: {file.content_type}"
@@ -182,3 +185,29 @@ def get_module_documents_summary(
             "uploaded_at": d.uploaded_at.isoformat() if d.uploaded_at else None
         } for d in documents]
     }
+
+
+@router.get("/documents/{document_id}/pdf")
+def get_document_pdf(
+    document_id: int,
+    admin_user: User = Depends(require_admin()),
+    db: Session = Depends(get_db)
+):
+    """Get PDF file as binary for viewing"""
+
+    document = db.query(Document).filter(Document.id == document_id).first()
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    # Check if it's a PDF with base64 content
+    if document.content.startswith("[PDF_BASE64]"):
+        pdf_base64 = document.content.replace("[PDF_BASE64]", "")
+        pdf_bytes = base64.b64decode(pdf_base64)
+
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"inline; filename={document.filename}"}
+        )
+    else:
+        raise HTTPException(status_code=400, detail="Document is not a PDF")
