@@ -59,7 +59,7 @@ const sections = {
                     <form id="register-form" onsubmit="handleRegister(event)">
                         <div class="form-group">
                             <label>Role</label>
-                            <select id="register-role" required>
+                            <select id="register-role" required onchange="toggleStudentFields()">
                                 <option value="">Select Role</option>
                                 <option value="student">Student</option>
                                 <option value="admin">Admin</option>
@@ -77,6 +77,19 @@ const sections = {
                             <label>Password</label>
                             <input type="password" id="register-password" required placeholder="Min 8 characters">
                         </div>
+
+                        <!-- Student-specific fields -->
+                        <div id="student-fields" style="display: none;">
+                            <div class="form-group">
+                                <label>Age / Grade Level</label>
+                                <input type="text" id="register-age-grade" placeholder="e.g., 10th grade, 16 years old">
+                            </div>
+                            <div class="form-group">
+                                <label>How do you learn best?</label>
+                                <textarea id="register-learning-notes" rows="4" placeholder="Tell us anything you'd like the AI to know about how you learn. For example: 'I learn best with visual examples' or 'I need extra time to process new information'"></textarea>
+                            </div>
+                        </div>
+
                         <button type="submit" class="auth-btn">Register</button>
                         <button type="button" class="link-btn" onclick="showLogin()">Back to Login</button>
                     </form>
@@ -380,8 +393,8 @@ const sections = {
                             <p>Select a module and start learning through Socratic dialogue</p>
                             <div class="chat-features">
                                 <span class="feature-item">🧠 4-Layer Memory</span>
-                                <span class="feature-item">🤖 9 AI Models</span>
-                                <span class="feature-item">💬 Socratic Method</span>
+                                <span class="feature-item">AI 9 AI Models</span>
+                                <span class="feature-item">Chats Socratic Method</span>
                             </div>
                         </div>
                     </div>
@@ -638,28 +651,28 @@ const sections = {
                 <!-- Overall Stats -->
                 <div id="progress-overview" class="progress-overview">
                     <div class="stat-card">
-                        <div class="stat-icon">💬</div>
+                        <div class="stat-icon">Chats</div>
                         <div class="stat-info">
                             <div class="stat-value" id="total-conversations">0</div>
                             <div class="stat-label">Total Conversations</div>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">💭</div>
+                        <div class="stat-icon">Messages</div>
                         <div class="stat-info">
                             <div class="stat-value" id="total-messages">0</div>
                             <div class="stat-label">Total Messages</div>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">📚</div>
+                        <div class="stat-icon">Modules</div>
                         <div class="stat-info">
                             <div class="stat-value" id="modules-started">0/15</div>
                             <div class="stat-label">Modules Started</div>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">🎯</div>
+                        <div class="stat-icon">Progress</div>
                         <div class="stat-info">
                             <div class="stat-value" id="completion-rate">0%</div>
                             <div class="stat-label">Completion Rate</div>
@@ -685,7 +698,7 @@ const sections = {
                 <div class="table-view-header">
                     <h3>Real-Time Database Tables</h3>
                     <div class="table-controls">
-                        <button class="refresh-btn" onclick="loadTableViewData()">🔄 Refresh</button>
+                        <button class="refresh-btn" onclick="loadTableViewData()">Refresh</button>
                         <label>
                             <input type="checkbox" id="auto-refresh-tables" onchange="toggleAutoRefresh()">
                             Auto-refresh (5s)
@@ -762,6 +775,17 @@ function showRegister() {
     document.getElementById('login-form').reset();
 }
 
+function toggleStudentFields() {
+    const role = document.getElementById('register-role').value;
+    const studentFields = document.getElementById('student-fields');
+
+    if (role === 'student') {
+        studentFields.style.display = 'block';
+    } else {
+        studentFields.style.display = 'none';
+    }
+}
+
 async function handleLogin(event) {
     event.preventDefault();
 
@@ -798,6 +822,10 @@ async function handleRegister(event) {
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
 
+    // Get student-specific fields
+    const ageGradeLevel = document.getElementById('register-age-grade').value || '';
+    const learningNotes = document.getElementById('register-learning-notes').value || '';
+
     try {
         const response = await fetch(`${API_BASE}/auth/register`, {
             method: 'POST',
@@ -806,7 +834,9 @@ async function handleRegister(event) {
                 name,
                 email,
                 password,
-                is_admin: role === 'admin',
+                role: role,
+                age_grade_level: ageGradeLevel,
+                learning_notes: learningNotes,
                 reason: '',
                 familiarity: '',
                 learning_style: '',
@@ -1117,7 +1147,7 @@ function addChatMessage(role, content, isLoading = false) {
 
     const avatar = document.createElement('div');
     avatar.className = 'chat-avatar';
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
+    avatar.textContent = role === 'user' ? 'U' : 'AI';
 
     const content_div = document.createElement('div');
     content_div.className = 'chat-message-content';
@@ -2931,7 +2961,7 @@ function displayProgressData(data) {
     const grid = document.getElementById('module-progress-grid');
     grid.innerHTML = data.modules.map(module => {
         const statusClass = module.completed ? 'completed' : 'not-started';
-        const statusIcon = module.completed ? '✓' : '○';
+        const statusIcon = module.completed ? 'Yes' : '[ ]';
         const progressPercent = module.completed ? 100 : 0;
 
         return `
@@ -2990,7 +3020,7 @@ function displayTablesData(data) {
         { key: 'id', label: 'ID' },
         { key: 'email', label: 'Email' },
         { key: 'name', label: 'Name' },
-        { key: 'is_admin', label: 'Admin', format: (val) => val ? '✓' : '✗' }
+        { key: 'is_admin', label: 'Admin', format: (val) => val ? 'Yes' : 'No' }
     ]);
 
     // Modules Table
@@ -3015,7 +3045,7 @@ function displayTablesData(data) {
         { key: 'module_id', label: 'Module ID' },
         { key: 'title', label: 'Title' },
         { key: 'message_count', label: 'Messages' },
-        { key: 'finalized', label: 'Finalized', format: (val) => val ? '✓' : '✗' },
+        { key: 'finalized', label: 'Finalized', format: (val) => val ? 'Yes' : 'No' },
         { key: 'created_at', label: 'Created' }
     ]);
 
@@ -3033,7 +3063,7 @@ function displayTablesData(data) {
         { key: 'id', label: 'ID' },
         { key: 'user_id', label: 'User ID' },
         { key: 'module_id', label: 'Module ID' },
-        { key: 'completed', label: 'Completed', format: (val) => val ? '✓' : '✗' },
+        { key: 'completed', label: 'Completed', format: (val) => val ? 'Yes' : 'No' },
         { key: 'grade', label: 'Grade' },
         { key: 'time_spent', label: 'Time (min)' },
         { key: 'attempts', label: 'Attempts' }

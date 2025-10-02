@@ -134,7 +134,7 @@ class UserProgress(Base):
 # OnboardingSurvey model (matches your existing database)
 class OnboardingSurvey(Base):
     __tablename__ = "onboarding_surveys"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     reason = Column(Text)
@@ -142,8 +142,10 @@ class OnboardingSurvey(Base):
     learning_style = Column(String)
     goals = Column(Text)
     background = Column(Text)
+    age_grade_level = Column(Text)  # New field for student age/grade
+    learning_notes = Column(Text)   # New field for "how you learn" notes
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    
+
     # Relationships
     user = relationship("User", back_populates="onboarding_survey")
 

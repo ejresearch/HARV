@@ -29,38 +29,38 @@ from app.endpoints.modules import router as modules_router
 # Import new admin routers
 try:
     from app.endpoints.analytics import router as analytics_router
-    print("✅ Analytics router loaded")
+    print("[OK] Analytics router loaded")
 except ImportError:
-    print("⚠️ Analytics router not found")
+    print("[WARN] Analytics router not found")
     from fastapi import APIRouter
     analytics_router = APIRouter()
 
 try:
     from app.endpoints.corpus import router as corpus_router
-    print("✅ Corpus router loaded")
+    print("[OK] Corpus router loaded")
 except ImportError:
-    print("⚠️ Corpus router not found")
+    print("[WARN] Corpus router not found")
     from fastapi import APIRouter
     corpus_router = APIRouter()
 
 try:
     from app.endpoints.documents import router as documents_router
-    print("✅ Documents router loaded")
+    print("[OK] Documents router loaded")
 except ImportError:
-    print("⚠️ Documents router not found")
+    print("[WARN] Documents router not found")
     from fastapi import APIRouter
     documents_router = APIRouter()
 
 # Import chat router with fallback
 try:
     from app.endpoints.chat import router as chat_router
-    print("✅ Chat router loaded from endpoints")
+    print("[OK] Chat router loaded from endpoints")
 except ImportError:
     try:
         from app.routers.chat import router as chat_router
-        print("✅ Chat router loaded from routers")
+        print("[OK] Chat router loaded from routers")
     except ImportError:
-        print("⚠️ Chat router not found, creating fallback")
+        print("[WARN] Chat router not found, creating fallback")
         from fastapi import APIRouter
         chat_router = APIRouter()
         
@@ -71,46 +71,46 @@ except ImportError:
 # Import other routers with fallbacks
 try:
     from app.endpoints.memory import router as memory_router
-    print("✅ Memory router loaded")
+    print("[OK] Memory router loaded")
 except ImportError:
-    print("⚠️ Memory router not found, creating fallback")
+    print("[WARN] Memory router not found, creating fallback")
     from fastapi import APIRouter
     memory_router = APIRouter()
 
 try:
     from app.endpoints.conversations import router as conversations_router
-    print("✅ Conversations router loaded")
+    print("[OK] Conversations router loaded")
 except ImportError:
-    print("⚠️ Conversations router not found, creating fallback")
+    print("[WARN] Conversations router not found, creating fallback")
     from fastapi import APIRouter
     conversations_router = APIRouter()
 
 try:
     from app.endpoints.progress import router as progress_router
-    print("✅ Progress router loaded")
+    print("[OK] Progress router loaded")
 except ImportError:
-    print("⚠️ Progress router not found, creating fallback")
+    print("[WARN] Progress router not found, creating fallback")
     from fastapi import APIRouter
     progress_router = APIRouter()
 
 try:
     from app.endpoints.auth import router as auth_router
-    print("✅ Auth router loaded from endpoints")
+    print("[OK] Auth router loaded from endpoints")
 except ImportError:
     try:
         from app.routers.auth import router as auth_router
-        print("✅ Auth router loaded from routers")
+        print("[OK] Auth router loaded from routers")
     except ImportError:
-        print("⚠️ Auth router not found, will use inline auth")
+        print("[WARN] Auth router not found, will use inline auth")
         from fastapi import APIRouter
         auth_router = APIRouter()
 
 # Import ASHER testing router
 try:
     from app.endpoints.asher import router as asher_router
-    print("✅ ASHER testing router loaded")
+    print("[OK] ASHER testing router loaded")
 except ImportError:
-    print("⚠️ ASHER testing router not found")
+    print("[WARN] ASHER testing router not found")
     from fastapi import APIRouter
     asher_router = APIRouter()
 
@@ -118,10 +118,10 @@ except ImportError:
 try:
     from app.memory_context_enhanced import DynamicMemoryAssembler
     ENHANCED_MEMORY_AVAILABLE = True
-    print("✅ Enhanced memory system loaded")
+    print("[OK] Enhanced memory system loaded")
 except ImportError:
     ENHANCED_MEMORY_AVAILABLE = False
-    print("⚠️ Enhanced memory system not available")
+    print("[WARN] Enhanced memory system not available")
 
 # Create FastAPI app
 app = FastAPI(
@@ -169,9 +169,9 @@ app.include_router(asher_router, prefix="", tags=["asher-testing"])
 # Create tables on startup
 @app.on_event("startup")
 def startup_event():
-    print("🚀 Starting Harv Backend with Enhanced Memory System...")
+    print("[START] Starting Harv Backend with Enhanced Memory System...")
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created")
+    print("[OK] Database tables created")
     
     # Auto-populate modules if empty
     db = next(get_db())
@@ -180,7 +180,7 @@ def startup_event():
         populate_default_modules(db)
     db.close()
     
-    print(f"🧠 Enhanced Memory System: {'Available' if ENHANCED_MEMORY_AVAILABLE else 'Not Available'}")
+    print(f"[MEMORY] Enhanced Memory System: {'Available' if ENHANCED_MEMORY_AVAILABLE else 'Not Available'}")
 
 def populate_default_modules(db: Session):
     """Auto-populate the 15 Communication Media & Society modules"""
@@ -308,13 +308,13 @@ def populate_default_modules(db: Session):
         db.add(module)
     
     db.commit()
-    print(f"✅ Auto-populated {len(modules)} Communication Media & Society modules")
+    print(f"[OK] Auto-populated {len(modules)} Communication Media & Society modules")
 
 # Root endpoint
 @app.get("/")
 def root():
     return {
-        "message": "🎉 Harv Backend - Enhanced Memory-Aware AI Tutoring System",
+        "message": "Harv Backend - Enhanced Memory-Aware AI Tutoring System",
         "status": "running",
         "version": "4.0.0",
         "course": "Communication Media & Society",
@@ -379,6 +379,11 @@ class SimpleRegisterRequest(BaseModel):
     email: EmailStr
     password: str
     name: str
+    role: str = "student"  # "student" or "admin"
+    # Student-specific onboarding fields
+    age_grade_level: str = ""
+    learning_notes: str = ""
+    # Original onboarding fields (optional for backward compatibility)
     reason: str = ""
     familiarity: str = ""
     learning_style: str = ""
@@ -413,6 +418,9 @@ def simple_login(request: SimpleLoginRequest, db: Session = Depends(get_db)):
 def simple_register(request: SimpleRegisterRequest, db: Session = Depends(get_db)):
     """Simplified registration endpoint for frontend compatibility"""
     try:
+        # Set is_admin based on role
+        is_admin = request.role == "admin"
+
         user = create_user_account(
             db=db,
             email=request.email,
@@ -422,8 +430,15 @@ def simple_register(request: SimpleRegisterRequest, db: Session = Depends(get_db
             familiarity=request.familiarity,
             learning_style=request.learning_style,
             goals=request.goals,
-            background=request.background
+            background=request.background,
+            age_grade_level=request.age_grade_level,
+            learning_notes=request.learning_notes
         )
+
+        # Update is_admin flag
+        user.is_admin = is_admin
+        db.commit()
+        db.refresh(user)
 
         tokens = create_user_tokens(user.id)
 
