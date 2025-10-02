@@ -10,10 +10,10 @@ import os
 try:
     from app.ai_providers import AIProviderManager
     MULTI_PROVIDER_AVAILABLE = True
-    print("✅ ASHER: Multi-provider AI service loaded")
+    print("ASHER: Multi-provider AI service loaded")
 except ImportError:
     MULTI_PROVIDER_AVAILABLE = False
-    print("⚠️ ASHER: Multi-provider AI service not available")
+    print("ASHER: Multi-provider AI service not available")
 
 router = APIRouter()
 

@@ -67,7 +67,7 @@ async function selectClass(classId) {
 
     } catch (error) {
         console.error('Error loading class:', error);
-        alert('Failed to load class');
+        NotificationSystem.error('Failed to load class');
     }
 }
 
@@ -268,66 +268,87 @@ async function saveClass(event) {
 
         currentClass = await response.json();
         await loadClassesList();
-        alert('Class saved successfully!');
+        NotificationSystem.success('Class saved successfully!');
 
     } catch (error) {
         console.error('Error saving class:', error);
-        alert('Failed to save class');
+        NotificationSystem.error('Failed to save class');
     }
 }
 
 // Create new class
 async function createNewClass() {
-    const title = prompt('Enter class title:');
-    if (!title) return;
+    ModalSystem.prompt(
+        'Create New Class',
+        'Enter a title for your new class:',
+        '',
+        async (title) => {
+            try {
+                ModalSystem.loading('Creating class...');
 
-    try {
-        const response = await fetch(`${API_BASE}/classes`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-            },
-            body: JSON.stringify({ title, description: '' })
-        });
+                const response = await fetch(`${API_BASE}/classes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify({ title, description: '' })
+                });
 
-        if (!response.ok) throw new Error('Failed to create class');
+                if (!response.ok) throw new Error('Failed to create class');
 
-        const newClass = await response.json();
-        await loadClassesList();
-        await selectClass(newClass.id);
+                const newClass = await response.json();
+                await loadClassesList();
+                await selectClass(newClass.id);
 
-    } catch (error) {
-        console.error('Error creating class:', error);
-        alert('Failed to create class');
-    }
+                ModalSystem.close();
+                NotificationSystem.success(`Class "${title}" created successfully!`);
+
+            } catch (error) {
+                console.error('Error creating class:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to create class');
+            }
+        }
+    );
 }
 
 // Delete class
 async function deleteClass() {
-    if (!confirm(`Delete class "${currentClass.title}"? This will delete all modules, corpus, and documents.`)) return;
+    ModalSystem.confirm(
+        'Delete Class',
+        `Are you sure you want to delete "${currentClass.title}"? This will permanently delete all modules, corpus entries, and documents associated with this class.`,
+        async () => {
+            try {
+                ModalSystem.loading('Deleting class...');
 
-    try {
-        const response = await fetch(`${API_BASE}/classes/${currentClass.id}`, {
-            method: 'DELETE',
-            headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        });
+                const response = await fetch(`${API_BASE}/classes/${currentClass.id}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+                });
 
-        if (!response.ok) throw new Error('Failed to delete class');
+                if (!response.ok) throw new Error('Failed to delete class');
 
-        currentClass = null;
-        await loadClassesList();
-        document.getElementById('class-editor-container').innerHTML = `
-            <div style="text-align: center; color: #95a5a6; padding: 100px 20px;">
-                <h3>Select a class to begin</h3>
-                <p>Choose a class from the left sidebar or create a new one</p>
-            </div>
-        `;
+                const classTitle = currentClass.title;
+                currentClass = null;
+                await loadClassesList();
+                document.getElementById('class-editor-container').innerHTML = `
+                    <div style="text-align: center; color: #95a5a6; padding: 100px 20px;">
+                        <h3>Select a class to begin</h3>
+                        <p>Choose a class from the dropdown above or create a new one</p>
+                    </div>
+                `;
 
-    } catch (error) {
-        console.error('Error deleting class:', error);
-        alert('Failed to delete class');
-    }
+                ModalSystem.close();
+                NotificationSystem.success(`Class "${classTitle}" deleted successfully`);
+
+            } catch (error) {
+                console.error('Error deleting class:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to delete class');
+            }
+        }
+    );
 }
 
 // Load class corpus
@@ -472,7 +493,7 @@ async function selectClassCorpus(id) {
         `;
     } catch (error) {
         console.error('Error loading corpus entry:', error);
-        alert('Failed to load corpus entry');
+        NotificationSystem.error('Failed to load corpus entry');
     }
 }
 
@@ -500,10 +521,11 @@ async function saveClassCorpus(event) {
 
         await loadClassCorpus();
         document.getElementById('class-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Corpus entry created!</p>';
+        NotificationSystem.success('Corpus entry created successfully!');
 
     } catch (error) {
         console.error('Error creating corpus:', error);
-        alert('Failed to create corpus entry');
+        NotificationSystem.error('Failed to create corpus entry');
     }
 }
 
@@ -530,32 +552,42 @@ async function updateClassCorpus(event, id) {
         if (!response.ok) throw new Error('Failed to update corpus entry');
 
         await loadClassCorpus();
-        alert('Corpus entry updated!');
+        NotificationSystem.success('Corpus entry updated successfully!');
 
     } catch (error) {
         console.error('Error updating corpus:', error);
-        alert('Failed to update corpus entry');
+        NotificationSystem.error('Failed to update corpus entry');
     }
 }
 
 async function deleteClassCorpus(id) {
-    if (!confirm('Delete this corpus entry?')) return;
+    ModalSystem.confirm(
+        'Delete Corpus Entry',
+        'Are you sure you want to delete this corpus entry? This action cannot be undone.',
+        async () => {
+            try {
+                ModalSystem.loading('Deleting corpus entry...');
 
-    try {
-        const response = await fetch(`${API_BASE}/classes/corpus/${id}`, {
-            method: 'DELETE',
-            headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        });
+                const response = await fetch(`${API_BASE}/classes/corpus/${id}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+                });
 
-        if (!response.ok) throw new Error('Failed to delete corpus entry');
+                if (!response.ok) throw new Error('Failed to delete corpus entry');
 
-        await loadClassCorpus();
-        document.getElementById('class-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>';
+                await loadClassCorpus();
+                document.getElementById('class-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>';
 
-    } catch (error) {
-        console.error('Error deleting corpus:', error);
-        alert('Failed to delete corpus entry');
-    }
+                ModalSystem.close();
+                NotificationSystem.success('Corpus entry deleted successfully');
+
+            } catch (error) {
+                console.error('Error deleting corpus:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to delete corpus entry');
+            }
+        }
+    );
 }
 
 function uploadClassDocument() {
@@ -582,11 +614,11 @@ function uploadClassDocument() {
             if (!response.ok) throw new Error('Failed to upload document');
 
             await loadClassDocuments();
-            alert(`Document "${file.name}" uploaded successfully!`);
+            NotificationSystem.success(`Document "${file.name}" uploaded successfully!`);
 
         } catch (error) {
             console.error('Error uploading document:', error);
-            alert('Failed to upload document');
+            NotificationSystem.error('Failed to upload document');
         }
     };
     input.click();
@@ -652,10 +684,11 @@ async function saveModule(event) {
         // Reload the class to get updated modules
         await selectClass(currentClass.id);
         showClassTab('modules');
+        NotificationSystem.success('Module created successfully!');
 
     } catch (error) {
         console.error('Error creating module:', error);
-        alert('Failed to create module');
+        NotificationSystem.error('Failed to create module');
     }
 }
 
@@ -672,7 +705,7 @@ async function editModule(id) {
 
     } catch (error) {
         console.error('Error loading module:', error);
-        alert('Failed to load module');
+        NotificationSystem.error('Failed to load module');
     }
 }
 
@@ -818,33 +851,43 @@ async function updateModule(event) {
 
         if (!response.ok) throw new Error('Failed to update module');
 
-        alert('Module updated successfully!');
+        NotificationSystem.success('Module updated successfully!');
         currentModule = { ...currentModule, ...data };
 
     } catch (error) {
         console.error('Error updating module:', error);
-        alert('Failed to update module');
+        NotificationSystem.error('Failed to update module');
     }
 }
 
 async function deleteModule(id) {
-    if (!confirm('Delete this module?')) return;
+    ModalSystem.confirm(
+        'Delete Module',
+        'Are you sure you want to delete this module? This will also delete all associated corpus entries and documents.',
+        async () => {
+            try {
+                ModalSystem.loading('Deleting module...');
 
-    try {
-        const response = await fetch(`${API_BASE}/modules/${id}`, {
-            method: 'DELETE',
-            headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        });
+                const response = await fetch(`${API_BASE}/modules/${id}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+                });
 
-        if (!response.ok) throw new Error('Failed to delete module');
+                if (!response.ok) throw new Error('Failed to delete module');
 
-        await selectClass(currentClass.id);
-        showClassTab('modules');
+                await selectClass(currentClass.id);
+                showClassTab('modules');
 
-    } catch (error) {
-        console.error('Error deleting module:', error);
-        alert('Failed to delete module');
-    }
+                ModalSystem.close();
+                NotificationSystem.success('Module deleted successfully');
+
+            } catch (error) {
+                console.error('Error deleting module:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to delete module');
+            }
+        }
+    );
 }
 
 // ===== MODULE CORPUS FUNCTIONS =====
@@ -957,7 +1000,7 @@ async function selectModuleCorpus(id) {
         `;
     } catch (error) {
         console.error('Error loading module corpus entry:', error);
-        alert('Failed to load corpus entry');
+        NotificationSystem.error('Failed to load corpus entry');
     }
 }
 
@@ -985,10 +1028,11 @@ async function saveModuleCorpus(event) {
 
         await loadModuleCorpus();
         document.getElementById('module-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Corpus entry created!</p>';
+        NotificationSystem.success('Module corpus entry created successfully!');
 
     } catch (error) {
         console.error('Error creating module corpus:', error);
-        alert('Failed to create corpus entry');
+        NotificationSystem.error('Failed to create corpus entry');
     }
 }
 
@@ -1015,32 +1059,42 @@ async function updateModuleCorpus(event, id) {
         if (!response.ok) throw new Error('Failed to update module corpus entry');
 
         await loadModuleCorpus();
-        alert('Corpus entry updated!');
+        NotificationSystem.success('Corpus entry updated successfully!');
 
     } catch (error) {
         console.error('Error updating module corpus:', error);
-        alert('Failed to update corpus entry');
+        NotificationSystem.error('Failed to update corpus entry');
     }
 }
 
 async function deleteModuleCorpus(id) {
-    if (!confirm('Delete this module corpus entry?')) return;
+    ModalSystem.confirm(
+        'Delete Module Corpus Entry',
+        'Are you sure you want to delete this corpus entry? This action cannot be undone.',
+        async () => {
+            try {
+                ModalSystem.loading('Deleting corpus entry...');
 
-    try {
-        const response = await fetch(`${API_BASE}/module-corpus/${id}`, {
-            method: 'DELETE',
-            headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
-        });
+                const response = await fetch(`${API_BASE}/module-corpus/${id}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
+                });
 
-        if (!response.ok) throw new Error('Failed to delete module corpus entry');
+                if (!response.ok) throw new Error('Failed to delete module corpus entry');
 
-        await loadModuleCorpus();
-        document.getElementById('module-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>';
+                await loadModuleCorpus();
+                document.getElementById('module-corpus-editor').innerHTML = '<p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>';
 
-    } catch (error) {
-        console.error('Error deleting module corpus:', error);
-        alert('Failed to delete corpus entry');
-    }
+                ModalSystem.close();
+                NotificationSystem.success('Corpus entry deleted successfully');
+
+            } catch (error) {
+                console.error('Error deleting module corpus:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to delete corpus entry');
+            }
+        }
+    );
 }
 
 // ===== MODULE DOCUMENTS FUNCTIONS =====
@@ -1094,11 +1148,11 @@ function uploadModuleDocument() {
             if (!response.ok) throw new Error('Failed to upload document');
 
             await loadModuleDocuments();
-            alert(`Document "${file.name}" uploaded successfully!`);
+            NotificationSystem.success(`Document "${file.name}" uploaded successfully!`);
 
         } catch (error) {
             console.error('Error uploading document:', error);
-            alert('Failed to upload document');
+            NotificationSystem.error('Failed to upload document');
         }
     };
     input.click();

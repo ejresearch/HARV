@@ -8,30 +8,173 @@ const archivedDocumentsHTML = `<p style="text-align: center; padding: 40px; colo
 
 // Section content definitions
 const sections = {
+    'admin-dashboard': {
+        title: 'Admin Dashboard',
+        description: 'System overview and course management',
+        content: `
+            <div class="p-6 space-y-6">
+                <!-- Top Metrics -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-bold text-sage-darkest" id="admin-total-students">-</div>
+                        <div class="text-sm text-gray-600 mt-2 font-medium">Total Students</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-bold text-sage-darkest" id="admin-classes-built">-</div>
+                        <div class="text-sm text-gray-600 mt-2 font-medium">Classes Built</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-bold text-sage-darkest" id="admin-modules-created">-</div>
+                        <div class="text-sm text-gray-600 mt-2 font-medium">Modules Created</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-bold text-sage-darkest" id="admin-active-conversations">-</div>
+                        <div class="text-sm text-gray-600 mt-2 font-medium">Active Conversations</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-bold text-sage-darkest" id="admin-memory-summaries">-</div>
+                        <div class="text-sm text-gray-600 mt-2 font-medium">Memory Summaries</div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Recent Activity</h3>
+                        <div class="space-y-3" id="admin-activity-feed">
+                            <p class="text-gray-500 text-center py-4">Loading activity...</p>
+                        </div>
+                    </div>
+
+                    <!-- Course Building Status -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Course Building Status</h3>
+                        <div id="admin-course-status">
+                            <p class="text-gray-500 text-center py-4">Loading status...</p>
+                        </div>
+                    </div>
+
+                    <!-- Student Insights -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Student Insights</h3>
+                        <div id="admin-student-insights">
+                            <p class="text-gray-500 text-center py-4">Loading insights...</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Quick Actions</h3>
+                        <div class="space-y-2">
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('classes')">📚 Manage Classes</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('memory')">🧠 Memory Inspector</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('conversations')">💬 All Conversations</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">🤖 Chat Interface</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    'student-dashboard': {
+        title: 'Student Dashboard',
+        description: 'Your personal learning journey',
+        content: `
+            <div class="p-6 space-y-6">
+                <!-- Welcome Header -->
+                <div class="bg-gradient-to-r from-sage-medium to-sage-dark text-white rounded-lg p-8 shadow-md" id="student-welcome">
+                    <h2 class="text-3xl font-bold">Welcome back, <span id="student-name">Student</span></h2>
+                    <p class="text-sage-lightest mt-2" id="student-subtitle">Loading your learning profile...</p>
+                </div>
+
+                <!-- Progress Hero -->
+                <div class="bg-white rounded-lg shadow-sm p-8 flex flex-col md:flex-row items-center gap-8">
+                    <div class="relative" id="student-progress-circle">
+                        <svg width="200" height="200">
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                            <circle id="progress-ring" cx="100" cy="100" r="90" fill="none" stroke="#8fae9d"
+                                stroke-width="10" stroke-dasharray="565" stroke-dashoffset="565"
+                                transform="rotate(-90 100 100)" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-sage-darkest" id="student-progress-text">0%</div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-sage-darkest mb-2">Overall Progress</h3>
+                        <p class="text-gray-600" id="student-progress-desc">Loading your progress...</p>
+                    </div>
+                </div>
+
+                <!-- Continue Learning -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-4">Continue Learning</h3>
+                    <div id="student-continue-learning">
+                        <p class="text-gray-500 text-center py-4">Loading your next steps...</p>
+                    </div>
+                </div>
+
+                <!-- Learning Path -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-4">Your Learning Path</h3>
+                    <div id="student-learning-path" class="space-y-4">
+                        <p class="text-gray-500 text-center py-4">Loading learning path...</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Stats -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Recent Activity</h3>
+                        <div id="student-recent-activity">
+                            <p class="text-gray-500 text-center py-4">Loading recent activity...</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Quick Stats</h3>
+                        <div class="grid grid-cols-3 gap-4" id="student-stats">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-sage-darkest" id="student-total-time">-</div>
+                                <div class="text-sm text-gray-600 mt-1">Total Time</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-sage-darkest" id="student-messages-sent">-</div>
+                                <div class="text-sm text-gray-600 mt-1">Messages Sent</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-sage-darkest" id="student-concepts-mastered">-</div>
+                                <div class="text-sm text-gray-600 mt-1">Concepts Mastered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    },
     system: {
         title: 'System',
         description: 'Check if server is running and healthy',
         content: `
-            <div class="system-grid">
-                <div class="system-card">
-                    <h3>Root Endpoint</h3>
-                    <p class="endpoint-label">GET /</p>
-                    <button class="test-btn" onclick="testRootEndpoint()">Test Endpoint</button>
-                    <pre class="result" id="root-result">Click test to run...</pre>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-2">Root Endpoint</h3>
+                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /</p>
+                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testRootEndpoint()">Test Endpoint</button>
+                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="root-result">Click test to run...</pre>
                 </div>
 
-                <div class="system-card">
-                    <h3>Health Check</h3>
-                    <p class="endpoint-label">GET /health</p>
-                    <button class="test-btn" onclick="testHealthEndpoint()">Test Endpoint</button>
-                    <pre class="result" id="health-result">Click test to run...</pre>
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-2">Health Check</h3>
+                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /health</p>
+                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testHealthEndpoint()">Test Endpoint</button>
+                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="health-result">Click test to run...</pre>
                 </div>
 
-                <div class="system-card">
-                    <h3>System Status</h3>
-                    <p class="endpoint-label">GET /system/status</p>
-                    <button class="test-btn" onclick="testStatusEndpoint()">Test Endpoint</button>
-                    <pre class="result" id="status-result">Click test to run...</pre>
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-2">System Status</h3>
+                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /system/status</p>
+                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testStatusEndpoint()">Test Endpoint</button>
+                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="status-result">Click test to run...</pre>
                 </div>
             </div>
         `
@@ -40,71 +183,79 @@ const sections = {
         title: 'Authentication',
         description: 'Register new users and log them in to get access tokens',
         content: `
-            <div class="auth-container">
+            <div class="p-6 max-w-md mx-auto">
                 <!-- Login Form -->
-                <div class="auth-card" id="login-card">
-                    <h3>Login</h3>
-                    <form id="login-form" onsubmit="handleLogin(event)">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="login-email" required placeholder="user@example.com">
+                <div class="bg-white rounded-lg shadow-sm p-8" id="login-card">
+                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Login</h3>
+                    <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="login-email" required placeholder="user@example.com"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                         </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="login-password" required placeholder="********">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="login-password" required placeholder="********"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                         </div>
-                        <button type="submit" class="auth-btn">Login</button>
-                        <button type="button" class="link-btn" onclick="showRegister()">Create New User</button>
+                        <button type="submit" class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium">Login</button>
+                        <button type="button" class="w-full text-sage-medium hover:text-sage-dark transition-colors font-medium" onclick="showRegister()">Create New User</button>
                     </form>
                 </div>
 
                 <!-- Register Form -->
-                <div class="auth-card" id="register-card" style="display: none;">
-                    <h3>Create New User</h3>
-                    <form id="register-form" onsubmit="handleRegister(event)">
-                        <div class="form-group">
-                            <label>Role</label>
-                            <select id="register-role" required onchange="toggleStudentFields()">
+                <div class="bg-white rounded-lg shadow-sm p-8" id="register-card" style="display: none;">
+                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Create New User</h3>
+                    <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                            <select id="register-role" required onchange="toggleStudentFields()"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                                 <option value="">Select Role</option>
                                 <option value="student">Student</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" id="register-name" required placeholder="John Doe">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                            <input type="text" id="register-name" required placeholder="John Doe"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="register-email" required placeholder="user@example.com">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="register-email" required placeholder="user@example.com"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                         </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="register-password" required placeholder="Min 8 characters">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="register-password" required placeholder="Min 8 characters"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                         </div>
 
                         <!-- Student-specific fields -->
-                        <div id="student-fields" style="display: none;">
-                            <div class="form-group">
-                                <label>Age / Grade Level</label>
-                                <input type="text" id="register-age-grade" placeholder="e.g., 10th grade, 16 years old">
+                        <div id="student-fields" style="display: none;" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Age / Grade Level</label>
+                                <input type="text" id="register-age-grade" placeholder="e.g., 10th grade, 16 years old"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                             </div>
-                            <div class="form-group">
-                                <label>How do you learn best?</label>
-                                <textarea id="register-learning-notes" rows="4" placeholder="Tell us anything you'd like the AI to know about how you learn. For example: 'I learn best with visual examples' or 'I need extra time to process new information'"></textarea>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">How do you learn best?</label>
+                                <textarea id="register-learning-notes" rows="4" placeholder="Tell us anything you'd like the AI to know about how you learn. For example: 'I learn best with visual examples' or 'I need extra time to process new information'"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none resize-none"></textarea>
                             </div>
                         </div>
 
-                        <button type="submit" class="auth-btn">Register</button>
-                        <button type="button" class="link-btn" onclick="showLogin()">Back to Login</button>
+                        <button type="submit" class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium">Register</button>
+                        <button type="button" class="w-full text-sage-medium hover:text-sage-dark transition-colors font-medium" onclick="showLogin()">Back to Login</button>
                     </form>
                 </div>
 
                 <!-- User Info Display -->
-                <div class="user-info-card" id="user-info" style="display: none;">
-                    <h3>Authenticated User</h3>
-                    <div id="user-details"></div>
-                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                <div class="bg-white rounded-lg shadow-sm p-8" id="user-info" style="display: none;">
+                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Authenticated User</h3>
+                    <div id="user-details" class="mb-6"></div>
+                    <button class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors font-medium" onclick="handleLogout()">Logout</button>
                 </div>
             </div>
         `
@@ -113,81 +264,31 @@ const sections = {
         title: 'Classes & Modules',
         description: 'Manage classes, modules, corpus, and documents in hierarchical structure',
         content: `
-            <div class="classes-container">
+            <div class="p-6 space-y-6">
                 <!-- Class Selector Dropdown -->
-                <div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <label style="font-weight: 600; color: var(--sage-darkest); white-space: nowrap;">Classes:</label>
-                        <select id="class-selector" onchange="selectClassFromDropdown()" style="flex: 1; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px; color: var(--sage-darkest); cursor: pointer;">
+                <div class="bg-white rounded-lg shadow-sm p-5">
+                    <div class="flex items-center gap-4">
+                        <label class="font-semibold text-sage-darkest whitespace-nowrap">Classes:</label>
+                        <select id="class-selector" onchange="selectClassFromDropdown()"
+                            class="flex-1 px-4 py-2 border-2 border-sage-light rounded-lg text-sm text-sage-darkest cursor-pointer focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                             <option value="">Select a class...</option>
                         </select>
-                        <button class="create-btn" onclick="createNewClass()" style="padding: 10px 16px; white-space: nowrap;">+ New Class</button>
+                        <button onclick="createNewClass()"
+                            class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium whitespace-nowrap">+ New Class</button>
                     </div>
                 </div>
 
                 <!-- Class/Module Editor -->
-                <div style="background: white; border-radius: 8px; padding: 30px; overflow-y: auto;" id="class-editor-container">
-                    <div style="text-align: center; color: #95a5a6; padding: 100px 20px;">
-                        <h3>Select a class to begin</h3>
-                        <p>Choose a class from the dropdown above or create a new one</p>
+                <div class="bg-white rounded-lg shadow-sm p-8 min-h-[400px]" id="class-editor-container">
+                    <div class="text-center text-gray-400 py-20">
+                        <h3 class="text-xl font-semibold mb-2">Select a class to begin</h3>
+                        <p class="text-gray-500">Choose a class from the dropdown above or create a new one</p>
                     </div>
                 </div>
             </div>
         `
     },
-    analytics: {
-        title: 'Analytics',
-        description: 'Track and display performance metrics for students, modules, and generate alerts',
-        content: `
-            <div class="analytics-container">
-                <!-- Dashboard Overview -->
-                <div class="analytics-section">
-                    <h3>Dashboard Overview</h3>
-                    <div id="dashboard-metrics" class="metrics-grid">
-                        <div class="metric-card">
-                            <div class="metric-label">Students Enrolled</div>
-                            <div class="metric-value" id="students-enrolled">-</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">Active Conversations</div>
-                            <div class="metric-value" id="active-conversations">-</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">Modules Completed</div>
-                            <div class="metric-value" id="modules-completed">-</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">Average Grade</div>
-                            <div class="metric-value" id="avg-grade">-</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">Completion Rate</div>
-                            <div class="metric-value" id="completion-rate">-</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-label">Avg Time (min)</div>
-                            <div class="metric-value" id="avg-time">-</div>
-                        </div>
-                    </div>
-                    <button class="refresh-btn" onclick="loadDashboardAnalytics()">Refresh Data</button>
-                </div>
-
-                <!-- Module Performance -->
-                <div class="analytics-section">
-                    <h3>Module Performance</h3>
-                    <div id="module-performance"></div>
-                    <button class="refresh-btn" onclick="loadModulePerformance()">Refresh Data</button>
-                </div>
-
-                <!-- Alerts -->
-                <div class="analytics-section">
-                    <h3>Alerts & Attention Needed</h3>
-                    <div id="analytics-alerts"></div>
-                    <button class="refresh-btn" onclick="loadAnalyticsAlerts()">Refresh Data</button>
-                </div>
-            </div>
-        `
-    },
+    // analytics: ARCHIVED - Now covered by Admin Dashboard
     corpus: {
         title: 'Corpus',
         description: 'Manage course-level and module-specific knowledge base entries',
@@ -248,41 +349,46 @@ const sections = {
         title: 'Conversations',
         description: 'Retrieve chat history with filtering by user, module, or pagination',
         content: `
-            <div class="conversations-container">
+            <div class="p-6 space-y-6">
                 <!-- Filters & Search -->
-                <div class="conversations-header">
-                    <div class="filters">
-                        <select id="filter-user" onchange="loadConversations()">
-                            <option value="">All Users</option>
-                        </select>
-                        <select id="filter-module" onchange="loadConversations()">
-                            <option value="">All Modules</option>
-                        </select>
-                        <button class="refresh-btn" onclick="loadConversations()">Refresh</button>
-                    </div>
-                    <div class="conversation-stats" id="conversation-stats">
-                        Total: <strong>0</strong> conversations
+                <div class="bg-white rounded-lg shadow-sm p-5">
+                    <div class="flex flex-wrap gap-4 items-center justify-between">
+                        <div class="flex gap-3 flex-1 flex-wrap">
+                            <select id="filter-user" onchange="loadConversations()"
+                                class="px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                                <option value="">All Users</option>
+                            </select>
+                            <select id="filter-module" onchange="loadConversations()"
+                                class="px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                                <option value="">All Modules</option>
+                            </select>
+                            <button onclick="loadConversations()"
+                                class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">Refresh</button>
+                        </div>
+                        <div class="text-gray-600" id="conversation-stats">
+                            Total: <strong>0</strong> conversations
+                        </div>
                     </div>
                 </div>
 
                 <!-- Two-column layout: List + Detail -->
-                <div class="conversations-layout">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">
                     <!-- Left: Conversation List (like ChatGPT sidebar) -->
-                    <div class="conversation-list">
-                        <div class="list-header">
-                            <h3>Conversation History</h3>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
+                        <div class="bg-sage-darkest text-white p-4">
+                            <h3 class="text-lg font-bold">Conversation History</h3>
                         </div>
-                        <div id="conversations-list-content">
-                            <p class="no-data">No conversations yet</p>
+                        <div id="conversations-list-content" class="flex-1 overflow-y-auto p-4">
+                            <p class="text-gray-500 text-center py-8">No conversations yet</p>
                         </div>
                     </div>
 
                     <!-- Right: Conversation Detail (like ChatGPT main view) -->
-                    <div class="conversation-detail">
-                        <div id="conversation-detail-content">
-                            <div class="empty-state">
-                                <h3>No Conversation Selected</h3>
-                                <p>Select a conversation from the list to view details</p>
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
+                        <div id="conversation-detail-content" class="flex-1 overflow-y-auto p-6">
+                            <div class="text-center text-gray-400 py-20">
+                                <h3 class="text-2xl font-bold mb-2">No Conversation Selected</h3>
+                                <p class="text-gray-500">Select a conversation from the list to view details</p>
                             </div>
                         </div>
                     </div>
@@ -291,54 +397,168 @@ const sections = {
         `
     },
     chat: {
-        title: 'Chat',
-        description: 'Send messages and have AI-powered conversations within modules',
+        title: 'Chat Interface',
+        description: 'AI-powered Socratic tutoring with enhanced memory and context',
         content: `
-            <div class="chat-page-container">
-                <!-- Controls Section -->
-                <div class="chat-controls-section">
-                    <div class="control-group">
-                        <label>Module</label>
-                        <select id="chat-module-select">
-                            <option value="">Select Module...</option>
-                        </select>
+            <div class="flex h-[calc(100vh-80px)]">
+                <!-- Left Sidebar: Conversations & Controls -->
+                <div class="w-80 bg-gradient-to-b from-sage-darkest to-sage-dark text-white flex flex-col">
+                    <div class="p-4 border-b border-sage-medium/30 flex items-center justify-between">
+                        <h3 class="text-lg font-bold">Conversations</h3>
+                        <button onclick="startNewChat()" title="Start new conversation"
+                            class="bg-sage-medium hover:bg-sage-light text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                            <span class="text-xl">+</span>
+                        </button>
                     </div>
-                    <div class="control-group">
-                        <label>AI Model</label>
-                        <select id="chat-provider-select">
-                            <option value="openai-gpt4">Loading models...</option>
-                        </select>
+
+                    <!-- Module & Model Selection -->
+                    <div class="p-4 space-y-3 border-b border-sage-medium/30">
+                        <div>
+                            <label class="block text-sm font-medium mb-1 text-sage-lightest">Module</label>
+                            <select id="chat-module-select" onchange="chatModuleChanged()"
+                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                <option value="">Select Module...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1 text-sage-lightest">AI Model</label>
+                            <select id="chat-provider-select"
+                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                <option value="openai-gpt4">GPT-4 (OpenAI)</option>
+                            </select>
+                        </div>
                     </div>
-                    <button class="new-chat-btn" onclick="startNewChat()">+ New Chat</button>
+
+                    <!-- Conversation History -->
+                    <div class="flex-1 overflow-y-auto p-4">
+                        <div class="text-sm font-semibold mb-2 text-sage-lightest">Recent Chats</div>
+                        <div id="chat-history-list">
+                            <div class="text-sage-light text-sm py-4 text-center">No conversations yet</div>
+                        </div>
+                    </div>
+
+                    <!-- Memory Context Indicator -->
+                    <div class="p-4 border-t border-sage-medium/30 bg-sage-darkest/50">
+                        <div class="text-sm font-semibold mb-2 text-sage-lightest">Memory Context</div>
+                        <div class="space-y-1 text-xs" id="chat-memory-stats">
+                            <div class="flex justify-between text-sage-light">
+                                <span>Profile:</span>
+                                <span class="font-mono" id="memory-profile-status">—</span>
+                            </div>
+                            <div class="flex justify-between text-sage-light">
+                                <span>Module Data:</span>
+                                <span class="font-mono" id="memory-module-status">—</span>
+                            </div>
+                            <div class="flex justify-between text-sage-light">
+                                <span>Conversations:</span>
+                                <span class="font-mono" id="memory-conv-status">—</span>
+                            </div>
+                            <div class="flex justify-between text-sage-light">
+                                <span>Context Size:</span>
+                                <span class="font-mono" id="memory-size-status">—</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Chat Container -->
-                <div class="chat-main-container">
-                    <!-- Chat Messages Area -->
-                    <div class="chat-messages-area" id="chat-messages">
-                        <div class="chat-welcome">
-                            <h2>Welcome to HARV AI Tutor</h2>
-                            <p>Select a module and start learning through Socratic dialogue</p>
-                            <div class="chat-features">
-                                <span class="feature-item">🧠 4-Layer Memory</span>
-                                <span class="feature-item">AI 9 AI Models</span>
-                                <span class="feature-item">Chats Socratic Method</span>
+                <!-- Main Chat Area -->
+                <div class="flex-1 flex flex-col bg-gray-50">
+                    <!-- Chat Header -->
+                    <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-sage-darkest" id="chat-module-title">HARV AI Tutor</h2>
+                            <p class="text-sm text-gray-600" id="chat-module-description">Select a module to begin learning</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleMemoryPanel()" title="View memory context"
+                                class="px-4 py-2 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm">
+                                🧠 Memory
+                            </button>
+                            <button onclick="exportConversation()" title="Export conversation"
+                                class="px-4 py-2 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm">
+                                📥 Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="flex-1 overflow-y-auto p-6" id="chat-messages">
+                        <div class="max-w-3xl mx-auto text-center py-12">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-sage-medium to-sage-dark rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                                HARV
+                            </div>
+                            <h2 class="text-3xl font-bold text-sage-darkest mb-2">Welcome to HARV</h2>
+                            <p class="text-gray-600 mb-8">Your AI-Powered Socratic Tutor</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                                <div class="bg-white rounded-lg p-6 shadow-sm">
+                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
+                                        🧠
+                                    </div>
+                                    <strong class="block text-sage-darkest mb-1">4-Layer Memory</strong>
+                                    <span class="text-sm text-gray-600">Personalized learning context</span>
+                                </div>
+                                <div class="bg-white rounded-lg p-6 shadow-sm">
+                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
+                                        💡
+                                    </div>
+                                    <strong class="block text-sage-darkest mb-1">Socratic Method</strong>
+                                    <span class="text-sm text-gray-600">Learn through guided discovery</span>
+                                </div>
+                                <div class="bg-white rounded-lg p-6 shadow-sm">
+                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
+                                        📚
+                                    </div>
+                                    <strong class="block text-sage-darkest mb-1">Context-Aware</strong>
+                                    <span class="text-sm text-gray-600">Remembers your progress</span>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-6 shadow-sm text-left max-w-md mx-auto">
+                                <h4 class="font-bold text-sage-darkest mb-3">Getting Started:</h4>
+                                <ol class="space-y-2 text-gray-700">
+                                    <li class="flex gap-3">
+                                        <span class="font-bold text-sage-medium">1.</span>
+                                        <span>Select a module from the dropdown above</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span class="font-bold text-sage-medium">2.</span>
+                                        <span>Choose your preferred AI model</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span class="font-bold text-sage-medium">3.</span>
+                                        <span>Ask questions and explore the topic through dialogue</span>
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Chat Input Area -->
-                    <div class="chat-input-section">
+                    <!-- Chat Input -->
+                    <div class="bg-white border-t border-gray-200 p-4">
                         <form id="chat-form" onsubmit="sendChatMessage(event)">
-                            <textarea
-                                id="chat-input"
-                                placeholder="Ask a question about the module..."
-                                rows="2"
-                                disabled
-                            ></textarea>
-                            <div class="chat-input-footer">
-                                <span class="chat-status" id="chat-status">Select a module to begin</span>
-                                <button type="submit" class="send-btn" id="send-btn" disabled>Send</button>
+                            <div class="max-w-3xl mx-auto">
+                                <div class="flex gap-2 items-end">
+                                    <textarea
+                                        id="chat-input"
+                                        placeholder="Ask a question about the module..."
+                                        rows="1"
+                                        disabled
+                                        class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none resize-none disabled:bg-gray-100"
+                                    ></textarea>
+                                    <button type="submit" id="send-btn" disabled title="Send message"
+                                        class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <span class="text-xl">→</span>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between items-center mt-2 text-sm">
+                                    <span class="flex items-center gap-2 text-gray-600" id="chat-status">
+                                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                        Select a module to begin
+                                    </span>
+                                    <span class="flex items-center gap-2 text-gray-600" id="active-model-badge">
+                                        <span>Model:</span>
+                                        <span class="font-medium" id="active-model-name">No model selected</span>
+                                    </span>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -408,65 +628,82 @@ const sections = {
         title: '4-Layer Memory Inspector',
         description: 'Drill down by Class → Module → Student to see exact prompts and data',
         content: `
-            <div class="memory-inspector-container">
+            <div class="p-6 space-y-6">
                 <!-- Hierarchical Selectors -->
-                <div style="background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h3 style="margin: 0 0 20px 0; color: var(--sage-darkest);">🔍 Select Context to Inspect</h3>
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-bold text-sage-darkest mb-5">Select Context to Inspect</h3>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
-                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">1. Class:</label>
-                            <select id="inspector-class" onchange="inspectorClassChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;">
+                            <label class="block font-semibold mb-2 text-sage-darkest">1. Class:</label>
+                            <select id="inspector-class" onchange="inspectorClassChanged()"
+                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                                 <option value="">Select a class...</option>
                             </select>
                         </div>
 
                         <div>
-                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">2. Module:</label>
-                            <select id="inspector-module" onchange="inspectorModuleChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;" disabled>
+                            <label class="block font-semibold mb-2 text-sage-darkest">2. Module:</label>
+                            <select id="inspector-module" onchange="inspectorModuleChanged()"
+                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
                                 <option value="">Select class first...</option>
                             </select>
                         </div>
 
                         <div>
-                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">3. Student:</label>
-                            <select id="inspector-student" onchange="inspectorStudentChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;" disabled>
+                            <label class="block font-semibold mb-2 text-sage-darkest">3. Student:</label>
+                            <select id="inspector-student" onchange="inspectorStudentChanged()"
+                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
                                 <option value="">Select module first...</option>
                             </select>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <button onclick="loadInspectorData()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600;">
-                            📊 Analyze Memory Context
+                    <div class="flex gap-3 items-center">
+                        <button onclick="loadInspectorData()"
+                            class="bg-sage-dark text-white px-6 py-3 rounded-lg hover:bg-sage-darkest transition-colors font-semibold">
+                            🔍 Analyze Memory Context
                         </button>
-                        <div style="flex: 1; position: relative;">
-                            <input type="text" id="inspector-search" placeholder="🔍 Or search by student name, email, conversation..." style="width: 100%; padding: 10px 40px 10px 15px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;">
-                            <button onclick="searchInspector()" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: var(--sage-medium); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Search</button>
+                        <div class="flex-1 relative">
+                            <input type="text" id="inspector-search" placeholder="Or search by student name, email, conversation..."
+                                class="w-full pl-4 pr-24 py-3 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                            <button onclick="searchInspector()"
+                                class="absolute right-1 top-1/2 -translate-y-1/2 bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors">
+                                Search
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Results Container -->
-                <div id="inspector-results" style="display: none;">
+                <div id="inspector-results" style="display: none;" class="space-y-6">
                     <!-- Assembled Prompt Section -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: var(--sage-darkest);">📝 Assembled Prompt for LLM</h3>
-                        <div id="assembled-prompt-display" style="background: #2d3748; color: #68d391; padding: 20px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; font-family: monospace; max-height: 500px; overflow-y: auto;">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Assembled Prompt for LLM</h3>
+                        <div id="assembled-prompt-display"
+                            class="bg-gray-900 text-green-400 p-5 rounded-lg overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono text-sm max-h-[500px] overflow-y-auto">
                             <!-- Prompt will be shown here -->
                         </div>
                     </div>
 
                     <!-- 4-Layer Data Breakdown -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 20px 0; color: var(--sage-darkest);">🧠 4-Layer Memory Breakdown</h3>
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-bold text-sage-darkest mb-5">4-Layer Memory Breakdown</h3>
 
                         <!-- Layer Tabs -->
-                        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd;">
-                            <button class="inspector-tab active" onclick="showInspectorLayer(1)" data-layer="1" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid var(--sage-dark);">Layer 1: Profile</button>
-                            <button class="inspector-tab" onclick="showInspectorLayer(2)" data-layer="2" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 2: Class</button>
-                            <button class="inspector-tab" onclick="showInspectorLayer(3)" data-layer="3" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 3: Module</button>
-                            <button class="inspector-tab" onclick="showInspectorLayer(4)" data-layer="4" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 4: Conversations</button>
+                        <div class="flex gap-2 mb-5 border-b-2 border-gray-200">
+                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-sage-dark text-sage-dark" onclick="showInspectorLayer(1)" data-layer="1">
+                                Layer 1: Profile
+                            </button>
+                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(2)" data-layer="2">
+                                Layer 2: Class
+                            </button>
+                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(3)" data-layer="3">
+                                Layer 3: Module
+                            </button>
+                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(4)" data-layer="4">
+                                Layer 4: Conversations
+                            </button>
                         </div>
 
                         <!-- Layer Content -->
@@ -477,9 +714,9 @@ const sections = {
                 </div>
 
                 <!-- Empty State -->
-                <div id="inspector-empty" style="text-align: center; padding: 60px 20px; color: var(--text-medium);">
-                    <h3 style="margin: 0 0 10px 0;">Select a Class, Module, and Student</h3>
-                    <p style="margin: 0;">Or use search to find specific conversations and see how the 4-layer memory system builds the LLM prompt</p>
+                <div id="inspector-empty" class="text-center py-16 text-gray-500">
+                    <h3 class="text-xl font-bold mb-2">Select a Class, Module, and Student</h3>
+                    <p>Or use search to find specific conversations and see how the 4-layer memory system builds the LLM prompt</p>
                 </div>
             </div>
         `
@@ -492,25 +729,26 @@ function loadSection(sectionName) {
     const contentDiv = document.getElementById('content');
 
     contentDiv.innerHTML = `
-        <div class="section-header">
-            <h2>${section.title}</h2>
-            <p>${section.description}</p>
+        <div class="bg-white border-b border-gray-200 px-6 py-4">
+            <h2 class="text-2xl font-bold text-sage-darkest">${section.title}</h2>
+            <p class="text-gray-600 mt-1">${section.description}</p>
         </div>
         ${section.content}
     `;
 
+    // Auto-load admin dashboard
+    if (sectionName === 'admin-dashboard') {
+        setTimeout(() => loadAdminDashboard(), 100);
+    }
+
+    // Auto-load student dashboard
+    if (sectionName === 'student-dashboard') {
+        setTimeout(() => loadStudentDashboard(), 100);
+    }
+
     // Auto-load classes section
     if (sectionName === 'classes') {
         setTimeout(() => loadClassesSection(), 100);
-    }
-
-    // Auto-load analytics section
-    if (sectionName === 'analytics') {
-        setTimeout(() => {
-            loadDashboardAnalytics();
-            loadModulePerformance();
-            loadAnalyticsAlerts();
-        }, 100);
     }
 
     // Auto-load conversations section
@@ -548,15 +786,16 @@ function getAuthHeaders() {
 }
 
 // Auto-login for testing (remove in production)
-async function autoLoginForTesting() {
+async function autoLoginForTesting(role = 'admin') {
     try {
+        const credentials = role === 'student'
+            ? { email: 'student@harv.com', password: 'student123' }
+            : { email: 'admin@harv.com', password: 'admin123' };
+
         const response = await fetch(`${API_BASE}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: 'admin@harv.com',
-                password: 'admin123'
-            })
+            body: JSON.stringify(credentials)
         });
 
         const data = await response.json();
@@ -565,12 +804,12 @@ async function autoLoginForTesting() {
             currentUser = data.user;
             authToken = data.access_token;
             localStorage.setItem('access_token', data.access_token);  // Save to localStorage for classes.js
-            console.log('✅ Auto-logged in as admin for testing');
+            console.log(`✅ Auto-logged in as ${role} for testing`);
         } else {
-            console.log('⚠️ Auto-login failed, manual login required');
+            console.log('Auto-login failed, manual login required');
         }
     } catch (error) {
-        console.log('⚠️ Auto-login error:', error.message);
+        console.log('Auto-login error:', error.message);
     }
 }
 
@@ -872,9 +1111,398 @@ async function loadAnalyticsAlerts() {
     }
 }
 
+// ===== DASHBOARD FUNCTIONS =====
+
+async function loadAdminDashboard() {
+    try {
+        // Load metrics from various endpoints
+        const [usersRes, classesRes, modulesRes, convsRes, memsRes] = await Promise.all([
+            fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/conversations`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/memory`, { headers: getAuthHeaders() })
+        ]);
+
+        const usersData = await usersRes.json();
+        const classesData = await classesRes.json();
+        const modulesData = await modulesRes.json();
+        const convsData = await convsRes.json();
+        const memsData = await memsRes.json();
+
+        // Extract counts
+        const students = Array.isArray(usersData) ? usersData : (usersData.users || []);
+        const studentCount = students.filter(u => u.role === 'student').length;
+        const classes = Array.isArray(classesData) ? classesData : (classesData.classes || []);
+        const modules = Array.isArray(modulesData) ? modulesData : (modulesData.modules || []);
+        const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
+        const memories = Array.isArray(memsData) ? memsData : (memsData.summaries || []);
+
+        // Update metrics
+        document.getElementById('admin-total-students').textContent = studentCount;
+        document.getElementById('admin-classes-built').textContent = classes.length;
+        document.getElementById('admin-modules-created').textContent = modules.length;
+        document.getElementById('admin-active-conversations').textContent = conversations.length;
+        document.getElementById('admin-memory-summaries').textContent = memories.length;
+
+        // Recent Activity Feed
+        const activityHTML = conversations.slice(0, 5).map(conv => {
+            const student = students.find(s => s.id === conv.user_id);
+            return `
+                <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="viewConversation(${conv.id})">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <strong class="text-sage-darkest">${student?.name || 'Unknown'}</strong>
+                            <p class="text-sm text-gray-600 mt-1">${conv.title || 'Untitled conversation'}</p>
+                        </div>
+                        <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `;
+        }).join('') || '<p class="text-gray-500 text-center py-4">No recent activity</p>';
+        document.getElementById('admin-activity-feed').innerHTML = activityHTML;
+
+        // Course Building Status
+        const incompleteClasses = classes.filter(c => !c.modules || c.modules.length === 0);
+        const statusHTML = incompleteClasses.length > 0
+            ? `<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-3">
+                   <p class="font-semibold text-yellow-800">⚠️ ${incompleteClasses.length} class(es) need modules</p>
+               </div>
+               <ul class="space-y-2">
+                   ${incompleteClasses.slice(0, 3).map(c => `<li class="text-gray-700 pl-4 border-l-2 border-gray-300">${c.title}</li>`).join('')}
+               </ul>`
+            : '<div class="bg-green-50 border-l-4 border-green-400 p-4"><p class="font-semibold text-green-800">✓ All classes have modules</p></div>';
+        document.getElementById('admin-course-status').innerHTML = statusHTML;
+
+        // Student Insights
+        const activeStudents = students.filter(s =>
+            conversations.some(c => c.user_id === s.id)
+        ).slice(0, 5);
+        const insightsHTML = activeStudents.length > 0
+            ? `<div class="space-y-2">
+                   ${activeStudents.map(s => {
+                       const convCount = conversations.filter(c => c.user_id === s.id).length;
+                       return `<div class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors" onclick="viewStudentConversations(${s.id})">
+                           <strong class="text-sage-darkest">${s.name}</strong>
+                           <span class="text-sm bg-sage-light text-sage-darkest px-3 py-1 rounded-full">${convCount} conversation${convCount !== 1 ? 's' : ''}</span>
+                       </div>`;
+                   }).join('')}
+               </div>`
+            : '<p class="text-gray-500 text-center py-4">No active students yet</p>';
+        document.getElementById('admin-student-insights').innerHTML = insightsHTML;
+
+    } catch (error) {
+        console.error('Error loading admin dashboard:', error);
+        alert('Failed to load admin dashboard. Please ensure you are logged in as admin.');
+    }
+}
+
+async function loadStudentDashboard() {
+    try {
+        // Get current user info
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        // Update welcome message
+        document.getElementById('student-name').textContent = user.name || 'Student';
+
+        // Get student's survey data if available
+        const surveyRes = await fetch(`${API_BASE}/surveys/${user.id}`, { headers: getAuthHeaders() });
+        if (surveyRes.ok) {
+            const survey = await surveyRes.json();
+            document.getElementById('student-subtitle').textContent =
+                `Learning style: ${survey.learning_style || 'visual'} | ${survey.familiarity || 'beginner'}`;
+        } else {
+            document.getElementById('student-subtitle').textContent = 'Complete your learning profile to get started';
+        }
+
+        // Get student's conversations and memories
+        const [convsRes, memsRes] = await Promise.all([
+            fetch(`${API_BASE}/conversations?user_id=${user.id}`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/memory/${user.id}`, { headers: getAuthHeaders() })
+        ]);
+
+        const convsData = await convsRes.json();
+        const memsData = await memsRes.json();
+
+        const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
+        const memories = Array.isArray(memsData) ? memsData : (memsData.summaries || []);
+
+        // Calculate progress (simplified - based on memories)
+        const totalModules = 10; // This should come from enrolled classes
+        const completedModules = new Set(memories.map(m => m.module_id)).size;
+        const progressPercent = Math.min(100, Math.round((completedModules / totalModules) * 100));
+
+        // Update progress circle
+        const circumference = 2 * Math.PI * 90; // radius is 90
+        const offset = circumference - (progressPercent / 100) * circumference;
+        document.getElementById('progress-ring').style.strokeDashoffset = offset;
+        document.getElementById('student-progress-text').textContent = `${progressPercent}%`;
+        document.getElementById('student-progress-desc').textContent =
+            `${completedModules} of ${totalModules} modules completed`;
+
+        // Continue Learning section
+        const lastConv = conversations[0];
+        const continueHTML = lastConv
+            ? `<div class="bg-gradient-to-r from-sage-light to-sage-lightest p-6 rounded-lg">
+                   <h4 class="text-lg font-bold text-sage-darkest mb-2">Resume: ${lastConv.title || 'Your last conversation'}</h4>
+                   <p class="text-gray-600 mb-4">Module: ${lastConv.module_title || 'Unknown'} • ${lastConv.message_count || 0} messages</p>
+                   <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="resumeConversation(${lastConv.id}, ${lastConv.module_id})">Continue Learning →</button>
+               </div>`
+            : `<div class="bg-gradient-to-r from-sage-light to-sage-lightest p-6 rounded-lg text-center">
+                   <h4 class="text-lg font-bold text-sage-darkest mb-4">Start your first lesson</h4>
+                   <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">Begin Learning →</button>
+               </div>`;
+        document.getElementById('student-continue-learning').innerHTML = continueHTML;
+
+        // Learning Path - simplified module list
+        const learningPathHTML = `
+            <div class="flex flex-wrap gap-3">
+                ${[...Array(totalModules)].map((_, i) => {
+                    const isCompleted = i < completedModules;
+                    const isCurrent = i === completedModules;
+                    const isLocked = i > completedModules;
+                    const bgColor = isCompleted ? 'bg-green-500' : (isCurrent ? 'bg-sage-medium' : 'bg-gray-300');
+                    const textColor = isCompleted || isCurrent ? 'text-white' : 'text-gray-500';
+                    return `<div class="flex flex-col items-center">
+                        <div class="${bgColor} ${textColor} w-12 h-12 rounded-full flex items-center justify-center font-bold mb-2">
+                            ${isCompleted ? '✓' : i + 1}
+                        </div>
+                        <div class="text-xs text-gray-600">Module ${i + 1}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `;
+        document.getElementById('student-learning-path').innerHTML = learningPathHTML;
+
+        // Recent Activity
+        const activityHTML = conversations.slice(0, 3).map(conv => `
+            <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="resumeConversation(${conv.id}, ${conv.module_id})">
+                <div class="flex justify-between items-center">
+                    <strong class="text-sage-darkest">${conv.title || 'Untitled'}</strong>
+                    <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
+                </div>
+            </div>
+        `).join('') || '<p class="text-gray-500 text-center py-4">No recent activity</p>';
+        document.getElementById('student-recent-activity').innerHTML = activityHTML;
+
+        // Quick Stats
+        const totalTime = conversations.reduce((sum, c) => sum + (c.duration_minutes || 0), 0);
+        const totalMessages = conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
+
+        document.getElementById('student-total-time').textContent = `${totalTime}min`;
+        document.getElementById('student-messages-sent').textContent = totalMessages;
+        document.getElementById('student-concepts-mastered').textContent = memories.length;
+
+    } catch (error) {
+        console.error('Error loading student dashboard:', error);
+        alert('Failed to load student dashboard. Please ensure you are logged in.');
+    }
+}
+
 // Chat Functions
 let currentChatConversationId = null;
 let chatMessages = [];
+let currentModuleData = null;
+
+// Enhanced Chat Functions
+async function chatModuleChanged() {
+    const moduleSelect = document.getElementById('chat-module-select');
+    const selectedModuleId = moduleSelect.value;
+
+    if (!selectedModuleId) {
+        resetChatInterface();
+        return;
+    }
+
+    try {
+        // Load module details
+        const moduleRes = await fetch(`${API_BASE}/modules/${selectedModuleId}`, {
+            headers: getAuthHeaders()
+        });
+        currentModuleData = await moduleRes.json();
+
+        // Update chat header
+        document.getElementById('chat-module-title').textContent = currentModuleData.title || 'Module';
+        document.getElementById('chat-module-description').textContent = currentModuleData.description || '';
+
+        // Enable chat input
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+
+        // Update status
+        const statusDot = document.querySelector('.status-dot');
+        statusDot.classList.add('active');
+        document.getElementById('chat-status').innerHTML = '<span class="status-dot active"></span> Ready to chat';
+
+        // Update active model badge
+        const providerSelect = document.getElementById('chat-provider-select');
+        const selectedProvider = providerSelect.options[providerSelect.selectedIndex].text;
+        document.getElementById('active-model-name').textContent = selectedProvider;
+
+        // Load memory stats
+        await loadChatMemoryStats(selectedModuleId);
+
+        // Load conversation history for this module
+        await loadChatHistory(selectedModuleId);
+
+        // Clear welcome message and show empty chat
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: var(--text-medium);"><p>Start a conversation about <strong>' + currentModuleData.title + '</strong></p></div>';
+
+    } catch (error) {
+        console.error('Error loading module:', error);
+        alert('Failed to load module details');
+    }
+}
+
+async function loadChatMemoryStats(moduleId) {
+    try {
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        // Update profile status
+        document.getElementById('memory-profile-status').textContent = user.name || 'Loaded';
+
+        // Load module data
+        document.getElementById('memory-module-status').textContent = 'Active';
+
+        // Load conversation count
+        const convsRes = await fetch(`${API_BASE}/conversations?user_id=${user.id}&module_id=${moduleId}`, {
+            headers: getAuthHeaders()
+        });
+        const convsData = await convsRes.json();
+        const convCount = convsData.conversations ? convsData.conversations.length : 0;
+        document.getElementById('memory-conv-status').textContent = convCount;
+
+        // Estimate context size
+        document.getElementById('memory-size-status').textContent = '~2.5KB';
+
+    } catch (error) {
+        console.error('Error loading memory stats:', error);
+    }
+}
+
+async function loadChatHistory(moduleId) {
+    try {
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        const convsRes = await fetch(`${API_BASE}/conversations?user_id=${user.id}&module_id=${moduleId}`, {
+            headers: getAuthHeaders()
+        });
+        const convsData = await convsRes.json();
+        const conversations = convsData.conversations || [];
+
+        const historyList = document.getElementById('chat-history-list');
+        if (conversations.length === 0) {
+            historyList.innerHTML = '<div class="no-conversations">No conversations yet</div>';
+            return;
+        }
+
+        historyList.innerHTML = conversations.slice(0, 10).map(conv => `
+            <div class="conversation-item" onclick="loadConversationMessages(${conv.id})">
+                <div class="conversation-item-title">${conv.title || 'Untitled'}</div>
+                <div class="conversation-item-meta">${conv.message_count || 0} messages • ${new Date(conv.created_at).toLocaleDateString()}</div>
+            </div>
+        `).join('');
+
+    } catch (error) {
+        console.error('Error loading chat history:', error);
+    }
+}
+
+function resetChatInterface() {
+    document.getElementById('chat-module-title').textContent = 'HARV AI Tutor';
+    document.getElementById('chat-module-description').textContent = 'Select a module to begin learning';
+
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    chatInput.disabled = true;
+    sendBtn.disabled = true;
+    chatInput.value = '';
+
+    const statusDot = document.querySelector('.status-dot');
+    statusDot.classList.remove('active');
+    document.getElementById('chat-status').innerHTML = '<span class="status-dot"></span> Select a module to begin';
+    document.getElementById('active-model-name').textContent = 'No model selected';
+
+    // Reset memory stats
+    document.getElementById('memory-profile-status').textContent = '—';
+    document.getElementById('memory-module-status').textContent = '—';
+    document.getElementById('memory-conv-status').textContent = '—';
+    document.getElementById('memory-size-status').textContent = '—';
+
+    // Clear history
+    document.getElementById('chat-history-list').innerHTML = '<div class="no-conversations">No conversations yet</div>';
+
+    currentModuleData = null;
+    currentChatConversationId = null;
+}
+
+function toggleMemoryPanel() {
+    alert('Memory panel feature - Coming soon!\n\nThis will show:\n- Full memory context\n- 4-layer breakdown\n- Token usage\n- Optimization stats');
+}
+
+function exportConversation() {
+    if (!chatMessages || chatMessages.length === 0) {
+        alert('No conversation to export');
+        return;
+    }
+
+    const conversation = {
+        module: currentModuleData?.title || 'Unknown Module',
+        date: new Date().toISOString(),
+        messages: chatMessages
+    };
+
+    const dataStr = JSON.stringify(conversation, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `harv-conversation-${Date.now()}.json`;
+    link.click();
+}
+
+async function loadConversationMessages(conversationId) {
+    try {
+        const response = await fetch(`${API_BASE}/conversations/${conversationId}`, {
+            headers: getAuthHeaders()
+        });
+        const conversation = await response.json();
+
+        currentChatConversationId = conversationId;
+        chatMessages = conversation.messages || [];
+
+        // Display messages
+        const messagesArea = document.getElementById('chat-messages');
+        messagesArea.innerHTML = chatMessages.map(msg => `
+            <div class="chat-message ${msg.role}-message">
+                <div class="message-avatar">${msg.role === 'user' ? 'U' : 'H'}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-role">${msg.role === 'user' ? 'You' : 'HARV'}</span>
+                    </div>
+                    <div class="message-text">${msg.content}</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Scroll to bottom
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+
+        // Highlight active conversation
+        document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+        event.currentTarget?.classList.add('active');
+
+    } catch (error) {
+        console.error('Error loading conversation messages:', error);
+        alert('Failed to load conversation');
+    }
+}
 
 async function loadChatProviders() {
     try {
@@ -946,22 +1574,32 @@ function addChatMessage(role, content, isLoading = false) {
     const messagesContainer = document.getElementById('chat-messages');
 
     // Remove welcome message if exists
-    const welcome = messagesContainer.querySelector('.chat-welcome');
+    const welcome = messagesContainer.querySelector('.chat-welcome, .max-w-3xl');
     if (welcome) welcome.remove();
 
     const messageDiv = document.createElement('div');
-    messageDiv.className = `chat-message chat-message-${role}${isLoading ? ' loading' : ''}`;
+    const isUser = role === 'user';
+    messageDiv.className = `flex gap-3 mb-4 ${isUser ? 'justify-end' : 'justify-start'}`;
 
     const avatar = document.createElement('div');
-    avatar.className = 'chat-avatar';
-    avatar.textContent = role === 'user' ? 'U' : 'AI';
+    avatar.className = `w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isUser ? 'bg-sage-medium order-2' : 'bg-blue-500'}`;
+    avatar.textContent = isUser ? 'U' : 'AI';
 
     const content_div = document.createElement('div');
-    content_div.className = 'chat-message-content';
+    content_div.className = `max-w-xl px-4 py-3 rounded-lg ${isUser ? 'bg-sage-lightest text-sage-darkest' : 'bg-white border border-gray-200 text-gray-700'}`;
     content_div.textContent = isLoading ? 'Thinking...' : content;
+    if (isLoading) {
+        content_div.classList.add('animate-pulse');
+    }
 
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(content_div);
+    if (isUser) {
+        messageDiv.appendChild(content_div);
+        messageDiv.appendChild(avatar);
+    } else {
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(content_div);
+    }
+
     messagesContainer.appendChild(messageDiv);
 
     // Scroll to bottom
@@ -1088,7 +1726,7 @@ async function loadConversations() {
         const listContent = document.getElementById('conversations-list-content');
 
         if (!data.conversations || data.conversations.length === 0) {
-            listContent.innerHTML = '<p class="no-data">No conversations found</p>';
+            listContent.innerHTML = '<p class="text-gray-500 text-center py-8">No conversations found</p>';
             return;
         }
 
@@ -1098,18 +1736,20 @@ async function loadConversations() {
             const time = conv.created_at ? new Date(conv.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
 
             html += `
-                <div class="conversation-item" onclick="loadConversationDetail(${conv.id})">
-                    <div class="conv-title">${conv.title}</div>
-                    <div class="conv-meta">
-                        <span class="conv-user">${conv.user_name}</span>
-                        <span class="conv-module">${conv.module_title}</span>
+                <div class="p-3 hover:bg-sage-lightest rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="loadConversationDetail(${conv.id})">
+                    <div class="font-semibold text-sage-darkest mb-1">${conv.title}</div>
+                    <div class="flex gap-2 text-xs text-gray-600 mb-2">
+                        <span class="bg-gray-100 px-2 py-1 rounded">${conv.user_name}</span>
+                        <span class="bg-sage-light px-2 py-1 rounded">${conv.module_title}</span>
                     </div>
-                    <div class="conv-info">
-                        <span class="conv-messages">${conv.message_count} messages</span>
-                        <span class="conv-date">${date} ${time}</span>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span>${conv.message_count} messages</span>
+                        <span>${date} ${time}</span>
                     </div>
-                    ${conv.finalized ? '<span class="conv-badge finalized">Finalized</span>' : ''}
-                    ${conv.current_grade ? `<span class="conv-badge grade">Grade: ${conv.current_grade}</span>` : ''}
+                    <div class="flex gap-2 mt-2">
+                        ${conv.finalized ? '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Finalized</span>' : ''}
+                        ${conv.current_grade ? `<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Grade: ${conv.current_grade}</span>` : ''}
+                    </div>
                 </div>
             `;
         });
@@ -1196,53 +1836,49 @@ async function loadConversationDetail(conversationId) {
         const updated = conv.updated_at ? new Date(conv.updated_at).toLocaleString() : 'N/A';
 
         let html = `
-            <div class="conversation-detail-header">
-                <div class="detail-title-section">
-                    <h2>${conv.title}</h2>
-                    <div class="detail-meta">
-                        <span><strong>User:</strong> ${conv.user.name} (${conv.user.email})</span>
-                        <span><strong>Module:</strong> ${conv.module.title}</span>
-                    </div>
-                    <div class="detail-meta">
-                        <span><strong>Created:</strong> ${date}</span>
-                        <span><strong>Updated:</strong> ${updated}</span>
-                    </div>
-                    <div class="detail-badges">
-                        ${conv.finalized ? '<span class="conv-badge finalized">Finalized</span>' : '<span class="conv-badge active">Active</span>'}
-                        ${conv.current_grade ? `<span class="conv-badge grade">Grade: ${conv.current_grade}</span>` : ''}
-                    </div>
+            <div class="border-b border-gray-200 pb-4 mb-4">
+                <h2 class="text-2xl font-bold text-sage-darkest mb-3">${conv.title}</h2>
+                <div class="grid grid-cols-2 gap-3 text-sm mb-3">
+                    <div><strong class="text-gray-700">User:</strong> <span class="text-gray-600">${conv.user.name} (${conv.user.email})</span></div>
+                    <div><strong class="text-gray-700">Module:</strong> <span class="text-gray-600">${conv.module.title}</span></div>
+                    <div><strong class="text-gray-700">Created:</strong> <span class="text-gray-600">${date}</span></div>
+                    <div><strong class="text-gray-700">Updated:</strong> <span class="text-gray-600">${updated}</span></div>
+                </div>
+                <div class="flex gap-2">
+                    ${conv.finalized ? '<span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Finalized</span>' : '<span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full">Active</span>'}
+                    ${conv.current_grade ? `<span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">Grade: ${conv.current_grade}</span>` : ''}
                 </div>
             </div>
 
-            <div class="conversation-messages">
-                <h3>Messages (${conv.messages.length})</h3>
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-sage-darkest">Messages (${conv.messages.length})</h3>
         `;
 
         if (conv.messages && conv.messages.length > 0) {
             conv.messages.forEach((msg, idx) => {
-                const roleClass = msg.role === 'user' ? 'message-user' : 'message-assistant';
-                const roleName = msg.role === 'user' ? 'Student' : 'AI Tutor';
+                const isUser = msg.role === 'user';
+                const bgColor = isUser ? 'bg-sage-lightest' : 'bg-white border border-gray-200';
+                const roleName = isUser ? 'Student' : 'AI Tutor';
+                const roleColor = isUser ? 'text-sage-dark' : 'text-blue-600';
 
                 html += `
-                    <div class="message-bubble ${roleClass}">
-                        <div class="message-header">
-                            <strong>${roleName}</strong>
-                        </div>
-                        <div class="message-content">${msg.content}</div>
+                    <div class="${bgColor} rounded-lg p-4">
+                        <div class="font-semibold ${roleColor} mb-2">${roleName}</div>
+                        <div class="text-gray-700 whitespace-pre-wrap">${msg.content}</div>
                     </div>
                 `;
             });
         } else {
-            html += '<p class="no-data">No messages in this conversation</p>';
+            html += '<p class="text-gray-500 text-center py-8">No messages in this conversation</p>';
         }
 
         html += '</div>';
 
         if (conv.memory_summary) {
             html += `
-                <div class="memory-summary-section">
-                    <h3>Memory Summary</h3>
-                    <div class="memory-summary-content">${conv.memory_summary}</div>
+                <div class="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <h3 class="text-lg font-bold text-sage-darkest mb-3">Memory Summary</h3>
+                    <div class="text-gray-700 whitespace-pre-wrap">${conv.memory_summary}</div>
                 </div>
             `;
         }
@@ -1422,12 +2058,81 @@ async function deleteModule() {
     }
 }
 
+// Resume a conversation (student dashboard)
+async function resumeConversation(conversationId, moduleId) {
+    // Switch to chat section
+    switchSection('chat');
+
+    // Wait for section to load, then set the module and load conversation
+    setTimeout(async () => {
+        // Set the module
+        const moduleSelect = document.getElementById('chat-module-select');
+        if (moduleSelect) {
+            moduleSelect.value = moduleId;
+        }
+
+        // Load the conversation (this would need to be implemented in the chat section)
+        console.log(`Resume conversation ${conversationId} in module ${moduleId}`);
+        // TODO: Implement conversation loading in chat section
+    }, 200);
+}
+
+// View a specific conversation (admin dashboard)
+async function viewConversation(conversationId) {
+    // Switch to conversations section
+    switchSection('conversations');
+
+    // Wait for section to load, then highlight/show the conversation
+    setTimeout(async () => {
+        console.log(`View conversation ${conversationId}`);
+        // The conversations section will load all conversations
+        // We could enhance it to filter/highlight this specific one
+    }, 200);
+}
+
+// View conversations for a specific student (admin dashboard)
+async function viewStudentConversations(userId) {
+    // Switch to conversations section
+    switchSection('conversations');
+
+    // Wait for section to load, then filter by user
+    setTimeout(async () => {
+        // Set the user filter if it exists
+        const userFilter = document.getElementById('filter-user');
+        if (userFilter) {
+            userFilter.value = userId;
+            // Trigger filter update
+            loadConversations();
+        }
+        console.log(`View conversations for user ${userId}`);
+    }, 200);
+}
+
+// Switch to a different section programmatically (for button clicks)
+function switchSection(sectionName) {
+    // Find and update active menu item
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        if (item.dataset.section === sectionName) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    // Load the section
+    loadSection(sectionName);
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 // Handle menu clicks
 document.addEventListener('DOMContentLoaded', () => {
     const menuItems = document.querySelectorAll('.menu-item');
 
     menuItems.forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', async () => {
             // Remove active class from all items
             menuItems.forEach(i => i.classList.remove('active'));
 
@@ -1436,17 +2141,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Load the section
             const section = item.dataset.section;
+
+            // Auto-login based on section
+            if (section === 'student-dashboard') {
+                await autoLoginForTesting('student');
+            } else if (section === 'admin-dashboard') {
+                await autoLoginForTesting('admin');
+            }
+
             loadSection(section);
 
             // Load data when section is opened
             if (section === 'modules') {
                 setTimeout(loadModulesList, 100);
-            } else if (section === 'analytics') {
-                setTimeout(() => {
-                    loadDashboardAnalytics();
-                    loadModulePerformance();
-                    loadAnalyticsAlerts();
-                }, 100);
             } else if (section === 'conversations') {
                 setTimeout(async () => {
                     await loadConversationFilters();
@@ -1473,8 +2180,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Load default section (system)
-    loadSection('system');
+    // Load default section (admin-dashboard)
+    loadSection('admin-dashboard');
 
     // Auto-login for testing
     autoLoginForTesting();
@@ -2737,17 +3444,17 @@ async function expandLayer(layerNum) {
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                     <div style="background: var(--sage-lighter); padding: 20px; border-radius: 8px;">
-                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">👨‍💼 Admin Role</h4>
+                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">Admin Role</h4>
                         <p style="margin: 0; color: var(--text-dark);">${info.adminAction}</p>
                     </div>
                     <div style="background: var(--warm-light); padding: 20px; border-radius: 8px;">
-                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">👨‍🎓 Student Role</h4>
+                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">Student Role</h4>
                         <p style="margin: 0; color: var(--text-dark);">${info.studentAction}</p>
                     </div>
                 </div>
 
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">📊 Real Database Records</h4>
+                    <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">Real Database Records</h4>
                     ${tablesHTML}
                 </div>
             </div>
@@ -2841,7 +3548,7 @@ function loadMemoryAssemblyFlow() {
                 <div style="font-size: 30px; color: var(--text-medium);">=</div>
 
                 <div style="flex: 1; min-width: 200px; background: var(--sage-dark); color: white; padding: 20px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 24px; font-weight: bold;">🧠</div>
+                    <div style="font-size: 24px; font-weight: bold;"></div>
                     <div style="margin-top: 5px; opacity: 0.9;">AI Context</div>
                 </div>
             </div>
@@ -2860,7 +3567,7 @@ function loadMemoryAssemblyFlow() {
 
             <div style="margin-top: 20px; text-align: center;">
                 <button onclick="viewAssembledPrompt()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600;">
-                    📝 View Sample Assembled Prompt
+                    View Sample Assembled Prompt
                 </button>
             </div>
         </div>
@@ -2898,7 +3605,7 @@ async function viewAssembledPrompt() {
         // Build the assembled prompt
         let assembledPrompt = `=== HARV DYNAMIC MEMORY CONTEXT ===
 
-🔹 LAYER 1: STUDENT PROFILE
+LAYER 1: STUDENT PROFILE
 Student Name: ${sampleUser.name}
 Email: ${sampleUser.email}
 Learning Style: ${sampleSurvey?.learning_style || 'Not specified'}
@@ -2906,19 +3613,19 @@ Familiarity: ${sampleSurvey?.familiarity || 'Not specified'}
 Goals: ${sampleSurvey?.goals || 'Not specified'}
 Pace Preference: ${sampleSurvey?.pace_preference || 'Not specified'}
 
-🔹 LAYER 2: CLASS ARCHITECTURE
+LAYER 2: CLASS ARCHITECTURE
 Class: ${sampleClass.title}
 Description: ${sampleClass.description || 'No description'}
 System Prompt: ${sampleClass.system_prompt || 'Use Socratic questioning...'}
 ${classCorpus ? `Class Corpus Entry: "${classCorpus.title}" - ${classCorpus.content?.substring(0, 100)}...` : ''}
 
-🔹 LAYER 3: MODULE CONTEXT
+LAYER 3: MODULE CONTEXT
 Current Module: ${sampleModule.title}
 Description: ${sampleModule.description || 'No description'}
 Learning Objectives: ${sampleModule.learning_objectives || 'Not specified'}
 Module Prompt: ${sampleModule.module_prompt || 'Guide student through discovery...'}
 
-🔹 LAYER 4: CONVERSATION MEMORY
+LAYER 4: CONVERSATION MEMORY
 ${sampleConversation ? `Recent Conversation: ${sampleConversation.title || 'Untitled'} (${sampleConversation.message_count || 0} messages)` : 'No recent conversations'}
 ${sampleMemory ? `
 Last Memory Summary:
@@ -2942,7 +3649,7 @@ Remember: Never give direct answers. Guide through questions and encourage indep
         modal.innerHTML = `
             <div style="background: white; border-radius: 12px; max-width: 900px; max-height: 90vh; overflow-y: auto; width: 100%;">
                 <div style="background: var(--sage-dark); color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="margin: 0;">📝 Assembled Prompt Preview</h3>
+                    <h3 style="margin: 0;">Assembled Prompt Preview</h3>
                     <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
                 </div>
                 <div style="padding: 30px;">
@@ -2951,7 +3658,7 @@ Remember: Never give direct answers. Guide through questions and encourage indep
                     </p>
                     <pre style="background: #2d3748; color: #68d391; padding: 20px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; margin: 0;">${assembledPrompt}</pre>
                     <div style="margin-top: 20px; padding: 15px; background: var(--warm-light); border-radius: 8px;">
-                        <strong>💡 Note:</strong> This is a sample using the first available record from each layer. In production, the system selects data specific to the user, class, and module being accessed.
+                        <strong>Note:</strong> This is a sample using the first available record from each layer. In production, the system selects data specific to the user, class, and module being accessed.
                     </div>
                 </div>
             </div>
@@ -3109,7 +3816,7 @@ async function loadInspectorData() {
             if (inspectorData.selectedModule) {
                 promises.push(fetch(`${API_BASE}/conversations?user_id=${inspectorData.selectedStudent}&module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }));
             }
-            promises.push(fetch(`${API_BASE}/memory?user_id=${inspectorData.selectedStudent}`, { headers: getAuthHeaders() }));
+            promises.push(fetch(`${API_BASE}/memory/${inspectorData.selectedStudent}`, { headers: getAuthHeaders() }));
         }
 
         const responses = await Promise.all(promises);
@@ -3179,7 +3886,7 @@ async function loadInspectorData() {
 function displayAssembledPrompt(user, classObj, module, survey, classCorpus, moduleCorpus, conversations, memories) {
     const prompt = `===  HARV 4-LAYER MEMORY CONTEXT ===
 
-🔹 LAYER 1: STUDENT PROFILE
+LAYER 1: STUDENT PROFILE
 Student Name: ${user?.name || 'Unknown'}
 Email: ${user?.email || 'Unknown'}
 Learning Style: ${survey?.learning_style || 'Not specified'}
@@ -3187,14 +3894,14 @@ Familiarity: ${survey?.familiarity || 'Not specified'}
 Goals: ${survey?.goals || 'Not specified'}
 Pace Preference: ${survey?.pace_preference || 'Not specified'}
 
-🔹 LAYER 2: CLASS ARCHITECTURE
+LAYER 2: CLASS ARCHITECTURE
 Class: ${classObj?.title || 'Unknown'}
 Description: ${classObj?.description || 'No description'}
 System Prompt: ${classObj?.system_prompt || 'Use Socratic questioning...'}
 Class Corpus (${classCorpus?.length || 0} entries):
 ${classCorpus?.slice(0, 2).map(c => `  - "${c.title}": ${c.content?.substring(0, 80)}...`).join('\n') || '  (none)'}
 
-🔹 LAYER 3: MODULE CONTEXT
+LAYER 3: MODULE CONTEXT
 Current Module: ${module?.title || 'Unknown'}
 Description: ${module?.description || 'No description'}
 Learning Objectives: ${module?.learning_objectives || 'Not specified'}
@@ -3202,7 +3909,7 @@ Module Prompt: ${module?.module_prompt || 'Guide student through discovery...'}
 Module Corpus (${moduleCorpus?.length || 0} entries):
 ${moduleCorpus?.slice(0, 2).map(c => `  - "${c.title}" (${c.type})`).join('\n') || '  (none)'}
 
-🔹 LAYER 4: CONVERSATION MEMORY
+LAYER 4: CONVERSATION MEMORY
 Recent Conversations: ${conversations?.length || 0} found
 ${conversations?.slice(0, 2).map(c => `  - "${c.title || 'Untitled'}" (${c.message_count || 0} messages)`).join('\n') || '  (none)'}
 
@@ -3353,7 +4060,8 @@ async function searchInspector() {
             fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() })
         ]);
 
-        const users = await usersRes.json();
+        const usersData = await usersRes.json();
+        const users = Array.isArray(usersData) ? usersData : (usersData.users || []);
         const tablesData = await convsRes.json();
         const conversations = tablesData.tables?.conversations?.data || [];
         const memories = tablesData.tables?.memory_summaries?.data || [];

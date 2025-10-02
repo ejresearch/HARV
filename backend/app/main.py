@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -15,7 +16,7 @@ import json
 
 # Import database and models
 from app.database import get_db, engine
-from app.models import Base, Class, Module, User, Conversation, MemorySummary
+from app.models import Base, Class, Module, User, Conversation, MemorySummary, OnboardingSurvey
 
 # Import authentication
 from app.auth import (
@@ -196,106 +197,91 @@ def populate_default_modules(db: Session):
     """Auto-populate the 15 Communication Media & Society modules"""
     modules = [
         {
-            "id": 1,
             "title": "Your Four Worlds", 
             "description": "Communication models, perception, and the four worlds we live in",
             "system_prompt": "You are Harv, a Socratic tutor for communication theory. Guide students to discover the four worlds of communication through strategic questioning about perception, reality, and media influence.",
             "module_prompt": "Focus on helping students understand communication models, perception processes, and how media shapes our understanding of reality."
         },
         {
-            "id": 2,
             "title": "Media Uses & Effects", 
             "description": "Functions vs effects, media theories, and societal impact",
             "system_prompt": "Guide students to discover the difference between media functions and effects through Socratic questioning about cultivation theory, agenda-setting, and media influence.",
             "module_prompt": "Help students explore media theories like cultivation theory, agenda-setting, and spiral of silence through discovery-based learning."
         },
         {
-            "id": 3,
             "title": "Shared Characteristics of Media", 
             "description": "Common features and patterns across all media types",
             "system_prompt": "Use Socratic questioning to help students identify universal patterns and characteristics that exist across all forms of media.",
             "module_prompt": "Guide discovery of shared media characteristics through comparative analysis and pattern recognition."
         },
         {
-            "id": 4,
-            "title": "Communication Infrastructure", 
+             "title": "Communication Infrastructure", 
             "description": "Telegraph, telephone, internet, and digital networks",
             "system_prompt": "Lead students to understand the evolution of communication infrastructure through strategic questions about technological development and social impact.",
             "module_prompt": "Explore how communication infrastructure has evolved from telegraph to internet and its societal implications."
         },
         {
-            "id": 5,
-            "title": "Books: The Birth of Mass Communication", 
+             "title": "Books: The Birth of Mass Communication", 
             "description": "History, publishing industry, and cultural impact of books",
             "system_prompt": "Guide students to discover how books became the first mass medium and their transformative cultural impact through Socratic inquiry.",
             "module_prompt": "Help students understand the publishing industry, copyright, and how books shaped civilization through strategic questioning."
         },
         {
-            "id": 6,
-            "title": "News & Newspapers", 
+             "title": "News & Newspapers", 
             "description": "News values, gatekeeping, and journalism norms",
             "system_prompt": "Use Socratic questioning to help students understand how news is constructed, what makes something 'newsworthy,' and the role of gatekeepers.",
             "module_prompt": "Explore news values, gatekeeping theory, and journalism ethics through guided discovery."
         },
         {
-            "id": 7,
-            "title": "Magazines: The Special Interest Medium", 
+             "title": "Magazines: The Special Interest Medium", 
             "description": "Specialization, audience targeting, and magazine economics",
             "system_prompt": "Guide students to understand how magazines evolved from general interest to specialized publications through strategic questioning.",
             "module_prompt": "Help students discover magazine industry economics, audience segmentation, and the shift to specialization."
         },
         {
-            "id": 8,
-            "title": "Comic Books: Small Business, Big Impact", 
+             "title": "Comic Books: Small Business, Big Impact", 
             "description": "Cultural influence and artistic expression in comics",
             "system_prompt": "Use Socratic questioning to explore how comic books, despite being a small industry, have had significant cultural impact.",
             "module_prompt": "Guide discovery of comic book art, storytelling, and cultural significance through strategic inquiry."
         },
         {
-            "id": 9,
-            "title": "Photography: Fixing a Shadow", 
+             "title": "Photography: Fixing a Shadow", 
             "description": "Visual communication and photographic technology",
             "system_prompt": "Lead students to understand how photography changed human communication and perception through strategic questioning.",
             "module_prompt": "Explore photographic technology, visual communication, and the phrase 'fixing a shadow' through guided discovery."
         },
         {
-            "id": 10,
-            "title": "Recordings: From Bach to Rock & Rap", 
+             "title": "Recordings: From Bach to Rock & Rap", 
             "description": "Music industry, cultural reflection, and audio technology",
             "system_prompt": "Guide students to understand how recorded music reflects and shapes culture through Socratic questioning about music industry evolution.",
             "module_prompt": "Help students explore how music recording technology and industry practices have evolved from classical to contemporary genres."
         },
         {
-            "id": 11,
-            "title": "Motion Pictures: The Start of Mass Entertainment", 
+             "title": "Motion Pictures: The Start of Mass Entertainment", 
             "description": "Film industry, storytelling, and cinematic influence",
             "system_prompt": "Use strategic questioning to help students understand how motion pictures became the first mass entertainment medium.",
             "module_prompt": "Explore film industry development, storytelling techniques, and cinema's role as a 'dream factory' through guided discovery."
         },
         {
-            "id": 12,
-            "title": "Radio: The Pervasive Medium", 
+             "title": "Radio: The Pervasive Medium", 
             "description": "Broadcasting history, programming, and radio's social role",
             "system_prompt": "Guide students to discover why radio became the most pervasive medium and its unique social role through Socratic questioning.",
             "module_prompt": "Help students understand radio's development, programming evolution, and its role in society through strategic inquiry."
         },
         {
-            "id": 13,
-            "title": "Television: The Center of Attention", 
+             "title": "Television: The Center of Attention", 
             "description": "TV's dominance, programming, and cultural transformation",
             "system_prompt": "Use Socratic questioning to help students understand why television became the dominant medium and its cultural impact.",
             "module_prompt": "Explore television's rise to dominance, programming strategies, and cultural transformation through guided discovery."
         },
         {
-            "id": 14,
-            "title": "Video Games: The Newest Mass Medium", 
+             "title": "Video Games: The Newest Mass Medium", 
             "description": "Interactive entertainment, gaming culture, and digital play",
             "system_prompt": "Guide students to understand how video games represent a new form of mass communication through strategic questioning.",
             "module_prompt": "Help students explore interactive entertainment, gaming culture, and video games as a communication medium."
         },
         {
-            "id": 15,
-            "title": "Economic Influencers: Advertising, PR, and Ownership", 
+             "title": "Economic Influencers: Advertising, PR, and Ownership", 
             "description": "Economic forces shaping media content and industry",
             "system_prompt": "Use Socratic questioning to help students understand how economic forces shape media content and industry practices.",
             "module_prompt": "Explore advertising, public relations, and media ownership through guided discovery of economic influences."
@@ -304,14 +290,13 @@ def populate_default_modules(db: Session):
     
     for module_data in modules:
         module = Module(
-            id=module_data["id"],
-            title=module_data["title"], 
+            title=module_data["title"],
             description=module_data["description"],
-            resources="", 
+            resources="",
             system_prompt=module_data["system_prompt"],
-            module_prompt=module_data["module_prompt"], 
+            module_prompt=module_data["module_prompt"],
             system_corpus="Core communication theories, media effects research, journalism ethics, digital transformation, media literacy",
-            module_corpus="", 
+            module_corpus="",
             dynamic_corpus="",
             api_endpoint="https://api.openai.com/v1/chat/completions"
         )
@@ -322,16 +307,21 @@ def populate_default_modules(db: Session):
 
 # Root endpoint
 @app.get("/")
-def root():
+def root(db: Session = Depends(get_db)):
+    modules_count = db.query(Module).count()
+    classes_count = db.query(Class).count()
+
     return {
         "message": "Harv Backend - Enhanced Memory-Aware AI Tutoring System",
         "status": "running",
         "version": "4.0.0",
-        "course": "Communication Media & Society",
+        "database": {
+            "classes": classes_count,
+            "modules": modules_count
+        },
         "features": [
             "4-layer dynamic memory system",
             "Socratic tutoring methodology",
-            "15 communication media modules",
             "Enhanced memory-driven responses",
             "Cross-module learning persistence",
             "Real-time context optimization"
@@ -467,6 +457,51 @@ def simple_register(request: SimpleRegisterRequest, db: Session = Depends(get_db
         raise HTTPException(status_code=500, detail="Registration failed")
 
 # Additional endpoints for enhanced memory system
+@app.get("/memory")
+def get_all_memory_summaries(db: Session = Depends(get_db)):
+    """Get all memory summaries (for admin dashboard)"""
+    summaries = db.query(MemorySummary).all()
+    return {
+        "summaries": [
+            {
+                "id": s.id,
+                "user_id": s.user_id,
+                "module_id": s.module_id,
+                "conversation_id": s.conversation_id,
+                "what_learned": s.what_learned,
+                "how_learned": s.how_learned,
+                "key_concepts": s.key_concepts,
+                "created_at": s.created_at.isoformat() if s.created_at else None
+            }
+            for s in summaries
+        ],
+        "total": len(summaries)
+    }
+
+@app.get("/users/me")
+async def get_me(
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    db: Session = Depends(get_db)
+):
+    """Get current authenticated user's info"""
+    from app.auth import verify_token
+
+    token_data = verify_token(credentials.credentials)
+    if not token_data:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    user = db.query(User).filter(User.id == token_data["user_id"]).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "role": "admin" if user.is_admin else "student",
+        "is_admin": user.is_admin
+    }
+
 @app.get("/users")
 def get_users(db: Session = Depends(get_db)):
     """Get all users (admin only in production)"""
@@ -477,21 +512,53 @@ def get_users(db: Session = Depends(get_db)):
                 "id": user.id,
                 "name": user.name,
                 "email": user.email,
-                "is_admin": user.is_admin
+                "is_admin": user.is_admin,
+                "role": "admin" if user.is_admin else "student"
             }
             for user in users
         ]
     }
 
+@app.get("/surveys/{user_id}")
+def get_user_survey(user_id: int, db: Session = Depends(get_db)):
+    """Get onboarding survey for a specific user"""
+    survey = db.query(OnboardingSurvey).filter(OnboardingSurvey.user_id == user_id).first()
+
+    if not survey:
+        raise HTTPException(status_code=404, detail="Survey not found")
+
+    return {
+        "id": survey.id,
+        "user_id": survey.user_id,
+        "reason": survey.reason,
+        "familiarity": survey.familiarity,
+        "learning_style": survey.learning_style,
+        "goals": survey.goals,
+        "background": survey.background,
+        "age_grade_level": survey.age_grade_level,
+        "learning_notes": survey.learning_notes,
+        "created_at": survey.created_at.isoformat() if survey.created_at else None
+    }
+
 @app.get("/system/status")
-def system_status():
+def system_status(db: Session = Depends(get_db)):
     """Get detailed system status"""
+    # Query actual database counts
+    classes_count = db.query(Class).count()
+    modules_count = db.query(Module).count()
+    users_count = db.query(User).count()
+    conversations_count = db.query(Conversation).count()
+
     return {
         "enhanced_memory": ENHANCED_MEMORY_AVAILABLE,
         "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
         "version": "4.0.0",
-        "course": "Communication Media & Society",
-        "modules": 15,
+        "database": {
+            "classes": classes_count,
+            "modules": modules_count,
+            "users": users_count,
+            "conversations": conversations_count
+        },
         "features": {
             "socratic_tutoring": True,
             "memory_persistence": True,

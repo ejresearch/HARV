@@ -22,8 +22,8 @@ class DynamicMemoryAssembler:
         conversation_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """Main entry point - assembles optimized, dynamic memory context"""
-        
-        print(f"🧠 Assembling dynamic memory context for user {user_id}, module {module_id}")
+
+        print(f"Assembling dynamic memory context for user {user_id}, module {module_id}")
         
         # Get core entities
         user = self.db.query(User).filter(User.id == user_id).first()
@@ -45,8 +45,8 @@ class DynamicMemoryAssembler:
         
         # Calculate context metrics
         context_metrics = self._calculate_context_metrics(assembled_prompt)
-        
-        print(f"📚 Dynamic context assembled: {context_metrics['total_chars']} chars")
+
+        print(f"Dynamic context assembled: {context_metrics['total_chars']} chars")
         
         return {
             'assembled_prompt': assembled_prompt,

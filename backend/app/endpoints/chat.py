@@ -16,19 +16,19 @@ from typing import Optional, List, Dict
 try:
     from app.ai_providers import AIProviderManager
     MULTI_PROVIDER_AVAILABLE = True
-    print("✅ Multi-provider AI service loaded")
+    print("Multi-provider AI service loaded")
 except ImportError:
     MULTI_PROVIDER_AVAILABLE = False
-    print("⚠️ Multi-provider AI service not available")
+    print("Multi-provider AI service not available")
 
 # Try to import enhanced memory system
 try:
     from app.memory_context_enhanced import DynamicMemoryAssembler
     ENHANCED_MEMORY_AVAILABLE = True
-    print("✅ Enhanced memory system loaded")
+    print("Enhanced memory system loaded")
 except ImportError:
     ENHANCED_MEMORY_AVAILABLE = False
-    print("⚠️ Enhanced memory system not available - using basic chat")
+    print("Enhanced memory system not available - using basic chat")
 
 # Create router
 router = APIRouter()
@@ -112,7 +112,7 @@ async def chat(
         )
         
     except Exception as e:
-        print(f"❌ Chat error: {e}")
+        print(f"Chat error: {e}")
         raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")
 
 @router.post("/chat/enhanced", response_model=ChatResponse)
@@ -170,7 +170,7 @@ async def enhanced_chat(
         
         # Log memory metrics
         metrics = memory_context['context_metrics']
-        print(f"📊 Enhanced context: {metrics['total_chars']} chars, {metrics['optimization_score']}/100 score")
+        print(f"Enhanced context: {metrics['total_chars']} chars, {metrics['optimization_score']}/100 score")
 
         # Save conversation to database
         conversation_id_str = memory_context['conversation_id'] or f"enhanced_{request.user_id}_{request.module_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -209,7 +209,7 @@ async def enhanced_chat(
         db.commit()
         db.refresh(conversation)
 
-        print(f"💾 Conversation saved: ID {conversation.id}, {len(messages)} messages")
+        print(f"Conversation saved: ID {conversation.id}, {len(messages)} messages")
 
         return ChatResponse(
             reply=reply,
@@ -219,15 +219,15 @@ async def enhanced_chat(
         )
         
     except Exception as e:
-        print(f"❌ Enhanced chat error: {e}")
+        print(f"Enhanced chat error: {e}")
         # Fallback to regular chat
-        print("🔄 Falling back to regular chat...")
+        print("Falling back to regular chat...")
         return await chat(request, db)
 
 @router.get("/memory/enhanced/{module_id}")
 async def get_enhanced_memory(
     module_id: int,
-    user_id: int = 1,  # Default for testing
+    user_id: int,
     db: Session = Depends(get_db)
 ):
     """Get enhanced memory data for GUI display"""
@@ -257,13 +257,13 @@ async def get_enhanced_memory(
             user_id=user_id,
             module_id=module_id
         )
-        
-        print(f"🧠 Memory context assembled for Module {module_id}: {memory_context['context_metrics']['total_chars']} chars")
+
+        print(f"Memory context assembled for Module {module_id}: {memory_context['context_metrics']['total_chars']} chars")
         
         return memory_context
         
     except Exception as e:
-        print(f"❌ Memory endpoint error: {e}")
+        print(f"Memory endpoint error: {e}")
         return {
             "error": str(e),
             "assembled_prompt": f"Error loading enhanced memory: {str(e)}",
@@ -329,7 +329,7 @@ async def get_basic_memory(
         }
         
     except Exception as e:
-        print(f"❌ Basic memory error: {e}")
+        print(f"Basic memory error: {e}")
         raise HTTPException(status_code=500, detail=f"Memory error: {str(e)}")
 
 @router.get("/providers")
