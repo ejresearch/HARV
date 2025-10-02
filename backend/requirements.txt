@@ -25,7 +25,7 @@ pydantic[email]==2.5.0
 # Additional utilities
 typing-extensions==4.8.0
 httpx==0.25.1
-anyio==4.0.0
+anyio>=3.7.1,<4.0.0
 
 # Development dependencies (optional)
 pytest==7.4.3

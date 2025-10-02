@@ -676,6 +676,28 @@ const sections = {
                 </div>
             </div>
         `
+    },
+    tableview: {
+        title: 'Table View',
+        description: 'Real-time view of all database tables',
+        content: `
+            <div class="table-view-container">
+                <div class="table-view-header">
+                    <h3>Real-Time Database Tables</h3>
+                    <div class="table-controls">
+                        <button class="refresh-btn" onclick="loadTableViewData()">🔄 Refresh</button>
+                        <label>
+                            <input type="checkbox" id="auto-refresh-tables" onchange="toggleAutoRefresh()">
+                            Auto-refresh (5s)
+                        </label>
+                    </div>
+                </div>
+                <div class="table-timestamp" id="table-timestamp"></div>
+                <div id="tables-container">
+                    <!-- Tables will be dynamically loaded here -->
+                </div>
+            </div>
+        `
     }
 };
 
@@ -691,6 +713,11 @@ function loadSection(sectionName) {
         </div>
         ${section.content}
     `;
+
+    // Auto-load table view data when section is opened
+    if (sectionName === 'tableview') {
+        loadTableViewData();
+    }
 }
 
 // Authentication Functions
@@ -2929,4 +2956,178 @@ function displayProgressData(data) {
             </div>
         `;
     }).join('');
+}
+
+// Table View Functions
+let autoRefreshInterval = null;
+
+async function loadTableViewData() {
+    try {
+        const response = await fetch(`${API_BASE}/progress/tables/all`);
+        if (!response.ok) throw new Error('Failed to load table data');
+
+        const data = await response.json();
+        displayTablesData(data);
+    } catch (error) {
+        console.error('Error loading table data:', error);
+        document.getElementById('tables-container').innerHTML = `
+            <div class="error-message">Failed to load table data: ${error.message}</div>
+        `;
+    }
+}
+
+function displayTablesData(data) {
+    const timestamp = new Date(data.timestamp).toLocaleString();
+    document.getElementById('table-timestamp').textContent = `Last updated: ${timestamp}`;
+
+    const container = document.getElementById('tables-container');
+    const tables = data.tables;
+
+    let html = '';
+
+    // Users Table
+    html += createTableHTML('Users', tables.users.count, tables.users.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'email', label: 'Email' },
+        { key: 'name', label: 'Name' },
+        { key: 'is_admin', label: 'Admin', format: (val) => val ? '✓' : '✗' }
+    ]);
+
+    // Modules Table
+    html += createTableHTML('Modules', tables.modules.count, tables.modules.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'title', label: 'Title' },
+        { key: 'description', label: 'Description' },
+        { key: 'system_prompt', label: 'System Prompt' },
+        { key: 'module_prompt', label: 'Module Prompt' },
+        { key: 'resources', label: 'Resources' },
+        { key: 'system_corpus', label: 'System Corpus' },
+        { key: 'module_corpus', label: 'Module Corpus' },
+        { key: 'dynamic_corpus', label: 'Dynamic Corpus' },
+        { key: 'api_endpoint', label: 'API Endpoint' },
+        { key: 'learning_objectives', label: 'Learning Objectives' }
+    ]);
+
+    // Conversations Table
+    html += createTableHTML('Conversations', tables.conversations.count, tables.conversations.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'user_id', label: 'User ID' },
+        { key: 'module_id', label: 'Module ID' },
+        { key: 'title', label: 'Title' },
+        { key: 'message_count', label: 'Messages' },
+        { key: 'finalized', label: 'Finalized', format: (val) => val ? '✓' : '✗' },
+        { key: 'created_at', label: 'Created' }
+    ]);
+
+    // Memory Summaries Table
+    html += createTableHTML('Memory Summaries', tables.memory_summaries.count, tables.memory_summaries.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'user_id', label: 'User ID' },
+        { key: 'module_id', label: 'Module ID' },
+        { key: 'conversation_id', label: 'Conv ID' },
+        { key: 'what_learned', label: 'What Learned' }
+    ]);
+
+    // User Progress Table
+    html += createTableHTML('User Progress', tables.user_progress.count, tables.user_progress.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'user_id', label: 'User ID' },
+        { key: 'module_id', label: 'Module ID' },
+        { key: 'completed', label: 'Completed', format: (val) => val ? '✓' : '✗' },
+        { key: 'grade', label: 'Grade' },
+        { key: 'time_spent', label: 'Time (min)' },
+        { key: 'attempts', label: 'Attempts' }
+    ]);
+
+    // Documents Table
+    html += createTableHTML('Documents', tables.documents.count, tables.documents.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'module_id', label: 'Module ID' },
+        { key: 'user_id', label: 'User ID' },
+        { key: 'filename', label: 'Filename' },
+        { key: 'content_length', label: 'Size (chars)' }
+    ]);
+
+    // Onboarding Surveys Table
+    html += createTableHTML('Onboarding Surveys', tables.onboarding_surveys.count, tables.onboarding_surveys.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'user_id', label: 'User ID' },
+        { key: 'familiarity', label: 'Familiarity' },
+        { key: 'learning_style', label: 'Learning Style' }
+    ]);
+
+    // Course Corpus Table
+    html += createTableHTML('Course Corpus', tables.course_corpus.count, tables.course_corpus.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'title', label: 'Title' },
+        { key: 'type', label: 'Type' },
+        { key: 'order_index', label: 'Order' },
+        { key: 'content_length', label: 'Size (chars)' }
+    ]);
+
+    // Module Corpus Entries Table
+    html += createTableHTML('Module Corpus Entries', tables.module_corpus_entries.count, tables.module_corpus_entries.data, [
+        { key: 'id', label: 'ID' },
+        { key: 'module_id', label: 'Module ID' },
+        { key: 'title', label: 'Title' },
+        { key: 'type', label: 'Type' },
+        { key: 'content_length', label: 'Size (chars)' }
+    ]);
+
+    container.innerHTML = html;
+}
+
+function createTableHTML(tableName, count, data, columns) {
+    let html = `
+        <div class="db-table">
+            <div class="db-table-header">
+                <h4>${tableName}</h4>
+                <span class="record-count">${count} record${count !== 1 ? 's' : ''}</span>
+            </div>
+    `;
+
+    if (count === 0) {
+        html += '<p class="no-data">No records</p>';
+    } else {
+        html += '<div class="table-wrapper"><table><thead><tr>';
+        columns.forEach(col => {
+            html += `<th>${col.label}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        data.forEach(row => {
+            html += '<tr>';
+            columns.forEach(col => {
+                let value = row[col.key];
+                if (col.format) {
+                    value = col.format(value);
+                }
+                if (value === null || value === undefined) {
+                    value = '-';
+                }
+                html += `<td>${value}</td>`;
+            });
+            html += '</tr>';
+        });
+
+        html += '</tbody></table></div>';
+    }
+
+    html += '</div>';
+    return html;
+}
+
+function toggleAutoRefresh() {
+    const checkbox = document.getElementById('auto-refresh-tables');
+
+    if (checkbox.checked) {
+        // Start auto-refresh
+        autoRefreshInterval = setInterval(loadTableViewData, 5000);
+    } else {
+        // Stop auto-refresh
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+        }
+    }
 }
