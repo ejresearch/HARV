@@ -405,261 +405,82 @@ const sections = {
         `
     },
     memory: {
-        title: 'Memory',
-        description: 'Store and retrieve conversation summaries for personalized context',
+        title: '4-Layer Memory Inspector',
+        description: 'Drill down by Class → Module → Student to see exact prompts and data',
         content: `
-            <div class="memory-container">
-                <!-- Filters -->
-                <div class="memory-header">
-                    <div class="memory-tabs">
-                        <button class="memory-tab active" onclick="switchMemoryView('table')">Table View</button>
-                        <button class="memory-tab" onclick="switchMemoryView('visualization')">4-Layer Visualization</button>
-                    </div>
-                    <select id="memory-user-filter" onchange="loadMemorySummaries()">
-                        <option value="">All Users</option>
-                    </select>
-                    <select id="memory-module-filter" onchange="loadMemorySummaries()">
-                        <option value="">All Modules</option>
-                    </select>
-                    <button class="refresh-btn" onclick="loadMemorySummaries()">Refresh</button>
-                    <span id="memory-count" class="memory-count">0 summaries</span>
-                </div>
+            <div class="memory-inspector-container">
+                <!-- Hierarchical Selectors -->
+                <div style="background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin: 0 0 20px 0; color: var(--sage-darkest);">🔍 Select Context to Inspect</h3>
 
-                <!-- Memory Table View -->
-                <div id="memory-table-view" class="memory-table-container">
-                    <table class="memory-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>User</th>
-                                <th>Module</th>
-                                <th>What Learned</th>
-                                <th>How Learned</th>
-                                <th>Key Concepts</th>
-                                <th>Understanding</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memory-table-body">
-                            <tr>
-                                <td colspan="9" class="no-data">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">1. Class:</label>
+                            <select id="inspector-class" onchange="inspectorClassChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;">
+                                <option value="">Select a class...</option>
+                            </select>
+                        </div>
 
-                <!-- 4-Layer Visualization View -->
-                <div id="memory-visualization-view" class="memory-visualization" style="display: none;">
-                    <div class="visualization-info">
-                        <h3>Memory Assembly Pipeline</h3>
-                        <p>When a user sends a chat message, the system queries these tables:</p>
-                        <ul>
-                            <li><strong>Layer 1:</strong> SELECT from users, onboarding_surveys WHERE user_id = ?</li>
-                            <li><strong>Layer 2:</strong> SELECT from modules, course_corpus, module_corpus_entries WHERE module_id = ?</li>
-                            <li><strong>Layer 3:</strong> SELECT messages_json from conversations WHERE user_id = ? AND module_id = ?</li>
-                            <li><strong>Layer 4:</strong> SELECT * from memory_summaries WHERE user_id = ? ORDER BY created_at DESC</li>
-                        </ul>
-                        <p class="info-note">All data is concatenated into a single context prompt sent to the AI, enabling personalized, continuous learning experiences across sessions.</p>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">2. Module:</label>
+                            <select id="inspector-module" onchange="inspectorModuleChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;" disabled>
+                                <option value="">Select class first...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--sage-darkest);">3. Student:</label>
+                            <select id="inspector-student" onchange="inspectorStudentChanged()" style="width: 100%; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;" disabled>
+                                <option value="">Select module first...</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="layer-stack">
-                        <div class="memory-layer layer-1">
-                            <div class="layer-header">
-                                <span class="layer-number">1</span>
-                                <h3>User Profile Data</h3>
-                            </div>
-                            <div class="layer-content">
-                                <div class="layer-item">
-                                    <strong>Table: users</strong>
-                                    <p><code>name: "Sarah Johnson", email: "sarah@example.com"</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Table: onboarding_surveys</strong>
-                                    <p><code>learning_style: "visual", familiarity: "beginner", goals: "Understand media theory for journalism career"</code></p>
-                                </div>
-                            </div>
-                            <div class="layer-badge">Who is learning</div>
-                        </div>
-
-                        <div class="memory-layer layer-2">
-                            <div class="layer-header">
-                                <span class="layer-number">2</span>
-                                <h3>Module & Corpus Data</h3>
-                            </div>
-                            <div class="layer-content">
-                                <div class="layer-item">
-                                    <strong>Table: modules (module_id=2)</strong>
-                                    <p><code>title: "Media Uses & Effects", system_prompt: "Guide students to discover cultivation theory through Socratic questioning..."</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Table: course_corpus (3 entries)</strong>
-                                    <p><code>"Media literacy frameworks", "Critical thinking in communication", "Socratic method principles"</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Table: module_corpus_entries (1 entry)</strong>
-                                    <p><code>"Cultivation Theory: heavy TV viewers develop worldviews that reflect media content..."</code></p>
-                                </div>
-                            </div>
-                            <div class="layer-badge">What we're teaching</div>
-                        </div>
-
-                        <div class="memory-layer layer-3">
-                            <div class="layer-header">
-                                <span class="layer-number">3</span>
-                                <h3>Conversation History</h3>
-                            </div>
-                            <div class="layer-content">
-                                <div class="layer-item">
-                                    <strong>Table: conversations (conversation_id=47)</strong>
-                                    <p><code>messages_json: [
-                                        {"role": "user", "content": "Can you explain cultivation theory?"},
-                                        {"role": "assistant", "content": "Before I explain, what do you think happens when people watch a lot of TV?"},
-                                        {"role": "user", "content": "Maybe they start thinking the world is like what they see on TV?"},
-                                        {"role": "assistant", "content": "Excellent observation! That's the core of cultivation theory..."}
-                                    ]</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Recent Context Window</strong>
-                                    <p><code>Last 8 messages from current session (most recent conversation)</code></p>
-                                </div>
-                            </div>
-                            <div class="layer-badge">Current session</div>
-                        </div>
-
-                        <div class="memory-layer layer-4">
-                            <div class="layer-header">
-                                <span class="layer-number">4</span>
-                                <h3>Learning Memory</h3>
-                            </div>
-                            <div class="layer-content">
-                                <div class="layer-item">
-                                    <strong>Table: memory_summaries (id=12, module_id=2)</strong>
-                                    <p><code>what_learned: "Cultivation theory explains how heavy TV viewing shapes perception of reality", how_learned: "Through Socratic dialogue about media influence", key_concepts: ["media effects", "worldview formation", "heavy viewing"], understanding_level: "intermediate"</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Learning Insights</strong>
-                                    <p><code>learning_insights: "Student demonstrates strong pattern recognition and can connect theory to real examples", teaching_effectiveness: "Socratic method working well - student discovering concepts independently"</code></p>
-                                </div>
-                                <div class="layer-item">
-                                    <strong>Cross-Module Context (module_id=1)</strong>
-                                    <p><code>what_learned: "Communication models show how perception filters reality", key_concepts: ["four worlds theory", "perception", "selective attention"]</code></p>
-                                </div>
-                            </div>
-                            <div class="layer-badge">Past learning</div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button onclick="loadInspectorData()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600;">
+                            📊 Analyze Memory Context
+                        </button>
+                        <div style="flex: 1; position: relative;">
+                            <input type="text" id="inspector-search" placeholder="🔍 Or search by student name, email, conversation..." style="width: 100%; padding: 10px 40px 10px 15px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px;">
+                            <button onclick="searchInspector()" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: var(--sage-medium); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Search</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Memory Detail Modal -->
-                <div id="memory-detail-modal" class="modal" style="display: none;">
-                    <div class="modal-content large-modal">
-                        <h3>Memory Summary Details</h3>
-                        <div id="memory-detail-content"></div>
-                        <div class="modal-actions">
-                            <button class="cancel-btn" onclick="closeMemoryDetail()">Close</button>
+                <!-- Results Container -->
+                <div id="inspector-results" style="display: none;">
+                    <!-- Assembled Prompt Section -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: var(--sage-darkest);">📝 Assembled Prompt for LLM</h3>
+                        <div id="assembled-prompt-display" style="background: #2d3748; color: #68d391; padding: 20px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; font-family: monospace; max-height: 500px; overflow-y: auto;">
+                            <!-- Prompt will be shown here -->
                         </div>
                     </div>
-                </div>
-            </div>
-        `
-    },
-    progress: {
-        title: 'Progress',
-        description: 'Track student completion and performance across modules',
-        content: `
-            <div class="progress-container">
-                <div class="progress-header">
-                    <select id="progress-user-filter" onchange="loadUserProgress()">
-                        <option value="">Select User</option>
-                    </select>
-                    <button class="refresh-btn" onclick="loadUserProgress()">Refresh</button>
-                </div>
 
-                <!-- Overall Stats -->
-                <div id="progress-overview" class="progress-overview">
-                    <div class="stat-card">
-                        <div class="stat-icon">Chats</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="total-conversations">0</div>
-                            <div class="stat-label">Total Conversations</div>
+                    <!-- 4-Layer Data Breakdown -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 20px 0; color: var(--sage-darkest);">🧠 4-Layer Memory Breakdown</h3>
+
+                        <!-- Layer Tabs -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd;">
+                            <button class="inspector-tab active" onclick="showInspectorLayer(1)" data-layer="1" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid var(--sage-dark);">Layer 1: Profile</button>
+                            <button class="inspector-tab" onclick="showInspectorLayer(2)" data-layer="2" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 2: Class</button>
+                            <button class="inspector-tab" onclick="showInspectorLayer(3)" data-layer="3" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 3: Module</button>
+                            <button class="inspector-tab" onclick="showInspectorLayer(4)" data-layer="4" style="background: none; border: none; padding: 12px 20px; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent;">Layer 4: Conversations</button>
                         </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Messages</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="total-messages">0</div>
-                            <div class="stat-label">Total Messages</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Modules</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="modules-started">0/15</div>
-                            <div class="stat-label">Modules Started</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Progress</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="completion-rate">0%</div>
-                            <div class="stat-label">Completion Rate</div>
+
+                        <!-- Layer Content -->
+                        <div id="inspector-layer-content">
+                            <!-- Layer data will be shown here -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Module Progress Grid -->
-                <div class="progress-modules">
-                    <h3>Module Progress</h3>
-                    <div id="module-progress-grid" class="module-grid">
-                        <!-- Module cards will be inserted here -->
-                    </div>
+                <!-- Empty State -->
+                <div id="inspector-empty" style="text-align: center; padding: 60px 20px; color: var(--text-medium);">
+                    <h3 style="margin: 0 0 10px 0;">Select a Class, Module, and Student</h3>
+                    <p style="margin: 0;">Or use search to find specific conversations and see how the 4-layer memory system builds the LLM prompt</p>
                 </div>
-            </div>
-        `
-    },
-    tableview: {
-        title: 'Table View',
-        description: 'Real-time view of all database tables',
-        content: `
-            <div class="table-view-container">
-                <div class="table-view-header">
-                    <h3>Real-Time Database Tables</h3>
-                    <div class="table-controls">
-                        <button class="refresh-btn" onclick="loadTableViewData()">Refresh</button>
-                        <label>
-                            <input type="checkbox" id="auto-refresh-tables" onchange="toggleAutoRefresh()">
-                            Auto-refresh (5s)
-                        </label>
-                    </div>
-                </div>
-                <div class="table-timestamp" id="table-timestamp"></div>
-                <div id="tables-container">
-                    <!-- Tables will be dynamically loaded here -->
-                </div>
-            </div>
-        `
-    },
-    archive: {
-        title: 'Archive',
-        description: 'Legacy sections (Modules, Corpus, Documents) - migrated to Classes',
-        content: `
-            <div style="padding: 20px;">
-                <div style="background: var(--warm-light); border-left: 4px solid var(--warm-accent); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-                    <h3 style="margin: 0 0 10px 0; color: var(--sage-darkest);">📦 Archived Sections</h3>
-                    <p style="margin: 0; color: var(--text-dark);">
-                        The following sections have been migrated to the new <strong>Classes & Modules</strong> hierarchical system.
-                        These are kept here for reference only.
-                    </p>
-                </div>
-
-                <div class="corpus-tabs" style="margin-bottom: 30px;">
-                    <button class="corpus-tab active" onclick="showArchiveSection('modules')">Legacy Modules</button>
-                    <button class="corpus-tab" onclick="showArchiveSection('corpus')">Legacy Corpus</button>
-                    <button class="corpus-tab" onclick="showArchiveSection('documents')">Legacy Documents</button>
-                </div>
-
-                <div id="archive-content"></div>
             </div>
         `
     }
@@ -677,11 +498,6 @@ function loadSection(sectionName) {
         </div>
         ${section.content}
     `;
-
-    // Auto-load table view data when section is opened
-    if (sectionName === 'tableview') {
-        loadTableViewData();
-    }
 
     // Auto-load classes section
     if (sectionName === 'classes') {
@@ -713,25 +529,11 @@ function loadSection(sectionName) {
         }, 100);
     }
 
-    // Auto-load memory section
+    // Auto-load memory inspector
     if (sectionName === 'memory') {
         setTimeout(() => {
-            loadMemoryFilters();
-            loadMemorySummaries();
+            loadMemoryInspector();
         }, 100);
-    }
-
-    // Auto-load progress section
-    if (sectionName === 'progress') {
-        setTimeout(() => {
-            loadProgressFilters();
-            loadUserProgress();
-        }, 100);
-    }
-
-    // Auto-load archive section default view
-    if (sectionName === 'archive') {
-        setTimeout(() => showArchiveSection('modules'), 100);
     }
 }
 
@@ -2649,611 +2451,946 @@ async function populateMemoryFilters() {
     }
 }
 
-async function loadMemorySummaries() {
-    const userFilter = document.getElementById('memory-user-filter')?.value;
-    const moduleFilter = document.getElementById('memory-module-filter')?.value;
-    const tableBody = document.getElementById('memory-table-body');
-    const countElement = document.getElementById('memory-count');
+// ===== 4-LAYER MEMORY DASHBOARD FUNCTIONS =====
 
-    if (!userFilter) {
-        // Show dummy data when no user is selected
-        const dummyData = generateDummyMemoryData();
-        renderMemoryTable(dummyData, tableBody, countElement);
-        return;
-    }
+async function loadMemoryDashboard() {
+    // Load all layer data in parallel
+    await Promise.all([
+        loadLayer1Data(),
+        loadLayer2Data(),
+        loadLayer3Data(),
+        loadLayer4Data()
+    ]);
 
-    const url = moduleFilter
-        ? `${API_BASE}/memory/${userFilter}?module_id=${moduleFilter}`
-        : `${API_BASE}/memory/${userFilter}`;
+    // Load assembly flow
+    loadMemoryAssemblyFlow();
+}
 
+async function loadLayer1Data() {
     try {
-        const response = await fetch(url, {
-            headers: {
-                ...getAuthHeaders()
-            }
-        });
-
-        if (!response.ok) throw new Error('Failed to load memory summaries');
-
-        const data = await response.json();
-
-        if (!data.summaries || data.summaries.length === 0) {
-            // Show dummy data when no summaries found
-            const dummyData = generateDummyMemoryData();
-            renderMemoryTable(dummyData, tableBody, countElement);
-            return;
-        }
-
-        renderMemoryTable(data, tableBody, countElement);
-
-    } catch (error) {
-        console.error('Error loading memory summaries:', error);
-        // Show dummy data on error
-        const dummyData = generateDummyMemoryData();
-        renderMemoryTable(dummyData, tableBody, countElement);
-    }
-}
-
-function generateDummyMemoryData() {
-    return {
-        user_id: 1,
-        count: 5,
-        summaries: [
-            {
-                id: 1,
-                user_id: 1,
-                module_id: 2,
-                what_learned: "Cultivation theory explains how heavy TV viewing shapes perception of reality. Heavy viewers tend to perceive the world as more dangerous than it actually is.",
-                how_learned: "Through Socratic dialogue about media influence and pattern recognition exercises",
-                key_concepts: "media effects, worldview formation, heavy viewing, mean world syndrome",
-                understanding_level: "intermediate",
-                learning_insights: "Student demonstrates strong pattern recognition and can connect theory to real examples",
-                teaching_effectiveness: "Socratic method working well - student discovering concepts independently",
-                created_at: "2025-09-28T14:30:00Z"
-            },
-            {
-                id: 2,
-                user_id: 1,
-                module_id: 1,
-                what_learned: "Communication models show how perception filters reality. The four worlds concept illustrates different layers of reality perception.",
-                how_learned: "Interactive discussion comparing personal experiences with theoretical frameworks",
-                key_concepts: "four worlds theory, perception, selective attention, communication models",
-                understanding_level: "advanced",
-                learning_insights: "Excellent grasp of abstract concepts, making sophisticated connections",
-                teaching_effectiveness: "Student engaged deeply with material, asking probing questions",
-                created_at: "2025-09-27T10:15:00Z"
-            },
-            {
-                id: 3,
-                user_id: 1,
-                module_id: 6,
-                what_learned: "News gatekeeping theory describes how editors decide what becomes news. News values include timeliness, proximity, prominence, and human interest.",
-                how_learned: "Case study analysis of real news stories and editorial decisions",
-                key_concepts: "gatekeeping, news values, editorial judgment, agenda-setting",
-                understanding_level: "intermediate",
-                learning_insights: "Good analytical skills when examining concrete examples",
-                teaching_effectiveness: "Case studies effective for this learner's visual learning style",
-                created_at: "2025-09-26T16:45:00Z"
-            },
-            {
-                id: 4,
-                user_id: 1,
-                module_id: 13,
-                what_learned: "Television became dominant medium through programming strategies like dayparting and creating appointment viewing.",
-                how_learned: "Historical analysis of TV industry evolution and programming innovations",
-                key_concepts: "programming strategies, dayparting, appointment viewing, cultural impact",
-                understanding_level: "beginner",
-                learning_insights: "Building foundational knowledge, needs more examples",
-                teaching_effectiveness: "Historical context helping student understand current media landscape",
-                created_at: "2025-09-25T13:20:00Z"
-            },
-            {
-                id: 5,
-                user_id: 1,
-                module_id: 15,
-                what_learned: "Economic forces shape media content through advertising revenue models, ownership concentration, and PR influence.",
-                how_learned: "Economic analysis of media business models and industry structure",
-                key_concepts: "advertising models, media ownership, public relations, economic influence",
-                understanding_level: "intermediate",
-                learning_insights: "Strong understanding of economic principles applied to media",
-                teaching_effectiveness: "Student connecting business concepts to media studies effectively",
-                created_at: "2025-09-24T11:00:00Z"
-            }
-        ]
-    };
-}
-
-function renderMemoryTable(data, tableBody, countElement) {
-    countElement.textContent = `${data.count} ${data.count === 1 ? 'summary' : 'summaries'}`;
-
-    tableBody.innerHTML = data.summaries.map(mem => {
-        const whatLearned = mem.summary_text || mem.what_learned || '-';
-        const howLearned = mem.how_learned || '-';
-        const keyConcepts = mem.key_concepts || '-';
-        const understanding = mem.understanding_level || '-';
-        const created = mem.created_at ? new Date(mem.created_at).toLocaleDateString() : '-';
-
-        return `
-            <tr>
-                <td>${mem.id}</td>
-                <td>${data.user_id}</td>
-                <td>${mem.module_id || '-'}</td>
-                <td class="text-preview">${truncate(whatLearned, 50)}</td>
-                <td class="text-preview">${truncate(howLearned, 50)}</td>
-                <td class="text-preview">${truncate(keyConcepts, 40)}</td>
-                <td><span class="level-badge">${understanding}</span></td>
-                <td>${created}</td>
-                <td><button class="view-btn" onclick="viewMemoryDetail(${mem.id}, ${data.user_id})">View</button></td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function truncate(text, length) {
-    if (!text || text === '-') return '-';
-    return text.length > length ? text.substring(0, length) + '...' : text;
-}
-
-async function viewMemoryDetail(memoryId, userId) {
-    const modal = document.getElementById('memory-detail-modal');
-    const content = document.getElementById('memory-detail-content');
-
-    try {
-        const response = await fetch(`${API_BASE}/memory/${userId}`, {
-            headers: {
-                ...getAuthHeaders()
-            }
-        });
-
-        if (!response.ok) throw new Error('Failed to load memory details');
-
-        const data = await response.json();
-        const memory = data.summaries.find(m => m.id === memoryId);
-
-        if (!memory) {
-            alert('Memory summary not found');
-            return;
-        }
-
-        content.innerHTML = `
-            <div class="memory-detail">
-                <div class="detail-row">
-                    <strong>ID:</strong> ${memory.id}
-                </div>
-                <div class="detail-row">
-                    <strong>User ID:</strong> ${memory.user_id || userId}
-                </div>
-                <div class="detail-row">
-                    <strong>Module ID:</strong> ${memory.module_id || 'N/A'}
-                </div>
-                <div class="detail-row">
-                    <strong>What Learned:</strong>
-                    <div class="detail-text">${memory.summary_text || memory.what_learned || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <strong>How Learned:</strong>
-                    <div class="detail-text">${memory.how_learned || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <strong>Key Concepts:</strong>
-                    <div class="detail-text">${memory.key_concepts || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <strong>Learning Insights:</strong>
-                    <div class="detail-text">${memory.learning_insights || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <strong>Teaching Effectiveness:</strong>
-                    <div class="detail-text">${memory.teaching_effectiveness || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
-                    <strong>Understanding Level:</strong> ${memory.understanding_level || 'N/A'}
-                </div>
-                <div class="detail-row">
-                    <strong>Context Data:</strong>
-                    <div class="detail-text"><pre>${memory.context_data || 'N/A'}</pre></div>
-                </div>
-                <div class="detail-row">
-                    <strong>Created:</strong> ${memory.created_at ? new Date(memory.created_at).toLocaleString() : 'N/A'}
-                </div>
-                <div class="detail-row">
-                    <strong>Updated:</strong> ${memory.updated_at ? new Date(memory.updated_at).toLocaleString() : 'N/A'}
-                </div>
-            </div>
-        `;
-
-        modal.style.display = 'flex';
-
-    } catch (error) {
-        console.error('Error loading memory detail:', error);
-        alert('Failed to load memory details');
-    }
-}
-
-function closeMemoryDetail() {
-    document.getElementById('memory-detail-modal').style.display = 'none';
-}
-
-function switchMemoryView(view) {
-    const tableView = document.getElementById('memory-table-view');
-    const vizView = document.getElementById('memory-visualization-view');
-    const tabs = document.querySelectorAll('.memory-tab');
-
-    tabs.forEach(tab => tab.classList.remove('active'));
-
-    if (view === 'table') {
-        tableView.style.display = 'flex';
-        vizView.style.display = 'none';
-        tabs[0].classList.add('active');
-    } else {
-        tableView.style.display = 'none';
-        vizView.style.display = 'block';
-        tabs[1].classList.add('active');
-    }
-}
-
-async function loadMemoryFilters() {
-    try {
-        // Load users for filter
-        const usersResponse = await fetch(`${API_BASE}/users`, {
+        const response = await fetch(`${API_BASE}/users`, {
             headers: getAuthHeaders()
         });
-        if (usersResponse.ok) {
-            const usersData = await usersResponse.json();
-            const users = usersData.users || usersData; // Handle both array and {users: []} response
-            const userFilter = document.getElementById('memory-user-filter');
-            if (userFilter && Array.isArray(users)) {
-                users.forEach(user => {
-                    const option = document.createElement('option');
-                    option.value = user.id;
-                    option.textContent = user.name || user.email;
-                    userFilter.appendChild(option);
-                });
-            }
-        }
 
-        // Load modules for filter
-        const modulesResponse = await fetch(`${API_BASE}/modules`, {
+        if (!response.ok) throw new Error('Failed to load students');
+        const users = await response.json();
+
+        // Get onboarding surveys
+        const surveysResponse = await fetch(`${API_BASE}/progress/tables/all`, {
             headers: getAuthHeaders()
         });
-        if (modulesResponse.ok) {
-            const modulesData = await modulesResponse.json();
-            const modules = modulesData.modules || modulesData; // Handle both array and {modules: []} response
-            const moduleFilter = document.getElementById('memory-module-filter');
-            if (moduleFilter && Array.isArray(modules)) {
-                modules.forEach(module => {
-                    const option = document.createElement('option');
-                    option.value = module.id;
-                    option.textContent = module.title;
-                    moduleFilter.appendChild(option);
-                });
-            }
-        }
+        const tablesData = await surveysResponse.json();
+        const surveys = tablesData.tables?.onboarding_surveys?.data || [];
+
+        const totalStudents = users.length;
+        const completedProfiles = surveys.length;
+
+        document.getElementById('layer1-students').textContent = totalStudents;
+        document.getElementById('layer1-complete').textContent = completedProfiles;
+        document.getElementById('layer1-status').textContent =
+            `${completedProfiles}/${totalStudents} complete`;
+
     } catch (error) {
-        console.error('Error loading memory filters:', error);
+        console.error('Error loading Layer 1:', error);
+        document.getElementById('layer1-status').textContent = 'Error loading';
     }
 }
 
-// ===== PROGRESS FUNCTIONS =====
-
-async function loadProgressFilters() {
+async function loadLayer2Data() {
     try {
-        // Load users for filter
-        const usersResponse = await fetch(`${API_BASE}/users`, {
+        const response = await fetch(`${API_BASE}/classes`, {
             headers: getAuthHeaders()
         });
-        if (usersResponse.ok) {
-            const usersData = await usersResponse.json();
-            const users = usersData.users || usersData; // Handle both array and {users: []} response
-            const userFilter = document.getElementById('progress-user-filter');
-            if (userFilter && Array.isArray(users)) {
-                users.forEach(user => {
-                    const option = document.createElement('option');
-                    option.value = user.id;
-                    option.textContent = user.name || user.email;
-                    userFilter.appendChild(option);
-                });
-            }
-        }
+
+        if (!response.ok) throw new Error('Failed to load classes');
+        const classes = await response.json();
+
+        // Get class corpus
+        const corpusResponse = await fetch(`${API_BASE}/course-corpus`, {
+            headers: getAuthHeaders()
+        });
+        const corpusData = await corpusResponse.json();
+        const corpusEntries = corpusData.entries || [];
+
+        document.getElementById('layer2-classes').textContent = classes.length;
+        document.getElementById('layer2-corpus').textContent = corpusEntries.length;
+        document.getElementById('layer2-status').textContent =
+            `${classes.length} classes, ${corpusEntries.length} corpus`;
+
     } catch (error) {
-        console.error('Error loading progress filters:', error);
+        console.error('Error loading Layer 2:', error);
+        document.getElementById('layer2-status').textContent = 'Error loading';
     }
 }
 
-async function loadUserProgress() {
-    const userSelect = document.getElementById('progress-user-filter');
-    const userId = userSelect?.value;
-
-    if (!userId) {
-        // Show dummy data when no user selected
-        displayProgressData(generateDummyProgressData());
-        return;
-    }
-
+async function loadLayer3Data() {
     try {
-        const response = await fetch(`${API_BASE}/progress/${userId}`, {
-            headers: {
-                ...getAuthHeaders()
-            }
+        const response = await fetch(`${API_BASE}/modules`, {
+            headers: getAuthHeaders()
         });
 
-        if (!response.ok) throw new Error('Failed to load progress');
+        if (!response.ok) throw new Error('Failed to load modules');
+        const modules = await response.json();
 
-        const data = await response.json();
-        displayProgressData(data);
+        // Get all module corpus and documents count
+        const tablesResponse = await fetch(`${API_BASE}/progress/tables/all`, {
+            headers: getAuthHeaders()
+        });
+        const tablesData = await tablesResponse.json();
+        const moduleCorpus = tablesData.tables?.module_corpus_entries?.count || 0;
+        const documents = tablesData.tables?.documents?.count || 0;
+
+        document.getElementById('layer3-modules').textContent = modules.length;
+        document.getElementById('layer3-resources').textContent = `${moduleCorpus + documents}`;
+        document.getElementById('layer3-status').textContent =
+            `${modules.length} modules, ${moduleCorpus + documents} resources`;
 
     } catch (error) {
-        console.error('Error loading progress:', error);
-        // Show dummy data on error
-        displayProgressData(generateDummyProgressData());
+        console.error('Error loading Layer 3:', error);
+        document.getElementById('layer3-status').textContent = 'Error loading';
     }
 }
 
-function generateDummyProgressData() {
-    return {
-        user_id: 1,
-        user_name: "Sarah Johnson",
-        user_email: "sarah@example.com",
-        overall: {
-            total_conversations: 47,
-            total_messages: 94,
-            modules_started: 8,
-            modules_total: 15,
-            completion_rate: 53.3
+async function loadLayer4Data() {
+    try {
+        const tablesResponse = await fetch(`${API_BASE}/progress/tables/all`, {
+            headers: getAuthHeaders()
+        });
+        const tablesData = await tablesResponse.json();
+
+        const conversations = tablesData.tables?.conversations?.count || 0;
+        const summaries = tablesData.tables?.memory_summaries?.count || 0;
+
+        document.getElementById('layer4-conversations').textContent = conversations;
+        document.getElementById('layer4-summaries').textContent = summaries;
+        document.getElementById('layer4-status').textContent =
+            `${conversations} chats, ${summaries} summaries`;
+
+    } catch (error) {
+        console.error('Error loading Layer 4:', error);
+        document.getElementById('layer4-status').textContent = 'Error loading';
+    }
+}
+
+async function expandLayer(layerNum) {
+    const detailsDiv = document.getElementById('layer-details');
+    detailsDiv.style.display = 'block';
+    detailsDiv.innerHTML = '<div style="text-align: center; padding: 40px;">Loading data...</div>';
+
+    const layerInfo = {
+        1: {
+            title: 'Layer 1: Student Profile Data',
+            description: 'Foundation layer built from student onboarding',
+            adminAction: 'Configure onboarding questions',
+            studentAction: 'Complete onboarding survey'
         },
-        modules: [
-            { module_id: 1, module_title: "Your Four Worlds", conversations: 12, messages: 24, completed: true },
-            { module_id: 2, module_title: "Media Uses & Effects", conversations: 15, messages: 30, completed: true },
-            { module_id: 3, module_title: "Shared Characteristics of Media", conversations: 0, messages: 0, completed: false },
-            { module_id: 4, module_title: "Communication Infrastructure", conversations: 5, messages: 10, completed: true },
-            { module_id: 5, module_title: "Books: The Birth of Mass Communication", conversations: 0, messages: 0, completed: false },
-            { module_id: 6, module_title: "News & Newspapers", conversations: 8, messages: 16, completed: true },
-            { module_id: 7, module_title: "Magazines: The Special Interest Medium", conversations: 0, messages: 0, completed: false },
-            { module_id: 8, module_title: "Comic Books: Small Business, Big Impact", conversations: 0, messages: 0, completed: false },
-            { module_id: 9, module_title: "Photography: Fixing a Shadow", conversations: 0, messages: 0, completed: false },
-            { module_id: 10, module_title: "Recordings: From Bach to Rock & Rap", conversations: 0, messages: 0, completed: false },
-            { module_id: 11, module_title: "Motion Pictures: The Start of Mass Entertainment", conversations: 0, messages: 0, completed: false },
-            { module_id: 12, module_title: "Radio: The Pervasive Medium", conversations: 3, messages: 6, completed: true },
-            { module_id: 13, module_title: "Television: The Center of Attention", conversations: 2, messages: 4, completed: true },
-            { module_id: 14, module_title: "Video Games: The Newest Mass Medium", conversations: 0, messages: 0, completed: false },
-            { module_id: 15, module_title: "Economic Influencers: Advertising, PR, and Ownership", conversations: 2, messages: 4, completed: true }
-        ]
+        2: {
+            title: 'Layer 2: Class Architecture',
+            description: 'Course-level knowledge built by admin',
+            adminAction: 'Create classes, add class corpus entries',
+            studentAction: 'Context automatically injected for enrolled classes'
+        },
+        3: {
+            title: 'Layer 3: Module Context',
+            description: 'Topic-specific resources built by admin',
+            adminAction: 'Create modules, add module corpus, upload documents',
+            studentAction: 'Context automatically loaded when chatting in module'
+        },
+        4: {
+            title: 'Layer 4: Conversation Memory',
+            description: 'Dynamic learning accumulated from student interactions',
+            adminAction: 'Monitor learning progress and memory formation',
+            studentAction: 'Chat with AI tutor - memories auto-generated after conversations'
+        }
     };
-}
 
-function displayProgressData(data) {
-    // Update overall stats
-    document.getElementById('total-conversations').textContent = data.overall.total_conversations;
-    document.getElementById('total-messages').textContent = data.overall.total_messages;
-    document.getElementById('modules-started').textContent = `${data.overall.modules_started}/${data.overall.modules_total}`;
-    document.getElementById('completion-rate').textContent = `${data.overall.completion_rate}%`;
+    const info = layerInfo[layerNum];
 
-    // Render module grid
-    const grid = document.getElementById('module-progress-grid');
-    grid.innerHTML = data.modules.map(module => {
-        const statusClass = module.completed ? 'completed' : 'not-started';
-        const statusIcon = module.completed ? 'Yes' : '[ ]';
-        const progressPercent = module.completed ? 100 : 0;
-
-        return `
-            <div class="module-card ${statusClass}">
-                <div class="module-card-header">
-                    <span class="module-status-icon">${statusIcon}</span>
-                    <h4>${module.module_title}</h4>
-                </div>
-                <div class="module-card-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Conversations</span>
-                        <span class="stat-value">${module.conversations}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Messages</span>
-                        <span class="stat-value">${module.messages}</span>
-                    </div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// Table View Functions
-let autoRefreshInterval = null;
-
-async function loadTableViewData() {
+    // Fetch real data
     try {
-        const response = await fetch(`${API_BASE}/progress/tables/all`);
-        if (!response.ok) throw new Error('Failed to load table data');
+        const tablesResponse = await fetch(`${API_BASE}/progress/tables/all`, {
+            headers: getAuthHeaders()
+        });
+        const tablesData = await tablesResponse.json();
 
-        const data = await response.json();
-        displayTablesData(data);
+        let tablesHTML = '';
+
+        if (layerNum === 1) {
+            // Layer 1: Users and Onboarding Surveys
+            const users = tablesData.tables?.users?.data || [];
+            const surveys = tablesData.tables?.onboarding_surveys?.data || [];
+
+            tablesHTML = `
+                <h4 style="margin: 20px 0 10px 0; color: var(--sage-darkest);">Users Table (${users.length} records)</h4>
+                ${createLayerTable(users, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'email', label: 'Email' },
+                    { key: 'name', label: 'Name' },
+                    { key: 'is_admin', label: 'Admin', format: (val) => val ? 'Yes' : 'No' }
+                ])}
+
+                <h4 style="margin: 30px 0 10px 0; color: var(--sage-darkest);">Onboarding Surveys (${surveys.length} records)</h4>
+                ${createLayerTable(surveys, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'user_id', label: 'User ID' },
+                    { key: 'familiarity', label: 'Familiarity' },
+                    { key: 'learning_style', label: 'Learning Style' },
+                    { key: 'goals', label: 'Goals' }
+                ])}
+            `;
+        } else if (layerNum === 2) {
+            // Layer 2: Classes and Class Corpus
+            const corpusResponse = await fetch(`${API_BASE}/course-corpus`, { headers: getAuthHeaders() });
+            const corpusData = await corpusResponse.json();
+            const corpus = corpusData.entries || [];
+
+            const classesResponse = await fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() });
+            const classes = await classesResponse.json();
+
+            tablesHTML = `
+                <h4 style="margin: 20px 0 10px 0; color: var(--sage-darkest);">Classes Table (${classes.length} records)</h4>
+                ${createLayerTable(classes, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'title', label: 'Title' },
+                    { key: 'description', label: 'Description' },
+                    { key: 'system_prompt', label: 'System Prompt' }
+                ])}
+
+                <h4 style="margin: 30px 0 10px 0; color: var(--sage-darkest);">Class Corpus (${corpus.length} records)</h4>
+                ${createLayerTable(corpus, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'title', label: 'Title' },
+                    { key: 'type', label: 'Type' },
+                    { key: 'content', label: 'Content (truncated)', format: (val) => val?.substring(0, 100) + '...' }
+                ])}
+            `;
+        } else if (layerNum === 3) {
+            // Layer 3: Modules, Module Corpus, Documents
+            const modulesResponse = await fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() });
+            const modules = await modulesResponse.json();
+
+            const moduleCorpus = tablesData.tables?.module_corpus_entries?.data || [];
+            const documents = tablesData.tables?.documents?.data || [];
+
+            tablesHTML = `
+                <h4 style="margin: 20px 0 10px 0; color: var(--sage-darkest);">Modules Table (${modules.length} records)</h4>
+                ${createLayerTable(modules, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'title', label: 'Title' },
+                    { key: 'description', label: 'Description' },
+                    { key: 'learning_objectives', label: 'Objectives' }
+                ])}
+
+                <h4 style="margin: 30px 0 10px 0; color: var(--sage-darkest);">Module Corpus Entries (${moduleCorpus.length} records)</h4>
+                ${createLayerTable(moduleCorpus, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'module_id', label: 'Module ID' },
+                    { key: 'title', label: 'Title' },
+                    { key: 'type', label: 'Type' },
+                    { key: 'content_length', label: 'Size (chars)' }
+                ])}
+
+                <h4 style="margin: 30px 0 10px 0; color: var(--sage-darkest);">Documents (${documents.length} records)</h4>
+                ${createLayerTable(documents, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'module_id', label: 'Module ID' },
+                    { key: 'filename', label: 'Filename' },
+                    { key: 'content_length', label: 'Size (chars)' }
+                ])}
+            `;
+        } else if (layerNum === 4) {
+            // Layer 4: Conversations and Memory Summaries
+            const conversations = tablesData.tables?.conversations?.data || [];
+            const memories = tablesData.tables?.memory_summaries?.data || [];
+
+            tablesHTML = `
+                <h4 style="margin: 20px 0 10px 0; color: var(--sage-darkest);">Conversations (${conversations.length} records)</h4>
+                ${createLayerTable(conversations, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'user_id', label: 'User ID' },
+                    { key: 'module_id', label: 'Module ID' },
+                    { key: 'title', label: 'Title' },
+                    { key: 'message_count', label: 'Messages' },
+                    { key: 'finalized', label: 'Finalized', format: (val) => val ? 'Yes' : 'No' }
+                ])}
+
+                <h4 style="margin: 30px 0 10px 0; color: var(--sage-darkest);">Memory Summaries (${memories.length} records)</h4>
+                ${createLayerTable(memories, [
+                    { key: 'id', label: 'ID' },
+                    { key: 'user_id', label: 'User ID' },
+                    { key: 'module_id', label: 'Module ID' },
+                    { key: 'what_learned', label: 'What Learned' },
+                    { key: 'understanding_level', label: 'Level' }
+                ])}
+            `;
+        }
+
+        detailsDiv.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin: 0 0 10px 0; color: var(--sage-darkest);">${info.title}</h3>
+                        <p style="margin: 0; color: var(--text-medium);">${info.description}</p>
+                    </div>
+                    <button onclick="document.getElementById('layer-details').style.display='none'" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-medium);">×</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div style="background: var(--sage-lighter); padding: 20px; border-radius: 8px;">
+                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">👨‍💼 Admin Role</h4>
+                        <p style="margin: 0; color: var(--text-dark);">${info.adminAction}</p>
+                    </div>
+                    <div style="background: var(--warm-light); padding: 20px; border-radius: 8px;">
+                        <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">👨‍🎓 Student Role</h4>
+                        <p style="margin: 0; color: var(--text-dark);">${info.studentAction}</p>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">📊 Real Database Records</h4>
+                    ${tablesHTML}
+                </div>
+            </div>
+        `;
+
     } catch (error) {
-        console.error('Error loading table data:', error);
-        document.getElementById('tables-container').innerHTML = `
-            <div class="error-message">Failed to load table data: ${error.message}</div>
+        console.error('Error loading layer data:', error);
+        detailsDiv.innerHTML = `
+            <div style="background: white; border-radius: 12px; padding: 30px;">
+                <div style="color: #e74c3c;">Error loading data: ${error.message}</div>
+                <button onclick="document.getElementById('layer-details').style.display='none'" style="margin-top: 20px;">Close</button>
+            </div>
         `;
     }
 }
 
-function displayTablesData(data) {
-    const timestamp = new Date(data.timestamp).toLocaleString();
-    document.getElementById('table-timestamp').textContent = `Last updated: ${timestamp}`;
-
-    const container = document.getElementById('tables-container');
-    const tables = data.tables;
-
-    let html = '';
-
-    // Users Table
-    html += createTableHTML('Users', tables.users.count, tables.users.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'email', label: 'Email' },
-        { key: 'name', label: 'Name' },
-        { key: 'is_admin', label: 'Admin', format: (val) => val ? 'Yes' : 'No' }
-    ]);
-
-    // Modules Table
-    html += createTableHTML('Modules', tables.modules.count, tables.modules.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'title', label: 'Title' },
-        { key: 'description', label: 'Description' },
-        { key: 'system_prompt', label: 'System Prompt' },
-        { key: 'module_prompt', label: 'Module Prompt' },
-        { key: 'resources', label: 'Resources' },
-        { key: 'system_corpus', label: 'System Corpus' },
-        { key: 'module_corpus', label: 'Module Corpus' },
-        { key: 'dynamic_corpus', label: 'Dynamic Corpus' },
-        { key: 'api_endpoint', label: 'API Endpoint' },
-        { key: 'learning_objectives', label: 'Learning Objectives' }
-    ]);
-
-    // Conversations Table
-    html += createTableHTML('Conversations', tables.conversations.count, tables.conversations.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'user_id', label: 'User ID' },
-        { key: 'module_id', label: 'Module ID' },
-        { key: 'title', label: 'Title' },
-        { key: 'message_count', label: 'Messages' },
-        { key: 'finalized', label: 'Finalized', format: (val) => val ? 'Yes' : 'No' },
-        { key: 'created_at', label: 'Created' }
-    ]);
-
-    // Memory Summaries Table
-    html += createTableHTML('Memory Summaries', tables.memory_summaries.count, tables.memory_summaries.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'user_id', label: 'User ID' },
-        { key: 'module_id', label: 'Module ID' },
-        { key: 'conversation_id', label: 'Conv ID' },
-        { key: 'what_learned', label: 'What Learned' }
-    ]);
-
-    // User Progress Table
-    html += createTableHTML('User Progress', tables.user_progress.count, tables.user_progress.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'user_id', label: 'User ID' },
-        { key: 'module_id', label: 'Module ID' },
-        { key: 'completed', label: 'Completed', format: (val) => val ? 'Yes' : 'No' },
-        { key: 'grade', label: 'Grade' },
-        { key: 'time_spent', label: 'Time (min)' },
-        { key: 'attempts', label: 'Attempts' }
-    ]);
-
-    // Documents Table
-    html += createTableHTML('Documents', tables.documents.count, tables.documents.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'module_id', label: 'Module ID' },
-        { key: 'user_id', label: 'User ID' },
-        { key: 'filename', label: 'Filename' },
-        { key: 'content_length', label: 'Size (chars)' }
-    ]);
-
-    // Onboarding Surveys Table
-    html += createTableHTML('Onboarding Surveys', tables.onboarding_surveys.count, tables.onboarding_surveys.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'user_id', label: 'User ID' },
-        { key: 'familiarity', label: 'Familiarity' },
-        { key: 'learning_style', label: 'Learning Style' }
-    ]);
-
-    // Course Corpus Table
-    html += createTableHTML('Course Corpus', tables.course_corpus.count, tables.course_corpus.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'title', label: 'Title' },
-        { key: 'type', label: 'Type' },
-        { key: 'order_index', label: 'Order' },
-        { key: 'content_length', label: 'Size (chars)' }
-    ]);
-
-    // Module Corpus Entries Table
-    html += createTableHTML('Module Corpus Entries', tables.module_corpus_entries.count, tables.module_corpus_entries.data, [
-        { key: 'id', label: 'ID' },
-        { key: 'module_id', label: 'Module ID' },
-        { key: 'title', label: 'Title' },
-        { key: 'type', label: 'Type' },
-        { key: 'content_length', label: 'Size (chars)' }
-    ]);
-
-    container.innerHTML = html;
-}
-
-function createTableHTML(tableName, count, data, columns) {
-    let html = `
-        <div class="db-table">
-            <div class="db-table-header">
-                <h4>${tableName}</h4>
-                <span class="record-count">${count} record${count !== 1 ? 's' : ''}</span>
-            </div>
-    `;
-
-    if (count === 0) {
-        html += '<p class="no-data">No records</p>';
-    } else {
-        html += '<div class="table-wrapper"><table><thead><tr>';
-        columns.forEach(col => {
-            html += `<th>${col.label}</th>`;
-        });
-        html += '</tr></thead><tbody>';
-
-        data.forEach(row => {
-            html += '<tr>';
-            columns.forEach(col => {
-                let value = row[col.key];
-                if (col.format) {
-                    value = col.format(value);
-                }
-                if (value === null || value === undefined) {
-                    value = '-';
-                }
-                html += `<td>${value}</td>`;
-            });
-            html += '</tr>';
-        });
-
-        html += '</tbody></table></div>';
+function createLayerTable(data, columns) {
+    if (data.length === 0) {
+        return '<p style="color: var(--text-medium); font-style: italic;">No records</p>';
     }
 
-    html += '</div>';
+    let html = '<div style="overflow-x: auto; margin-top: 10px;"><table style="width: 100%; border-collapse: collapse;">';
+    html += '<thead><tr style="background: var(--sage-lighter);">';
+    columns.forEach(col => {
+        html += `<th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--sage-light);">${col.label}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    data.slice(0, 10).forEach(row => {  // Limit to 10 rows
+        html += '<tr style="border-bottom: 1px solid #eee;">';
+        columns.forEach(col => {
+            let value = row[col.key];
+            if (col.format) {
+                value = col.format(value);
+            }
+            if (value === null || value === undefined) {
+                value = '-';
+            }
+            // Truncate long values
+            if (typeof value === 'string' && value.length > 100) {
+                value = value.substring(0, 100) + '...';
+            }
+            html += `<td style="padding: 10px;">${value}</td>`;
+        });
+        html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    if (data.length > 10) {
+        html += `<p style="margin-top: 10px; color: var(--text-medium); font-style: italic;">Showing first 10 of ${data.length} records</p>`;
+    }
     return html;
 }
 
-function toggleAutoRefresh() {
-    const checkbox = document.getElementById('auto-refresh-tables');
+function loadMemoryAssemblyFlow() {
+    const flowDiv = document.getElementById('memory-assembly-flow');
 
-    if (checkbox.checked) {
-        // Start auto-refresh
-        autoRefreshInterval = setInterval(loadTableViewData, 5000);
-    } else {
-        // Stop auto-refresh
-        if (autoRefreshInterval) {
-            clearInterval(autoRefreshInterval);
-            autoRefreshInterval = null;
-        }
+    flowDiv.innerHTML = `
+        <div style="position: relative;">
+            <p style="color: var(--text-medium); margin-bottom: 20px;">
+                When a student sends a message in a chat, the system assembles a personalized context by combining all 4 layers:
+            </p>
+
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold;">Layer 1</div>
+                    <div style="margin-top: 5px; opacity: 0.9;">Student Profile</div>
+                </div>
+
+                <div style="font-size: 30px; color: var(--text-medium);">+</div>
+
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold;">Layer 2</div>
+                    <div style="margin-top: 5px; opacity: 0.9;">Class Architecture</div>
+                </div>
+
+                <div style="font-size: 30px; color: var(--text-medium);">+</div>
+
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold;">Layer 3</div>
+                    <div style="margin-top: 5px; opacity: 0.9;">Module Context</div>
+                </div>
+
+                <div style="font-size: 30px; color: var(--text-medium);">+</div>
+
+                <div style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold;">Layer 4</div>
+                    <div style="margin-top: 5px; opacity: 0.9;">Conversation Memory</div>
+                </div>
+
+                <div style="font-size: 30px; color: var(--text-medium);">=</div>
+
+                <div style="flex: 1; min-width: 200px; background: var(--sage-dark); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold;">🧠</div>
+                    <div style="margin-top: 5px; opacity: 0.9;">AI Context</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; background: var(--sage-lighter); padding: 20px; border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: var(--sage-darkest);">How It Works</h4>
+                <ol style="margin: 0; padding-left: 20px; color: var(--text-dark);">
+                    <li>Student sends a message in a module chat</li>
+                    <li>System queries all 4 layers from database</li>
+                    <li>Data is concatenated into a single prompt</li>
+                    <li>AI receives full personalized context</li>
+                    <li>AI responds using Socratic method with complete student understanding</li>
+                    <li>After conversation, key learnings are distilled into memory summaries (Layer 4)</li>
+                </ol>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button onclick="viewAssembledPrompt()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600;">
+                    📝 View Sample Assembled Prompt
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+async function viewAssembledPrompt() {
+    // Fetch real data from all layers
+    try {
+        const [usersRes, classesRes, modulesRes, tablesRes] = await Promise.all([
+            fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() })
+        ]);
+
+        const users = await usersRes.json();
+        const classes = await classesRes.json();
+        const modules = await modulesRes.json();
+        const tablesData = await tablesRes.json();
+
+        // Get sample data
+        const sampleUser = users[0] || { name: 'Sample Student', email: 'student@example.com' };
+        const sampleSurvey = tablesData.tables?.onboarding_surveys?.data?.[0];
+        const sampleClass = classes[0] || { title: 'Sample Class', system_prompt: 'Use Socratic method...' };
+        const sampleModule = modules[0] || { title: 'Sample Module', description: 'Sample description' };
+        const sampleConversation = tablesData.tables?.conversations?.data?.[0];
+        const sampleMemory = tablesData.tables?.memory_summaries?.data?.[0];
+
+        // Get corpus data
+        const corpusRes = await fetch(`${API_BASE}/course-corpus`, { headers: getAuthHeaders() });
+        const corpusData = await corpusRes.json();
+        const classCorpus = corpusData.entries?.[0];
+
+        // Build the assembled prompt
+        let assembledPrompt = `=== HARV DYNAMIC MEMORY CONTEXT ===
+
+🔹 LAYER 1: STUDENT PROFILE
+Student Name: ${sampleUser.name}
+Email: ${sampleUser.email}
+Learning Style: ${sampleSurvey?.learning_style || 'Not specified'}
+Familiarity: ${sampleSurvey?.familiarity || 'Not specified'}
+Goals: ${sampleSurvey?.goals || 'Not specified'}
+Pace Preference: ${sampleSurvey?.pace_preference || 'Not specified'}
+
+🔹 LAYER 2: CLASS ARCHITECTURE
+Class: ${sampleClass.title}
+Description: ${sampleClass.description || 'No description'}
+System Prompt: ${sampleClass.system_prompt || 'Use Socratic questioning...'}
+${classCorpus ? `Class Corpus Entry: "${classCorpus.title}" - ${classCorpus.content?.substring(0, 100)}...` : ''}
+
+🔹 LAYER 3: MODULE CONTEXT
+Current Module: ${sampleModule.title}
+Description: ${sampleModule.description || 'No description'}
+Learning Objectives: ${sampleModule.learning_objectives || 'Not specified'}
+Module Prompt: ${sampleModule.module_prompt || 'Guide student through discovery...'}
+
+🔹 LAYER 4: CONVERSATION MEMORY
+${sampleConversation ? `Recent Conversation: ${sampleConversation.title || 'Untitled'} (${sampleConversation.message_count || 0} messages)` : 'No recent conversations'}
+${sampleMemory ? `
+Last Memory Summary:
+- What Learned: ${sampleMemory.what_learned}
+- How Learned: ${sampleMemory.how_learned || 'Through dialogue'}
+- Understanding Level: ${sampleMemory.understanding_level || 'intermediate'}` : 'No memory summaries yet'}
+
+=== TEACHING STRATEGY ===
+Use the Socratic method to guide ${sampleUser.name} through discovery-based learning.
+Consider their ${sampleSurvey?.learning_style || 'visual'} learning style and ${sampleSurvey?.familiarity || 'beginner'} familiarity level.
+Build on their existing knowledge and help them connect concepts independently.
+
+=== CURRENT MESSAGE ===
+[Student's message would appear here]
+
+Remember: Never give direct answers. Guide through questions and encourage independent thinking.`;
+
+        // Display the prompt in a modal
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px;';
+        modal.innerHTML = `
+            <div style="background: white; border-radius: 12px; max-width: 900px; max-height: 90vh; overflow-y: auto; width: 100%;">
+                <div style="background: var(--sage-dark); color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0;">📝 Assembled Prompt Preview</h3>
+                    <button onclick="this.closest('div').parentElement.remove()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                <div style="padding: 30px;">
+                    <p style="margin: 0 0 20px 0; color: var(--text-medium);">
+                        This is what gets sent to the AI when a student chats. Real data from your database is assembled into a single context string:
+                    </p>
+                    <pre style="background: #2d3748; color: #68d391; padding: 20px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; line-height: 1.6; margin: 0;">${assembledPrompt}</pre>
+                    <div style="margin-top: 20px; padding: 15px; background: var(--warm-light); border-radius: 8px;">
+                        <strong>💡 Note:</strong> This is a sample using the first available record from each layer. In production, the system selects data specific to the user, class, and module being accessed.
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+    } catch (error) {
+        console.error('Error assembling prompt:', error);
+        alert('Error loading prompt preview: ' + error.message);
     }
 }
 
+// ===== 4-LAYER MEMORY INSPECTOR FUNCTIONS =====
 
-// ===== ARCHIVE SECTION HANDLER =====
-function showArchiveSection(section) {
-    // Update active tab
-    document.querySelectorAll(".corpus-tab").forEach(btn => btn.classList.remove("active"));
-    event?.target?.classList.add("active");
+let inspectorData = {
+    selectedClass: null,
+    selectedModule: null,
+    selectedStudent: null,
+    currentLayer: 1
+};
 
-    const content = document.getElementById("archive-content");
+async function loadMemoryInspector() {
+    // Load classes for the dropdown
+    try {
+        const response = await fetch(`${API_BASE}/classes`, {
+            headers: getAuthHeaders()
+        });
+        const classes = await response.json();
 
-    switch(section) {
-        case "modules":
-            content.innerHTML = archivedModulesHTML;
-            break;
-        case "corpus":
-            content.innerHTML = archivedCorpusHTML;
-            break;
-        case "documents":
-            content.innerHTML = archivedDocumentsHTML;
-            break;
-        default:
-            content.innerHTML = `<p style="text-align: center; padding: 40px;">Select a section to view</p>`;
+        const classSelect = document.getElementById('inspector-class');
+        classSelect.innerHTML = '<option value="">Select a class...</option>';
+        classes.forEach(cls => {
+            const option = document.createElement('option');
+            option.value = cls.id;
+            option.textContent = cls.title;
+            classSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading classes:', error);
+    }
+}
+
+function inspectorClassChanged() {
+    const classId = parseInt(document.getElementById('inspector-class').value);
+    inspectorData.selectedClass = classId;
+
+    const moduleSelect = document.getElementById('inspector-module');
+    const studentSelect = document.getElementById('inspector-student');
+
+    if (!classId) {
+        moduleSelect.disabled = true;
+        moduleSelect.innerHTML = '<option value="">Select class first...</option>';
+        studentSelect.disabled = true;
+        studentSelect.innerHTML = '<option value="">Select module first...</option>';
+        return;
+    }
+
+    // Load modules for this class
+    loadInspectorModules(classId);
+}
+
+async function loadInspectorModules(classId) {
+    try {
+        // Note: You'll need to add a filter by class_id to your modules endpoint
+        const response = await fetch(`${API_BASE}/modules`, {
+            headers: getAuthHeaders()
+        });
+        const allModules = await response.json();
+
+        // For now, show all modules (you can filter by class_id when that's implemented)
+        const moduleSelect = document.getElementById('inspector-module');
+        moduleSelect.disabled = false;
+        moduleSelect.innerHTML = '<option value="">Select a module...</option>';
+
+        allModules.forEach(mod => {
+            const option = document.createElement('option');
+            option.value = mod.id;
+            option.textContent = mod.title;
+            moduleSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading modules:', error);
+    }
+}
+
+function inspectorModuleChanged() {
+    const moduleId = parseInt(document.getElementById('inspector-module').value);
+    inspectorData.selectedModule = moduleId;
+
+    if (!moduleId) {
+        const studentSelect = document.getElementById('inspector-student');
+        studentSelect.disabled = true;
+        studentSelect.innerHTML = '<option value="">Select module first...</option>';
+        return;
+    }
+
+    // Load students
+    loadInspectorStudents();
+}
+
+async function loadInspectorStudents() {
+    try {
+        const response = await fetch(`${API_BASE}/users`, {
+            headers: getAuthHeaders()
+        });
+        const users = await response.json();
+
+        const studentSelect = document.getElementById('inspector-student');
+        studentSelect.disabled = false;
+        studentSelect.innerHTML = '<option value="">Select a student...</option>';
+
+        users.filter(u => !u.is_admin).forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = `${user.name} (${user.email})`;
+            studentSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading students:', error);
+    }
+}
+
+function inspectorStudentChanged() {
+    const studentId = parseInt(document.getElementById('inspector-student').value);
+    inspectorData.selectedStudent = studentId;
+}
+
+async function loadInspectorData() {
+    if (!inspectorData.selectedClass) {
+        alert('Please select at least a Class');
+        return;
+    }
+
+    document.getElementById('inspector-empty').style.display = 'none';
+    document.getElementById('inspector-results').style.display = 'block';
+
+    // Fetch data based on what's selected
+    try {
+        const promises = [
+            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/course-corpus`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() })
+        ];
+
+        // Add module data if module is selected
+        if (inspectorData.selectedModule) {
+            promises.push(fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }));
+            promises.push(fetch(`${API_BASE}/modules/${inspectorData.selectedModule}/corpus`, { headers: getAuthHeaders() }));
+            promises.push(fetch(`${API_BASE}/documents?module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }));
+        }
+
+        // Add student data if student is selected
+        if (inspectorData.selectedStudent) {
+            promises.push(fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }));
+            if (inspectorData.selectedModule) {
+                promises.push(fetch(`${API_BASE}/conversations?user_id=${inspectorData.selectedStudent}&module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }));
+            }
+            promises.push(fetch(`${API_BASE}/memory?user_id=${inspectorData.selectedStudent}`, { headers: getAuthHeaders() }));
+        }
+
+        const responses = await Promise.all(promises);
+        const [classRes, corpusRes, tablesRes, ...rest] = responses;
+
+        const classes = await classRes.json();
+        const corpusData = await corpusRes.json();
+        const tablesData = await tablesRes.json();
+
+        const classObj = classes.find(c => c.id === inspectorData.selectedClass);
+        let user = null, module = null, survey = null;
+        let moduleCorpus = [], documents = [], conversations = [], memories = [];
+
+        let restIndex = 0;
+        if (inspectorData.selectedModule) {
+            const modulesData = await rest[restIndex++].json();
+            const moduleCorpusData = await rest[restIndex++].json();
+            const docsData = await rest[restIndex++].json();
+
+            module = modulesData.find(m => m.id === inspectorData.selectedModule);
+            moduleCorpus = moduleCorpusData.entries || [];
+            documents = docsData;
+        }
+
+        if (inspectorData.selectedStudent) {
+            const usersData = await rest[restIndex++].json();
+            user = usersData.find(u => u.id === inspectorData.selectedStudent);
+            survey = tablesData.tables?.onboarding_surveys?.data?.find(s => s.user_id === inspectorData.selectedStudent);
+
+            if (inspectorData.selectedModule) {
+                conversations = await rest[restIndex++].json();
+            }
+            memories = await rest[restIndex++].json();
+        }
+
+        // Store data globally for layer views
+        window.inspectorLoadedData = {
+            user,
+            classObj,
+            module,
+            survey,
+            classCorpus: corpusData.entries || [],
+            moduleCorpus,
+            documents,
+            conversations,
+            memories
+        };
+
+        // Build and display assembled prompt
+        displayAssembledPrompt(user, classObj, module, survey, corpusData.entries, moduleCorpus, conversations, memories);
+
+        // Show appropriate layer by default
+        if (inspectorData.selectedStudent) {
+            showInspectorLayer(1);
+        } else if (inspectorData.selectedModule) {
+            showInspectorLayer(3);
+        } else {
+            showInspectorLayer(2);
+        }
+
+    } catch (error) {
+        console.error('Error loading inspector data:', error);
+        alert('Error loading data: ' + error.message);
+    }
+}
+
+function displayAssembledPrompt(user, classObj, module, survey, classCorpus, moduleCorpus, conversations, memories) {
+    const prompt = `===  HARV 4-LAYER MEMORY CONTEXT ===
+
+🔹 LAYER 1: STUDENT PROFILE
+Student Name: ${user?.name || 'Unknown'}
+Email: ${user?.email || 'Unknown'}
+Learning Style: ${survey?.learning_style || 'Not specified'}
+Familiarity: ${survey?.familiarity || 'Not specified'}
+Goals: ${survey?.goals || 'Not specified'}
+Pace Preference: ${survey?.pace_preference || 'Not specified'}
+
+🔹 LAYER 2: CLASS ARCHITECTURE
+Class: ${classObj?.title || 'Unknown'}
+Description: ${classObj?.description || 'No description'}
+System Prompt: ${classObj?.system_prompt || 'Use Socratic questioning...'}
+Class Corpus (${classCorpus?.length || 0} entries):
+${classCorpus?.slice(0, 2).map(c => `  - "${c.title}": ${c.content?.substring(0, 80)}...`).join('\n') || '  (none)'}
+
+🔹 LAYER 3: MODULE CONTEXT
+Current Module: ${module?.title || 'Unknown'}
+Description: ${module?.description || 'No description'}
+Learning Objectives: ${module?.learning_objectives || 'Not specified'}
+Module Prompt: ${module?.module_prompt || 'Guide student through discovery...'}
+Module Corpus (${moduleCorpus?.length || 0} entries):
+${moduleCorpus?.slice(0, 2).map(c => `  - "${c.title}" (${c.type})`).join('\n') || '  (none)'}
+
+🔹 LAYER 4: CONVERSATION MEMORY
+Recent Conversations: ${conversations?.length || 0} found
+${conversations?.slice(0, 2).map(c => `  - "${c.title || 'Untitled'}" (${c.message_count || 0} messages)`).join('\n') || '  (none)'}
+
+Memory Summaries: ${memories?.length || 0} found
+${memories?.slice(0, 2).map(m => `  - What Learned: ${m.what_learned}\n    Understanding: ${m.understanding_level || 'intermediate'}`).join('\n') || '  (none)'}
+
+=== TEACHING STRATEGY ===
+Use the Socratic method to guide ${user?.name} through discovery-based learning.
+Consider their ${survey?.learning_style || 'visual'} learning style and ${survey?.familiarity || 'beginner'} familiarity level.
+Build on their existing knowledge and help them connect concepts independently.
+
+=== CURRENT MESSAGE ===
+[Student's message would appear here]
+
+Remember: Never give direct answers. Guide through questions and encourage independent thinking.`;
+
+    document.getElementById('assembled-prompt-display').textContent = prompt;
+}
+
+function showInspectorLayer(layerNum) {
+    inspectorData.currentLayer = layerNum;
+
+    // Update tab styling
+    document.querySelectorAll('.inspector-tab').forEach(tab => {
+        if (parseInt(tab.getAttribute('data-layer')) === layerNum) {
+            tab.style.borderBottom = '3px solid var(--sage-dark)';
+            tab.classList.add('active');
+        } else {
+            tab.style.borderBottom = '3px solid transparent';
+            tab.classList.remove('active');
+        }
+    });
+
+    const data = window.inspectorLoadedData;
+    if (!data) return;
+
+    const layerContent = document.getElementById('inspector-layer-content');
+
+    if (layerNum === 1) {
+        if (!data.user) {
+            layerContent.innerHTML = '<p style="color: var(--text-medium); font-style: italic;">Select a student to view Layer 1 data</p>';
+            return;
+        }
+        layerContent.innerHTML = `
+            <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">Student: ${data.user?.name || 'Unknown'}</h4>
+            ${createLayerTable([data.user], [
+                { key: 'id', label: 'ID' },
+                { key: 'email', label: 'Email' },
+                { key: 'name', label: 'Name' },
+                { key: 'created_at', label: 'Created' }
+            ])}
+
+            <h4 style="margin: 30px 0 15px 0; color: var(--sage-darkest);">Onboarding Survey</h4>
+            ${data.survey ? createLayerTable([data.survey], [
+                { key: 'familiarity', label: 'Familiarity' },
+                { key: 'learning_style', label: 'Learning Style' },
+                { key: 'pace_preference', label: 'Pace' },
+                { key: 'goals', label: 'Goals' }
+            ]) : '<p>No onboarding survey completed</p>'}
+        `;
+    } else if (layerNum === 2) {
+        layerContent.innerHTML = `
+            <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">Class: ${data.classObj?.title || 'Unknown'}</h4>
+            ${data.classObj ? createLayerTable([data.classObj], [
+                { key: 'id', label: 'ID' },
+                { key: 'title', label: 'Title' },
+                { key: 'description', label: 'Description' },
+                { key: 'system_prompt', label: 'System Prompt' }
+            ]) : '<p>Class not found</p>'}
+
+            <h4 style="margin: 30px 0 15px 0; color: var(--sage-darkest);">Class Corpus (${data.classCorpus?.length || 0} entries)</h4>
+            ${data.classCorpus && data.classCorpus.length > 0 ? createLayerTable(data.classCorpus, [
+                { key: 'id', label: 'ID' },
+                { key: 'title', label: 'Title' },
+                { key: 'type', label: 'Type' },
+                { key: 'content', label: 'Content', format: (val) => val?.substring(0, 100) + '...' }
+            ]) : '<p>No class corpus entries</p>'}
+        `;
+    } else if (layerNum === 3) {
+        if (!data.module) {
+            layerContent.innerHTML = '<p style="color: var(--text-medium); font-style: italic;">Select a module to view Layer 3 data</p>';
+            return;
+        }
+        layerContent.innerHTML = `
+            <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">Module: ${data.module?.title || 'Unknown'}</h4>
+            ${createLayerTable([data.module], [
+                { key: 'id', label: 'ID' },
+                { key: 'title', label: 'Title' },
+                { key: 'description', label: 'Description' },
+                { key: 'learning_objectives', label: 'Learning Objectives' },
+                { key: 'module_prompt', label: 'Module Prompt' }
+            ])}
+
+            <h4 style="margin: 30px 0 15px 0; color: var(--sage-darkest);">Module Corpus (${data.moduleCorpus?.length || 0} entries)</h4>
+            ${data.moduleCorpus && data.moduleCorpus.length > 0 ? createLayerTable(data.moduleCorpus, [
+                { key: 'id', label: 'ID' },
+                { key: 'title', label: 'Title' },
+                { key: 'type', label: 'Type' },
+                { key: 'content', label: 'Content', format: (val) => val?.substring(0, 100) + '...' }
+            ]) : '<p>No module corpus entries</p>'}
+
+            <h4 style="margin: 30px 0 15px 0; color: var(--sage-darkest);">Documents (${data.documents?.length || 0} files)</h4>
+            ${data.documents && data.documents.length > 0 ? createLayerTable(data.documents, [
+                { key: 'id', label: 'ID' },
+                { key: 'filename', label: 'Filename' },
+                { key: 'content', label: 'Content', format: (val) => val?.substring(0, 100) + '...' }
+            ]) : '<p>No documents</p>'}
+        `;
+    } else if (layerNum === 4) {
+        if (!data.user) {
+            layerContent.innerHTML = '<p style="color: var(--text-medium); font-style: italic;">Select a student to view Layer 4 conversation data</p>';
+            return;
+        }
+        layerContent.innerHTML = `
+            <h4 style="margin: 0 0 15px 0; color: var(--sage-darkest);">Conversations (${data.conversations?.length || 0} found)</h4>
+            ${data.conversations && data.conversations.length > 0 ? createLayerTable(data.conversations, [
+                { key: 'id', label: 'ID' },
+                { key: 'title', label: 'Title' },
+                { key: 'message_count', label: 'Messages' },
+                { key: 'finalized', label: 'Finalized', format: (val) => val ? 'Yes' : 'No' },
+                { key: 'created_at', label: 'Created' }
+            ]) : '<p>No conversations yet</p>'}
+
+            <h4 style="margin: 30px 0 15px 0; color: var(--sage-darkest);">Memory Summaries (${data.memories?.length || 0} found)</h4>
+            ${data.memories && data.memories.length > 0 ? createLayerTable(data.memories, [
+                { key: 'id', label: 'ID' },
+                { key: 'what_learned', label: 'What Learned' },
+                { key: 'how_learned', label: 'How Learned' },
+                { key: 'understanding_level', label: 'Understanding' },
+                { key: 'created_at', label: 'Created' }
+            ]) : '<p>No memory summaries yet</p>'}
+        `;
+    }
+}
+
+async function searchInspector() {
+    const searchTerm = document.getElementById('inspector-search').value.trim();
+    if (!searchTerm) {
+        alert('Please enter a search term');
+        return;
+    }
+
+    // Simple search through all data
+    try {
+        const [usersRes, convsRes, memsRes] = await Promise.all([
+            fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() })
+        ]);
+
+        const users = await usersRes.json();
+        const tablesData = await convsRes.json();
+        const conversations = tablesData.tables?.conversations?.data || [];
+        const memories = tablesData.tables?.memory_summaries?.data || [];
+
+        const lowerSearch = searchTerm.toLowerCase();
+
+        // Search in users
+        const matchedUser = users.find(u =>
+            u.name?.toLowerCase().includes(lowerSearch) ||
+            u.email?.toLowerCase().includes(lowerSearch)
+        );
+
+        // Search in conversations
+        const matchedConv = conversations.find(c =>
+            c.title?.toLowerCase().includes(lowerSearch)
+        );
+
+        // Search in memories
+        const matchedMem = memories.find(m =>
+            m.what_learned?.toLowerCase().includes(lowerSearch)
+        );
+
+        if (matchedUser) {
+            alert(`Found user: ${matchedUser.name} (${matchedUser.email})\nPlease select their class and module to analyze.`);
+            // Auto-select the user
+            document.getElementById('inspector-student').value = matchedUser.id;
+            inspectorData.selectedStudent = matchedUser.id;
+        } else if (matchedConv) {
+            alert(`Found conversation: "${matchedConv.title}"\nUser ID: ${matchedConv.user_id}, Module ID: ${matchedConv.module_id}`);
+        } else if (matchedMem) {
+            alert(`Found memory: "${matchedMem.what_learned}"\nUser ID: ${matchedMem.user_id}`);
+        } else {
+            alert('No matches found. Try searching by student name, email, or conversation title.');
+        }
+    } catch (error) {
+        console.error('Error searching:', error);
+        alert('Error searching: ' + error.message);
     }
 }
 
