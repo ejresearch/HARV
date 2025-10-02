@@ -11,7 +11,7 @@ from typing import List, Optional
 from datetime import datetime
 
 from app.database import get_db
-from app.models import CourseCorpus, ModuleCorpusEntry, Module, User
+from app.models import ClassCorpus, ModuleCorpusEntry, Module, User
 from app.auth import require_admin
 
 router = APIRouter()
@@ -54,7 +54,7 @@ def get_course_corpus(
     db: Session = Depends(get_db)
 ):
     """Get all course-level corpus entries"""
-    entries = db.query(CourseCorpus).order_by(CourseCorpus.order_index).all()
+    entries = db.query(ClassCorpus).order_by(ClassCorpus.order_index).all()
 
     return {
         "entries": [{
@@ -82,7 +82,7 @@ def create_course_corpus_entry(
     if entry_data.type not in valid_types:
         raise HTTPException(status_code=400, detail=f"Invalid type. Must be one of: {', '.join(valid_types)}")
 
-    new_entry = CourseCorpus(
+    new_entry = ClassCorpus(
         title=entry_data.title,
         content=entry_data.content,
         type=entry_data.type,
@@ -112,7 +112,7 @@ def update_course_corpus_entry(
 ):
     """Update existing course-level corpus entry"""
 
-    entry = db.query(CourseCorpus).filter(CourseCorpus.id == entry_id).first()
+    entry = db.query(ClassCorpus).filter(ClassCorpus.id == entry_id).first()
     if not entry:
         raise HTTPException(status_code=404, detail="Corpus entry not found")
 
@@ -150,7 +150,7 @@ def delete_course_corpus_entry(
 ):
     """Delete course-level corpus entry"""
 
-    entry = db.query(CourseCorpus).filter(CourseCorpus.id == entry_id).first()
+    entry = db.query(ClassCorpus).filter(ClassCorpus.id == entry_id).first()
     if not entry:
         raise HTTPException(status_code=404, detail="Corpus entry not found")
 

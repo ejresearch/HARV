@@ -17,8 +17,10 @@ class ModuleConfig(BaseModel):
     api_endpoint: Optional[str] = None
 
 class ModuleCreate(BaseModel):
+    class_id: int  # NEW: required parent class
     title: str
     description: Optional[str] = None
+    outline: Optional[str] = None  # NEW
     resources: Optional[str] = None
     system_prompt: Optional[str] = None
     module_prompt: Optional[str] = None
@@ -26,6 +28,15 @@ class ModuleCreate(BaseModel):
     module_corpus: Optional[str] = None
     dynamic_corpus: Optional[str] = None
     api_endpoint: Optional[str] = "https://api.openai.com/v1/chat/completions"
+    learning_objectives: Optional[str] = None
+
+class ModuleUpdate(BaseModel):
+    class_id: Optional[int] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    outline: Optional[str] = None
+    resources: Optional[str] = None
+    system_prompt: Optional[str] = None
     learning_objectives: Optional[str] = None
 
 @router.get("/modules")
@@ -114,18 +125,26 @@ def test_module_config(module_id: int, db: Session = Depends(get_db)):
         "has_corpus": bool(module.system_corpus or module.module_corpus)
     }
 
+@router.get("/classes/{class_id}/modules")
+def get_class_modules(class_id: int, db: Session = Depends(get_db)):
+    """Get all modules for a specific class"""
+    modules = db.query(Module).filter(Module.class_id == class_id).all()
+    return {"modules": modules}
+
 @router.post("/modules")
 def create_module(
     module_data: ModuleCreate,
     admin_user: User = Depends(require_admin()),
     db: Session = Depends(get_db)
 ):
-    """Create a new module"""
+    """Create a new module (must belong to a class)"""
 
     # Create new module
     new_module = Module(
+        class_id=module_data.class_id,  # NEW
         title=module_data.title,
         description=module_data.description,
+        outline=module_data.outline,  # NEW
         resources=module_data.resources or "",
         system_prompt=module_data.system_prompt,
         module_prompt=module_data.module_prompt,

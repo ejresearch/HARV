@@ -72,6 +72,7 @@ def get_document(
 async def upload_document(
     file: UploadFile = File(...),
     module_id: Optional[int] = Form(None),
+    class_id: Optional[int] = Form(None),
     admin_user: User = Depends(require_admin()),
     db: Session = Depends(get_db)
 ):
@@ -82,6 +83,13 @@ async def upload_document(
         module = db.query(Module).filter(Module.id == module_id).first()
         if not module:
             raise HTTPException(status_code=404, detail="Module not found")
+
+    # Verify class exists if provided
+    if class_id is not None:
+        from app.models import Class
+        class_obj = db.query(Class).filter(Class.id == class_id).first()
+        if not class_obj:
+            raise HTTPException(status_code=404, detail="Class not found")
 
     # Validate file type
     allowed_extensions = ['.txt', '.md', '.pdf', '.doc', '.docx']
@@ -118,6 +126,7 @@ async def upload_document(
         filename=file.filename,
         content=text_content,
         module_id=module_id,
+        class_id=class_id,
         user_id=admin_user.id
     )
 

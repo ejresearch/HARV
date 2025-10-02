@@ -15,7 +15,7 @@ import json
 
 # Import database and models
 from app.database import get_db, engine
-from app.models import Base, Module, User, Conversation, MemorySummary
+from app.models import Base, Class, Module, User, Conversation, MemorySummary
 
 # Import authentication
 from app.auth import (
@@ -25,6 +25,15 @@ from app.auth import (
 
 # Import all endpoint routers
 from app.endpoints.modules import router as modules_router
+
+# Import classes router
+try:
+    from app.endpoints.classes import router as classes_router
+    print("[OK] Classes router loaded")
+except ImportError:
+    print("[WARN] Classes router not found")
+    from fastapi import APIRouter
+    classes_router = APIRouter()
 
 # Import new admin routers
 try:
@@ -151,6 +160,7 @@ app.add_middleware(
 )
 
 # Include all routers with proper prefixes
+app.include_router(classes_router, prefix="", tags=["classes"])  # NEW: Class management
 app.include_router(modules_router, prefix="", tags=["modules"])
 app.include_router(chat_router, prefix="", tags=["chat"])  # No prefix so /chat/ works
 app.include_router(memory_router, prefix="", tags=["memory"])

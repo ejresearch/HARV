@@ -1,6 +1,11 @@
 // API Configuration
 const API_BASE = 'http://localhost:8000';
 
+// Archived legacy sections storage
+const archivedModulesHTML = `<p style="text-align: center; padding: 40px; color: var(--text-medium);">Legacy modules section - now managed in <strong>Classes & Modules</strong></p>`;
+const archivedCorpusHTML = `<p style="text-align: center; padding: 40px; color: var(--text-medium);">Legacy corpus section - now managed within each Class</p>`;
+const archivedDocumentsHTML = `<p style="text-align: center; padding: 40px; color: var(--text-medium);">Legacy documents section - now managed within each Class or Module</p>`;
+
 // Section content definitions
 const sections = {
     system: {
@@ -104,105 +109,28 @@ const sections = {
             </div>
         `
     },
-    modules: {
-        title: 'Modules',
-        description: 'View and update course modules (lessons/units)',
+    classes: {
+        title: 'Classes & Modules',
+        description: 'Manage classes, modules, corpus, and documents in hierarchical structure',
         content: `
-            <div class="modules-container">
-                <!-- Module Selector -->
-                <div class="module-selector">
-                    <div class="selector-header">
-                        <select id="module-select" onchange="loadModuleData()">
-                            <option value="">Select a module...</option>
+            <div class="classes-container">
+                <!-- Class Selector Dropdown -->
+                <div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="font-weight: 600; color: var(--sage-darkest); white-space: nowrap;">Classes:</label>
+                        <select id="class-selector" onchange="selectClassFromDropdown()" style="flex: 1; padding: 10px; border: 2px solid var(--sage-light); border-radius: 6px; font-size: 14px; color: var(--sage-darkest); cursor: pointer;">
+                            <option value="">Select a class...</option>
                         </select>
-                        <button class="create-btn" onclick="createNewModule()">+ Create Module</button>
+                        <button class="create-btn" onclick="createNewClass()" style="padding: 10px 16px; white-space: nowrap;">+ New Class</button>
                     </div>
                 </div>
 
-                <!-- Module Editor -->
-                <div id="module-editor" style="display: none;">
-                    <form id="module-form" onsubmit="saveModule(event)">
-
-                        <!-- 1. Module Identity -->
-                        <div class="form-section">
-                            <h3 class="section-title">1. Module Identity</h3>
-                            <p class="section-description">Basic information about this learning module</p>
-
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" id="module-title" required placeholder="e.g., Media Effects Theory">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea id="module-description" rows="3" placeholder="What does this module teach?"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Learning Objectives</label>
-                                <textarea id="module-objectives" rows="3" placeholder="What will students learn?"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Resources</label>
-                                <textarea id="module-resources" rows="3" placeholder="Supplementary materials, links, references"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- 2. Teaching Instructions -->
-                        <div class="form-section">
-                            <h3 class="section-title">2. Teaching Instructions (Prompts)</h3>
-                            <p class="section-description">How the AI should teach this module</p>
-
-                            <div class="form-group">
-                                <label>System Prompt <span class="label-hint">(Cross-module teaching philosophy)</span></label>
-                                <textarea id="module-system-prompt" rows="5" placeholder="Core teaching approach, Socratic method guidelines, general behavior..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Module Prompt <span class="label-hint">(Module-specific instructions)</span></label>
-                                <textarea id="module-module-prompt" rows="5" placeholder="How to teach THIS specific module, focus areas, pedagogical approach..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- 3. Knowledge Base -->
-                        <div class="form-section">
-                            <h3 class="section-title">3. Knowledge Base (Corpus)</h3>
-                            <p class="section-description">What content the AI should reference when teaching</p>
-
-                            <div class="form-group">
-                                <label>System Corpus <span class="label-hint">(Foundation knowledge - reusable)</span></label>
-                                <textarea id="module-system-corpus" rows="6" placeholder="Core concepts, definitions, frameworks used across modules..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Module Corpus <span class="label-hint">(Module-specific content)</span></label>
-                                <textarea id="module-module-corpus" rows="6" placeholder="Facts, theories, examples specific to this module..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Dynamic Corpus <span class="label-hint">(Real-time context - changes per conversation)</span></label>
-                                <textarea id="module-dynamic-corpus" rows="6" placeholder="Variables, templates, dynamic content injection patterns..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- 4. API Configuration -->
-                        <div class="form-section">
-                            <h3 class="section-title">4. API Configuration</h3>
-                            <p class="section-description">Where to send the assembled context</p>
-
-                            <div class="form-group">
-                                <label>API Endpoint</label>
-                                <input type="url" id="module-api-endpoint" placeholder="https://api.openai.com/v1/chat/completions">
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="form-actions">
-                            <button type="submit" class="save-btn">Save Module</button>
-                            <button type="button" class="delete-btn" onclick="deleteModule()">Delete Module</button>
-                        </div>
-                    </form>
+                <!-- Class/Module Editor -->
+                <div style="background: white; border-radius: 8px; padding: 30px; overflow-y: auto;" id="class-editor-container">
+                    <div style="text-align: center; color: #95a5a6; padding: 100px 20px;">
+                        <h3>Select a class to begin</h3>
+                        <p>Choose a class from the dropdown above or create a new one</p>
+                    </div>
                 </div>
             </div>
         `
@@ -711,6 +639,29 @@ const sections = {
                 </div>
             </div>
         `
+    },
+    archive: {
+        title: 'Archive',
+        description: 'Legacy sections (Modules, Corpus, Documents) - migrated to Classes',
+        content: `
+            <div style="padding: 20px;">
+                <div style="background: var(--warm-light); border-left: 4px solid var(--warm-accent); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 10px 0; color: var(--sage-darkest);">📦 Archived Sections</h3>
+                    <p style="margin: 0; color: var(--text-dark);">
+                        The following sections have been migrated to the new <strong>Classes & Modules</strong> hierarchical system.
+                        These are kept here for reference only.
+                    </p>
+                </div>
+
+                <div class="corpus-tabs" style="margin-bottom: 30px;">
+                    <button class="corpus-tab active" onclick="showArchiveSection('modules')">Legacy Modules</button>
+                    <button class="corpus-tab" onclick="showArchiveSection('corpus')">Legacy Corpus</button>
+                    <button class="corpus-tab" onclick="showArchiveSection('documents')">Legacy Documents</button>
+                </div>
+
+                <div id="archive-content"></div>
+            </div>
+        `
     }
 };
 
@@ -731,11 +682,68 @@ function loadSection(sectionName) {
     if (sectionName === 'tableview') {
         loadTableViewData();
     }
+
+    // Auto-load classes section
+    if (sectionName === 'classes') {
+        setTimeout(() => loadClassesSection(), 100);
+    }
+
+    // Auto-load analytics section
+    if (sectionName === 'analytics') {
+        setTimeout(() => {
+            loadDashboardAnalytics();
+            loadModulePerformance();
+            loadAnalyticsAlerts();
+        }, 100);
+    }
+
+    // Auto-load conversations section
+    if (sectionName === 'conversations') {
+        setTimeout(() => {
+            loadConversationFilters();
+            loadConversations();
+        }, 100);
+    }
+
+    // Auto-load chat section
+    if (sectionName === 'chat') {
+        setTimeout(() => {
+            loadModulesList();
+            loadChatProviders();
+        }, 100);
+    }
+
+    // Auto-load memory section
+    if (sectionName === 'memory') {
+        setTimeout(() => {
+            loadMemoryFilters();
+            loadMemorySummaries();
+        }, 100);
+    }
+
+    // Auto-load progress section
+    if (sectionName === 'progress') {
+        setTimeout(() => {
+            loadProgressFilters();
+            loadUserProgress();
+        }, 100);
+    }
+
+    // Auto-load archive section default view
+    if (sectionName === 'archive') {
+        setTimeout(() => showArchiveSection('modules'), 100);
+    }
 }
 
 // Authentication Functions
 let currentUser = null;
 let authToken = null;
+
+// Helper function to get auth headers
+function getAuthHeaders() {
+    const token = localStorage.getItem('access_token') || authToken;
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
 
 // Auto-login for testing (remove in production)
 async function autoLoginForTesting() {
@@ -754,6 +762,7 @@ async function autoLoginForTesting() {
         if (response.ok && data.success) {
             currentUser = data.user;
             authToken = data.access_token;
+            localStorage.setItem('access_token', data.access_token);  // Save to localStorage for classes.js
             console.log('✅ Auto-logged in as admin for testing');
         } else {
             console.log('⚠️ Auto-login failed, manual login required');
@@ -804,6 +813,7 @@ async function handleLogin(event) {
         if (response.ok && data.success) {
             currentUser = data.user;
             authToken = data.access_token;
+            localStorage.setItem('access_token', data.access_token);  // Save to localStorage for classes.js
             displayUserInfo(data.user, data.access_token);
             document.getElementById('login-form').reset();
         } else {
@@ -882,6 +892,7 @@ function displayUserInfo(user, token) {
 function handleLogout() {
     currentUser = null;
     authToken = null;
+    localStorage.removeItem('access_token');  // Clear localStorage token
     document.getElementById('user-info').style.display = 'none';
     showLogin();
 }
@@ -936,9 +947,7 @@ async function testStatusEndpoint() {
 async function loadDashboardAnalytics() {
     try {
         const response = await fetch(`${API_BASE}/analytics/dashboard`, {
-            headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
-            }
+            headers: getAuthHeaders()
         });
 
         if (!response.ok) {
@@ -964,9 +973,7 @@ async function loadDashboardAnalytics() {
 async function loadModulePerformance() {
     try {
         const response = await fetch(`${API_BASE}/analytics/modules/performance`, {
-            headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
-            }
+            headers: getAuthHeaders()
         });
 
         if (!response.ok) {
@@ -1016,9 +1023,7 @@ async function loadModulePerformance() {
 async function loadAnalyticsAlerts() {
     try {
         const response = await fetch(`${API_BASE}/analytics/alerts`, {
-            headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
-            }
+            headers: getAuthHeaders()
         });
 
         if (!response.ok) {
@@ -1204,7 +1209,7 @@ async function sendChatMessage(event) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: JSON.stringify({
                 user_id: parseInt(userId),
@@ -1263,7 +1268,7 @@ async function loadConversations() {
 
         const response = await fetch(url, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1323,7 +1328,7 @@ async function loadConversationFilters() {
     try {
         const usersResponse = await fetch(`${API_BASE}/users`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1373,7 +1378,7 @@ async function loadConversationDetail(conversationId) {
     try {
         const response = await fetch(`${API_BASE}/conversations/${conversationId}`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1530,7 +1535,7 @@ async function saveModule(event) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: JSON.stringify(moduleData)
         });
@@ -1558,7 +1563,7 @@ async function createNewModule() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: JSON.stringify({
                 title: title,
@@ -1595,7 +1600,7 @@ async function deleteModule() {
         const response = await fetch(`${API_BASE}/modules/${currentModuleId}`, {
             method: 'DELETE',
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1707,7 +1712,7 @@ async function loadCorpusTypes() {
     try {
         const response = await fetch(`${API_BASE}/corpus/types`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1755,7 +1760,7 @@ async function loadCourseCorpusEntries() {
 
         const response = await fetch(`${API_BASE}/course-corpus`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1818,7 +1823,7 @@ async function selectCourseCorpusEntry(entryId, clickEvent = null) {
     try {
         const response = await fetch(`${API_BASE}/course-corpus`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1918,7 +1923,7 @@ async function saveCourseCorpusEntry(entryId) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: JSON.stringify(data)
         });
@@ -1950,7 +1955,7 @@ async function deleteCourseCorpusEntry(entryId) {
         const response = await fetch(`${API_BASE}/course-corpus/${entryId}`, {
             method: 'DELETE',
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -1990,7 +1995,7 @@ async function loadModuleCorpusEntries() {
     try {
         const response = await fetch(`${API_BASE}/modules/${moduleId}/corpus`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2054,7 +2059,7 @@ async function selectModuleCorpusEntry(entryId, clickEvent = null) {
     try {
         const response = await fetch(`${API_BASE}/modules/${moduleId}/corpus`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2162,7 +2167,7 @@ async function saveModuleCorpusEntry(entryId) {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: JSON.stringify(data)
         });
@@ -2199,7 +2204,7 @@ async function deleteModuleCorpusEntry(entryId) {
         const response = await fetch(`${API_BASE}/module-corpus/${entryId}`, {
             method: 'DELETE',
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2244,7 +2249,7 @@ async function loadDocuments() {
     try {
         const response = await fetch(url, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2307,7 +2312,7 @@ async function selectDocument(docId, clickEvent = null) {
     try {
         const response = await fetch(`${API_BASE}/documents/${docId}`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2380,7 +2385,7 @@ async function renderPDF(docId) {
         // Fetch PDF with auth
         const response = await fetch(`${API_BASE}/documents/${docId}/pdf`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2474,7 +2479,7 @@ async function uploadDocument() {
         const response = await fetch(`${API_BASE}/documents/upload`, {
             method: 'POST',
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             },
             body: formData
         });
@@ -2502,7 +2507,7 @@ async function deleteDocument(docId) {
         const response = await fetch(`${API_BASE}/documents/${docId}`, {
             method: 'DELETE',
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2528,7 +2533,7 @@ async function exportDocument(docId, format) {
     try {
         const response = await fetch(`${API_BASE}/documents/${docId}`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2557,7 +2562,7 @@ async function exportAllDocuments() {
     try {
         const response = await fetch(url, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2575,7 +2580,7 @@ async function exportAllDocuments() {
             data.documents.map(async doc => {
                 const res = await fetch(`${API_BASE}/documents/${doc.id}`, {
                     headers: {
-                        ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                        ...getAuthHeaders()
                     }
                 });
                 return res.json();
@@ -2623,7 +2628,7 @@ async function populateMemoryFilters() {
     try {
         const response = await fetch(`${API_BASE}/users`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
         if (response.ok) {
@@ -2664,7 +2669,7 @@ async function loadMemorySummaries() {
     try {
         const response = await fetch(url, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2796,7 +2801,7 @@ async function viewMemoryDetail(memoryId, userId) {
     try {
         const response = await fetch(`${API_BASE}/memory/${userId}`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -2887,7 +2892,73 @@ function switchMemoryView(view) {
     }
 }
 
+async function loadMemoryFilters() {
+    try {
+        // Load users for filter
+        const usersResponse = await fetch(`${API_BASE}/users`, {
+            headers: getAuthHeaders()
+        });
+        if (usersResponse.ok) {
+            const usersData = await usersResponse.json();
+            const users = usersData.users || usersData; // Handle both array and {users: []} response
+            const userFilter = document.getElementById('memory-user-filter');
+            if (userFilter && Array.isArray(users)) {
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.name || user.email;
+                    userFilter.appendChild(option);
+                });
+            }
+        }
+
+        // Load modules for filter
+        const modulesResponse = await fetch(`${API_BASE}/modules`, {
+            headers: getAuthHeaders()
+        });
+        if (modulesResponse.ok) {
+            const modulesData = await modulesResponse.json();
+            const modules = modulesData.modules || modulesData; // Handle both array and {modules: []} response
+            const moduleFilter = document.getElementById('memory-module-filter');
+            if (moduleFilter && Array.isArray(modules)) {
+                modules.forEach(module => {
+                    const option = document.createElement('option');
+                    option.value = module.id;
+                    option.textContent = module.title;
+                    moduleFilter.appendChild(option);
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error loading memory filters:', error);
+    }
+}
+
 // ===== PROGRESS FUNCTIONS =====
+
+async function loadProgressFilters() {
+    try {
+        // Load users for filter
+        const usersResponse = await fetch(`${API_BASE}/users`, {
+            headers: getAuthHeaders()
+        });
+        if (usersResponse.ok) {
+            const usersData = await usersResponse.json();
+            const users = usersData.users || usersData; // Handle both array and {users: []} response
+            const userFilter = document.getElementById('progress-user-filter');
+            if (userFilter && Array.isArray(users)) {
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.name || user.email;
+                    userFilter.appendChild(option);
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error loading progress filters:', error);
+    }
+}
 
 async function loadUserProgress() {
     const userSelect = document.getElementById('progress-user-filter');
@@ -2902,7 +2973,7 @@ async function loadUserProgress() {
     try {
         const response = await fetch(`${API_BASE}/progress/${userId}`, {
             headers: {
-                ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                ...getAuthHeaders()
             }
         });
 
@@ -3161,3 +3232,28 @@ function toggleAutoRefresh() {
         }
     }
 }
+
+
+// ===== ARCHIVE SECTION HANDLER =====
+function showArchiveSection(section) {
+    // Update active tab
+    document.querySelectorAll(".corpus-tab").forEach(btn => btn.classList.remove("active"));
+    event?.target?.classList.add("active");
+
+    const content = document.getElementById("archive-content");
+
+    switch(section) {
+        case "modules":
+            content.innerHTML = archivedModulesHTML;
+            break;
+        case "corpus":
+            content.innerHTML = archivedCorpusHTML;
+            break;
+        case "documents":
+            content.innerHTML = archivedDocumentsHTML;
+            break;
+        default:
+            content.innerHTML = `<p style="text-align: center; padding: 40px;">Select a section to view</p>`;
+    }
+}
+

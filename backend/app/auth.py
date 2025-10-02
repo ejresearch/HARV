@@ -78,7 +78,7 @@ def verify_token(token: str) -> Optional[Dict[str, Any]]:
         }
     except jwt.ExpiredSignatureError:
         return None
-    except jwt.JWTError:
+    except Exception:  # Catch all JWT decode errors
         return None
 
 def get_user_by_id(db: Session, user_id: int):

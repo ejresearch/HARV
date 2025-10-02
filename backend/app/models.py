@@ -11,6 +11,27 @@ from sqlalchemy.sql import func
 
 Base = declarative_base()
 
+# Forward declare relationships using strings to avoid circular dependencies
+
+# Class model (NEW - parent of modules)
+class Class(Base):
+    __tablename__ = "classes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text)
+    outline = Column(Text)
+    learning_objectives = Column(Text)
+    system_prompt = Column(Text)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # Relationships (lazy-loaded via strings)
+    modules = relationship("Module", back_populates="class_parent", cascade="all, delete-orphan", lazy="dynamic")
+    class_corpus_entries = relationship("ClassCorpus", back_populates="class_parent", cascade="all, delete-orphan")
+    documents = relationship("Document", back_populates="class_parent", foreign_keys="Document.class_id")
+    progress_records = relationship("UserProgress", back_populates="class_parent", foreign_keys="UserProgress.class_id")
+
 # User model (matches your existing database)
 class User(Base):
     __tablename__ = "users"
@@ -30,16 +51,18 @@ class User(Base):
     documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
     memory_summaries = relationship("MemorySummary", back_populates="user", cascade="all, delete-orphan")
 
-# Module model (matches your migrated database)
+# Module model (UPDATED - now child of class)
 class Module(Base):
     __tablename__ = "modules"
-    
+
     id = Column(Integer, primary_key=True, index=True)
+    class_id = Column(Integer, ForeignKey("classes.id", ondelete="CASCADE"))  # NEW: parent class
     title = Column(String, nullable=False)
     description = Column(Text)
+    outline = Column(Text)  # NEW: module-level outline
     resources = Column(Text)
     system_prompt = Column(Text)
-    
+
     # Added by migration
     module_prompt = Column(Text)
     system_corpus = Column(Text)
@@ -47,13 +70,15 @@ class Module(Base):
     dynamic_corpus = Column(Text)
     api_endpoint = Column(String, default="https://api.openai.com/v1/chat/completions")
     learning_objectives = Column(Text)
-    
+
     # Note: created_at, updated_at don't exist in your DB yet
-    
+
     # Relationships
+    class_parent = relationship("Class", back_populates="modules")  # NEW
     conversations = relationship("Conversation", back_populates="module")
     progress = relationship("UserProgress", back_populates="module")
     module_corpus_entries = relationship("ModuleCorpusEntry", back_populates="module", cascade="all, delete-orphan")
+    documents = relationship("Document", back_populates="module")
 
 # Conversation model (matches your existing database + added columns)
 class Conversation(Base):
@@ -76,21 +101,22 @@ class Conversation(Base):
     user = relationship("User", back_populates="conversations")
     module = relationship("Module", back_populates="conversations")
 
-# Document model (matches your existing database)
+# Document model (UPDATED - can belong to class OR module)
 class Document(Base):
     __tablename__ = "documents"
-    
+
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    class_id = Column(Integer, ForeignKey("classes.id", ondelete="CASCADE"))  # NEW
     module_id = Column(Integer, ForeignKey("modules.id", ondelete="CASCADE"))
     filename = Column(String)
     content = Column(Text)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
-    
-    # Added by migration (might be NULL)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
-    
+
     # Relationships
     user = relationship("User", back_populates="documents")
+    class_parent = relationship("Class", back_populates="documents")  # NEW
+    module = relationship("Module", back_populates="documents")
 
 # MemorySummary model (matches your existing database)
 class MemorySummary(Base):
@@ -110,25 +136,27 @@ class MemorySummary(Base):
     user = relationship("User", back_populates="memory_summaries")
     conversation = relationship("Conversation")
 
-# UserProgress model (matches your existing database + added columns)
+# UserProgress model (UPDATED - can track class or module progress)
 class UserProgress(Base):
     __tablename__ = "user_progress"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    module_id = Column(Integer, ForeignKey("modules.id", ondelete="CASCADE"), nullable=False)
+    class_id = Column(Integer, ForeignKey("classes.id", ondelete="CASCADE"))  # NEW: class-level progress
+    module_id = Column(Integer, ForeignKey("modules.id", ondelete="CASCADE"))  # module-level progress
     completed = Column(Boolean, default=False)
     grade = Column(String)
     completion_date = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+
     # Added by migration (might be NULL)
     time_spent = Column(Integer, default=0)
     attempts = Column(Integer, default=0)
-    
+
     # Relationships
     user = relationship("User", back_populates="progress")
+    class_parent = relationship("Class", back_populates="progress_records")  # Fixed: back_populates must match Class relationship name
     module = relationship("Module", back_populates="progress")
 
 # OnboardingSurvey model (matches your existing database)
@@ -149,17 +177,21 @@ class OnboardingSurvey(Base):
     # Relationships
     user = relationship("User", back_populates="onboarding_survey")
 
-# CourseCorpus model (matches your existing database)
-class CourseCorpus(Base):
-    __tablename__ = "course_corpus"
-    
+# ClassCorpus model (RENAMED from CourseCorpus - belongs to Class)
+class ClassCorpus(Base):
+    __tablename__ = "class_corpus"
+
     id = Column(Integer, primary_key=True, index=True)
+    class_id = Column(Integer, ForeignKey("classes.id", ondelete="CASCADE"))  # NEW: belongs to class
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     type = Column(String, nullable=False)
     order_index = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # Relationships
+    class_parent = relationship("Class", back_populates="class_corpus_entries")  # NEW
 
 # ModuleCorpusEntry model (matches your existing database)
 class ModuleCorpusEntry(Base):
