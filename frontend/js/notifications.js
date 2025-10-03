@@ -207,29 +207,35 @@ const ModalSystem = {
         `;
 
         modal.innerHTML = `
-            <h3 style="margin: 0 0 12px 0; color: var(--sage-darkest); font-size: 20px;">${title}</h3>
-            <p style="margin: 0 0 24px 0; color: var(--text-medium); line-height: 1.6;">${message}</p>
+            <h3 style="margin: 0 0 12px 0; color: #1f1f1f; font-size: 20px; font-weight: 700;">${title}</h3>
+            <p style="margin: 0 0 24px 0; color: #565656; line-height: 1.6;">${message}</p>
             <div style="display: flex; gap: 10px; justify-content: flex-end;">
                 <button id="modal-cancel" style="
                     padding: 10px 20px;
-                    border: 2px solid var(--sage-light);
+                    border: 2px solid #d4d4d4;
                     background: white;
-                    color: var(--sage-darkest);
+                    color: #2f2f2f;
                     border-radius: 6px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
-                ">Cancel</button>
+                    transition: all 0.2s;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">Cancel</button>
                 <button id="modal-confirm" style="
                     padding: 10px 20px;
                     border: none;
-                    background: var(--sage-medium);
+                    background: #EF4444;
                     color: white;
                     border-radius: 6px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
-                ">Confirm</button>
+                    transition: all 0.2s;
+                "
+                onmouseover="this.style.background='#DC2626'"
+                onmouseout="this.style.background='#EF4444'">Delete</button>
             </div>
         `;
 
@@ -254,12 +260,12 @@ const ModalSystem = {
         `;
 
         modal.innerHTML = `
-            <h3 style="margin: 0 0 12px 0; color: var(--sage-darkest); font-size: 20px;">${title}</h3>
-            <p style="margin: 0 0 16px 0; color: var(--text-medium); line-height: 1.6;">${message}</p>
+            <h3 style="margin: 0 0 12px 0; color: #1f1f1f; font-size: 20px; font-weight: 700;">${title}</h3>
+            <p style="margin: 0 0 16px 0; color: #565656; line-height: 1.6;">${message}</p>
             <input type="text" id="modal-input" value="${defaultValue}" style="
                 width: 100%;
                 padding: 10px 12px;
-                border: 2px solid var(--sage-light);
+                border: 2px solid #d4d4d4;
                 border-radius: 6px;
                 font-size: 14px;
                 margin-bottom: 20px;
@@ -268,24 +274,30 @@ const ModalSystem = {
             <div style="display: flex; gap: 10px; justify-content: flex-end;">
                 <button id="modal-cancel" style="
                     padding: 10px 20px;
-                    border: 2px solid var(--sage-light);
+                    border: 2px solid #d4d4d4;
                     background: white;
-                    color: var(--sage-darkest);
+                    color: #2f2f2f;
                     border-radius: 6px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
-                ">Cancel</button>
+                    transition: all 0.2s;
+                "
+                onmouseover="this.style.background='#f5f5f5'"
+                onmouseout="this.style.background='white'">Cancel</button>
                 <button id="modal-submit" style="
                     padding: 10px 20px;
                     border: none;
-                    background: var(--sage-medium);
+                    background: #10B981;
                     color: white;
                     border-radius: 6px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
-                ">Submit</button>
+                    transition: all 0.2s;
+                "
+                onmouseover="this.style.background='#059669'"
+                onmouseout="this.style.background='#10B981'">Submit</button>
             </div>
         `;
 
@@ -324,13 +336,13 @@ const ModalSystem = {
             <div class="spinner" style="
                 width: 40px;
                 height: 40px;
-                border: 4px solid var(--sage-lighter);
-                border-top-color: var(--sage-medium);
+                border: 4px solid #ECFDF5;
+                border-top-color: #10B981;
                 border-radius: 50%;
                 animation: spin 1s linear infinite;
                 margin: 0 auto 16px;
             "></div>
-            <p style="margin: 0; color: var(--sage-darkest); font-size: 15px;">${message}</p>
+            <p style="margin: 0; color: #1f1f1f; font-size: 15px; font-weight: 600;">${message}</p>
         `;
 
         this.open(modal);

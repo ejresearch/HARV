@@ -16,7 +16,7 @@ import json
 
 # Import database and models
 from app.database import get_db, engine
-from app.models import Base, Class, Module, User, Conversation, MemorySummary, OnboardingSurvey
+from app.models import Base, Class, Module, User, Conversation, MemorySummary, OnboardingSurvey, UserProgress
 
 # Import authentication
 from app.auth import (
@@ -504,19 +504,77 @@ async def get_me(
 
 @app.get("/users")
 def get_users(db: Session = Depends(get_db)):
-    """Get all users (admin only in production)"""
+    """Get all users with role-specific data (admin only in production)"""
     users = db.query(User).all()
+    result = []
+
+    for user in users:
+        user_data = {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "is_admin": user.is_admin,
+            "role": "admin" if user.is_admin else "student"
+        }
+
+        if user.is_admin:
+            # For admins: show how many classes and modules they created
+            classes_created = db.query(Class).filter(Class.created_by == user.id).count()
+            modules_created = db.query(Module).filter(Module.created_by == user.id).count()
+            user_data["classes_created"] = classes_created
+            user_data["modules_created"] = modules_created
+        else:
+            # For students: show onboarding data and completion stats
+            survey = db.query(OnboardingSurvey).filter(OnboardingSurvey.user_id == user.id).first()
+            if survey:
+                user_data["age_grade_level"] = survey.age_grade_level
+                user_data["learning_style"] = survey.learning_style
+                user_data["familiarity"] = survey.familiarity
+                user_data["goals"] = survey.goals
+
+            # Count completed classes and modules
+            classes_completed = db.query(UserProgress).filter(
+                UserProgress.user_id == user.id,
+                UserProgress.class_id.isnot(None),
+                UserProgress.completed == True
+            ).count()
+
+            modules_completed = db.query(UserProgress).filter(
+                UserProgress.user_id == user.id,
+                UserProgress.module_id.isnot(None),
+                UserProgress.completed == True
+            ).count()
+
+            user_data["classes_completed"] = classes_completed
+            user_data["modules_completed"] = modules_completed
+
+        result.append(user_data)
+
+    return {"users": result}
+
+class UserUpdateRequest(BaseModel):
+    name: str = None
+
+@app.put("/users/{user_id}")
+def update_user(user_id: int, update_data: UserUpdateRequest, db: Session = Depends(get_db)):
+    """Update user information (admin only in production)"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Update only the provided fields
+    if update_data.name is not None:
+        user.name = update_data.name
+
+    db.commit()
+    db.refresh(user)
+
     return {
-        "users": [
-            {
-                "id": user.id,
-                "name": user.name,
-                "email": user.email,
-                "is_admin": user.is_admin,
-                "role": "admin" if user.is_admin else "student"
-            }
-            for user in users
-        ]
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "is_admin": user.is_admin,
+        "role": "admin" if user.is_admin else "student"
     }
 
 @app.get("/surveys/{user_id}")

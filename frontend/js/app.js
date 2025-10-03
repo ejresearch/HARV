@@ -13,65 +13,58 @@ const sections = {
         description: 'System overview and course management',
         content: `
             <div class="p-6 space-y-6">
-                <!-- Top Metrics -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-gray-900" id="admin-total-students">-</div>
-                        <div class="text-sm text-gray-600 mt-2 font-medium">Total Students</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-gray-900" id="admin-classes-built">-</div>
-                        <div class="text-sm text-gray-600 mt-2 font-medium">Classes Built</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-gray-900" id="admin-modules-created">-</div>
-                        <div class="text-sm text-gray-600 mt-2 font-medium">Modules Created</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-gray-900" id="admin-active-conversations">-</div>
-                        <div class="text-sm text-gray-600 mt-2 font-medium">Active Conversations</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-gray-900" id="admin-memory-summaries">-</div>
-                        <div class="text-sm text-gray-600 mt-2 font-medium">Memory Summaries</div>
-                    </div>
+                <!-- Quick Actions Bar -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('classes')">
+                        <div class="text-2xl mb-2">📚</div>
+                        <div class="font-bold text-gray-900">Manage Classes</div>
+                        <div class="text-sm text-gray-600 mt-1">Edit classes & modules</div>
+                    </button>
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('memory')">
+                        <div class="text-2xl mb-2">🧠</div>
+                        <div class="font-bold text-gray-900">Memory Inspector</div>
+                        <div class="text-sm text-gray-600 mt-1">View student learning</div>
+                    </button>
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('system')">
+                        <div class="text-2xl mb-2">⚙️</div>
+                        <div class="font-bold text-gray-900">Settings</div>
+                        <div class="text-sm text-gray-600 mt-1">System configuration</div>
+                    </button>
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('chat')">
+                        <div class="text-2xl mb-2">💬</div>
+                        <div class="font-bold text-gray-900">Test Chat</div>
+                        <div class="text-sm text-gray-600 mt-1">Try the AI tutor</div>
+                    </button>
                 </div>
 
-                <!-- Two Column Layout -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Recent Activity -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
-                        <div class="space-y-3" id="admin-activity-feed">
-                            <p class="text-gray-500 text-center py-4">Loading activity...</p>
+                <!-- Student Management Section -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300">
+                    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Student Management</h3>
+                            <p class="text-sm text-gray-600 mt-1">View and manage all registered students</p>
                         </div>
+                        <button onclick="showAddStudentModal()" class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                            + Add Student
+                        </button>
                     </div>
-
-                    <!-- Course Building Status -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Course Building Status</h3>
-                        <div id="admin-course-status">
-                            <p class="text-gray-500 text-center py-4">Loading status...</p>
-                        </div>
-                    </div>
-
-                    <!-- Student Insights -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Student Insights</h3>
-                        <div id="admin-student-insights">
-                            <p class="text-gray-500 text-center py-4">Loading insights...</p>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
-                        <div class="space-y-2">
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('classes')">Manage Classes</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('memory')">Memory Inspector</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('conversations')">All Conversations</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">Chat Interface</button>
-                        </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-100 border-b-2 border-gray-300">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Classes</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Progress</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200" id="admin-students-table">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">Loading students...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -82,69 +75,27 @@ const sections = {
         description: 'Your personal learning journey',
         content: `
             <div class="p-6 space-y-6">
-                <!-- Welcome Header -->
-                <div class="bg-sage-medium text-white rounded-lg p-8" id="student-welcome">
-                    <h2 class="text-3xl font-bold">Welcome back, <span id="student-name">Student</span></h2>
-                    <p class="text-sage-lightest mt-2" id="student-subtitle">Loading your learning profile...</p>
+                <!-- Welcome Header with Settings -->
+                <div class="bg-sage-medium text-white rounded-lg p-8 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold">Welcome back, <span id="student-name">Student</span>!</h2>
+                        <p class="text-white opacity-90 mt-2" id="student-subtitle">Loading your learning profile...</p>
+                    </div>
+                    <button onclick="showStudentSettings()" class="bg-white text-sage-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium flex items-center gap-2">
+                        <span>⚙️</span>
+                        <span>Settings</span>
+                    </button>
                 </div>
 
-                <!-- Progress Hero -->
-                <div class="bg-white rounded-lg shadow-sm p-8 flex flex-col md:flex-row items-center gap-8">
-                    <div class="relative" id="student-progress-circle">
-                        <svg width="200" height="200">
-                            <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="10"/>
-                            <circle id="progress-ring" cx="100" cy="100" r="90" fill="none" stroke="#8fae9d"
-                                stroke-width="10" stroke-dasharray="565" stroke-dashoffset="565"
-                                transform="rotate(-90 100 100)" stroke-linecap="round"/>
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-gray-900" id="student-progress-text">0%</div>
+                <!-- Your Classes -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-900">Your Classes</h3>
+                        <p class="text-sm text-gray-600 mt-1">Track your progress across all enrolled classes</p>
                     </div>
-                    <div class="flex-1 text-center md:text-left">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Overall Progress</h3>
-                        <p class="text-gray-600" id="student-progress-desc">Loading your progress...</p>
-                    </div>
-                </div>
-
-                <!-- Continue Learning -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Continue Learning</h3>
-                    <div id="student-continue-learning">
-                        <p class="text-gray-500 text-center py-4">Loading your next steps...</p>
-                    </div>
-                </div>
-
-                <!-- Learning Path -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Your Learning Path</h3>
-                    <div id="student-learning-path" class="space-y-4">
-                        <p class="text-gray-500 text-center py-4">Loading learning path...</p>
-                    </div>
-                </div>
-
-                <!-- Recent Activity & Stats -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
-                        <div id="student-recent-activity">
-                            <p class="text-gray-500 text-center py-4">Loading recent activity...</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Quick Stats</h3>
-                        <div class="grid grid-cols-3 gap-4" id="student-stats">
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-gray-900" id="student-total-time">-</div>
-                                <div class="text-sm text-gray-600 mt-1">Total Time</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-gray-900" id="student-messages-sent">-</div>
-                                <div class="text-sm text-gray-600 mt-1">Messages Sent</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-gray-900" id="student-concepts-mastered">-</div>
-                                <div class="text-sm text-gray-600 mt-1">Concepts Mastered</div>
-                            </div>
+                    <div class="p-6">
+                        <div id="student-classes-list" class="space-y-4">
+                            <p class="text-gray-500 text-center py-8">Loading your classes...</p>
                         </div>
                     </div>
                 </div>
@@ -175,6 +126,65 @@ const sections = {
                     <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /system/status</p>
                     <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testStatusEndpoint()">Test Endpoint</button>
                     <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="status-result">Click test to run...</pre>
+                </div>
+            </div>
+        `
+    },
+    users: {
+        title: 'User Management',
+        description: 'View and manage all users (students and admins)',
+        content: `
+            <div class="p-6 space-y-6">
+                <!-- Admins Table -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-4 bg-purple-50 border-b-2 border-purple-200">
+                        <h3 class="text-lg font-bold text-purple-900">Administrators</h3>
+                        <p class="text-sm text-purple-700 mt-1">System administrators with full access</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Classes Created</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Modules Created</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="admins-table-body">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading administrators...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-4 bg-blue-50 border-b-2 border-blue-200">
+                        <h3 class="text-lg font-bold text-blue-900">Students</h3>
+                        <p class="text-sm text-blue-700 mt-1">Learners using the platform</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Learning Profile</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Progress</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="students-table-body">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading students...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         `
@@ -1105,86 +1115,132 @@ async function loadAnalyticsAlerts() {
 
 async function loadAdminDashboard() {
     try {
-        // Load metrics from various endpoints
-        const [usersRes, classesRes, modulesRes, convsRes, memsRes] = await Promise.all([
+        // Load students and conversations
+        const [usersRes, convsRes] = await Promise.all([
             fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/conversations`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/memory`, { headers: getAuthHeaders() })
+            fetch(`${API_BASE}/conversations`, { headers: getAuthHeaders() })
         ]);
 
         const usersData = await usersRes.json();
-        const classesData = await classesRes.json();
-        const modulesData = await modulesRes.json();
         const convsData = await convsRes.json();
-        const memsData = await memsRes.json();
 
-        // Extract counts
         const students = Array.isArray(usersData) ? usersData : (usersData.users || []);
-        const studentCount = students.filter(u => u.role === 'student').length;
-        const classes = Array.isArray(classesData) ? classesData : (classesData.classes || []);
-        const modules = Array.isArray(modulesData) ? modulesData : (modulesData.modules || []);
         const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
-        const memories = Array.isArray(memsData) ? memsData : (memsData.summaries || []);
 
-        // Update metrics
-        document.getElementById('admin-total-students').textContent = studentCount;
-        document.getElementById('admin-classes-built').textContent = classes.length;
-        document.getElementById('admin-modules-created').textContent = modules.length;
-        document.getElementById('admin-active-conversations').textContent = conversations.length;
-        document.getElementById('admin-memory-summaries').textContent = memories.length;
+        // Build students table
+        const tableBody = document.getElementById('admin-students-table');
 
-        // Recent Activity Feed
-        const activityHTML = conversations.slice(0, 5).map(conv => {
-            const student = students.find(s => s.id === conv.user_id);
+        if (students.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No students registered yet</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = students.map(student => {
+            const studentConvs = conversations.filter(c => c.user_id === student.id);
+            const uniqueModules = [...new Set(studentConvs.map(c => c.module_id))].filter(Boolean);
+            const classCount = uniqueModules.length > 0 ? '1 class' : '0 classes'; // Simplified
+            const progress = uniqueModules.length;
+
             return `
-                <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="viewConversation(${conv.id})">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <strong class="text-gray-900">${student?.name || 'Unknown'}</strong>
-                            <p class="text-sm text-gray-600 mt-1">${conv.title || 'Untitled conversation'}</p>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-gray-900">${student.name || 'N/A'}</div>
+                        ${student.is_admin ? '<span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Admin</span>' : ''}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700">${student.email}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">${classCount}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
+                                <div class="bg-sage-medium h-2 rounded-full" style="width: ${Math.min(100, progress * 10)}%"></div>
+                            </div>
+                            <span class="text-sm text-gray-600">${progress} modules</span>
                         </div>
-                        <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
-                    </div>
-                </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <button onclick="viewStudentConversations(${student.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                View History
+                            </button>
+                            ${!student.is_admin ? `
+                            <button onclick="deleteStudent(${student.id}, '${student.name}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                Delete
+                            </button>` : ''}
+                        </div>
+                    </td>
+                </tr>
             `;
-        }).join('') || '<p class="text-gray-500 text-center py-4">No recent activity</p>';
-        document.getElementById('admin-activity-feed').innerHTML = activityHTML;
-
-        // Course Building Status
-        const incompleteClasses = classes.filter(c => !c.modules || c.modules.length === 0);
-        const statusHTML = incompleteClasses.length > 0
-            ? `<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-3">
-                   <p class="font-semibold text-yellow-800">⚠️ ${incompleteClasses.length} class(es) need modules</p>
-               </div>
-               <ul class="space-y-2">
-                   ${incompleteClasses.slice(0, 3).map(c => `<li class="text-gray-700 pl-4 border-l-2 border-gray-300">${c.title}</li>`).join('')}
-               </ul>`
-            : '<div class="bg-green-50 border-l-4 border-green-400 p-4"><p class="font-semibold text-green-800">✓ All classes have modules</p></div>';
-        document.getElementById('admin-course-status').innerHTML = statusHTML;
-
-        // Student Insights
-        const activeStudents = students.filter(s =>
-            conversations.some(c => c.user_id === s.id)
-        ).slice(0, 5);
-        const insightsHTML = activeStudents.length > 0
-            ? `<div class="space-y-2">
-                   ${activeStudents.map(s => {
-                       const convCount = conversations.filter(c => c.user_id === s.id).length;
-                       return `<div class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors" onclick="viewStudentConversations(${s.id})">
-                           <strong class="text-gray-900">${s.name}</strong>
-                           <span class="text-sm bg-sage-light text-gray-900 px-3 py-1 rounded-full">${convCount} conversation${convCount !== 1 ? 's' : ''}</span>
-                       </div>`;
-                   }).join('')}
-               </div>`
-            : '<p class="text-gray-500 text-center py-4">No active students yet</p>';
-        document.getElementById('admin-student-insights').innerHTML = insightsHTML;
+        }).join('');
 
     } catch (error) {
         console.error('Error loading admin dashboard:', error);
+        const tableBody = document.getElementById('admin-students-table');
+        tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Failed to load students</td></tr>';
         NotificationSystem.error('Failed to load admin dashboard. Please ensure you are logged in as admin.');
     }
+}
+
+// View student conversation history
+async function viewStudentConversations(userId) {
+    try {
+        const response = await fetch(`${API_BASE}/conversations?user_id=${userId}`, { headers: getAuthHeaders() });
+        const data = await response.json();
+        const conversations = Array.isArray(data) ? data : (data.conversations || []);
+
+        // Switch to conversations view and filter by user
+        switchSection('conversations');
+        setTimeout(() => {
+            // Trigger filter if the conversations section supports it
+            const filterInput = document.querySelector('#conversation-filter');
+            if (filterInput) {
+                filterInput.value = userId;
+                filterInput.dispatchEvent(new Event('input'));
+            }
+        }, 100);
+    } catch (error) {
+        console.error('Error viewing student conversations:', error);
+        NotificationSystem.error('Failed to load student conversations');
+    }
+}
+
+// Delete student
+async function deleteStudent(userId, userName) {
+    ModalSystem.confirm(
+        'Delete Student',
+        `Are you sure you want to delete ${userName}? This will permanently delete all their conversations, progress, and memory data.`,
+        async () => {
+            try {
+                ModalSystem.loading('Deleting student...');
+
+                const response = await fetch(`${API_BASE}/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                if (!response.ok) throw new Error('Failed to delete student');
+
+                ModalSystem.close();
+                NotificationSystem.success(`Student ${userName} deleted successfully`);
+                loadAdminDashboard(); // Reload the dashboard
+            } catch (error) {
+                console.error('Error deleting student:', error);
+                ModalSystem.close();
+                NotificationSystem.error('Failed to delete student');
+            }
+        }
+    );
+}
+
+// Show add student modal
+function showAddStudentModal() {
+    ModalSystem.prompt(
+        'Add New Student',
+        'This feature requires backend support for creating users. Use the registration page instead.',
+        '',
+        () => {
+            switchSection('auth');
+        }
+    );
 }
 
 async function loadStudentDashboard() {
@@ -1197,96 +1253,418 @@ async function loadStudentDashboard() {
         document.getElementById('student-name').textContent = user.name || 'Student';
 
         // Get student's survey data if available
+        let surveyData = null;
         const surveyRes = await fetch(`${API_BASE}/surveys/${user.id}`, { headers: getAuthHeaders() });
         if (surveyRes.ok) {
-            const survey = await surveyRes.json();
+            surveyData = await surveyRes.json();
             document.getElementById('student-subtitle').textContent =
-                `Learning style: ${survey.learning_style || 'visual'} | ${survey.familiarity || 'beginner'}`;
+                `${surveyData.age_grade_level || 'Student'} • ${surveyData.learning_style || 'Visual learner'}`;
         } else {
             document.getElementById('student-subtitle').textContent = 'Complete your learning profile to get started';
         }
 
-        // Get student's conversations and memories
-        const [convsRes, memsRes] = await Promise.all([
+        // Get all classes, student's conversations, and modules
+        const [classesRes, convsRes, modulesRes] = await Promise.all([
+            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
             fetch(`${API_BASE}/conversations?user_id=${user.id}`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/memory/${user.id}`, { headers: getAuthHeaders() })
+            fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() })
         ]);
 
+        const classesData = await classesRes.json();
         const convsData = await convsRes.json();
-        const memsData = await memsRes.json();
+        const modulesData = await modulesRes.json();
 
+        const classes = Array.isArray(classesData) ? classesData : (classesData.classes || []);
         const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
-        const memories = Array.isArray(memsData) ? memsData : (memsData.summaries || []);
+        const allModules = Array.isArray(modulesData) ? modulesData : (modulesData.modules || []);
 
-        // Calculate progress (simplified - based on memories)
-        const totalModules = 10; // This should come from enrolled classes
-        const completedModules = new Set(memories.map(m => m.module_id)).size;
-        const progressPercent = Math.min(100, Math.round((completedModules / totalModules) * 100));
+        // Build classes list with progress
+        const classesContainer = document.getElementById('student-classes-list');
 
-        // Update progress circle
-        const circumference = 2 * Math.PI * 90; // radius is 90
-        const offset = circumference - (progressPercent / 100) * circumference;
-        document.getElementById('progress-ring').style.strokeDashoffset = offset;
-        document.getElementById('student-progress-text').textContent = `${progressPercent}%`;
-        document.getElementById('student-progress-desc').textContent =
-            `${completedModules} of ${totalModules} modules completed`;
+        if (classes.length === 0) {
+            classesContainer.innerHTML = '<p class="text-gray-500 text-center py-8">No classes available yet. Check back soon!</p>';
+            return;
+        }
 
-        // Continue Learning section
-        const lastConv = conversations[0];
-        const continueHTML = lastConv
-            ? `<div class="bg-white border border-gray-200 p-6 rounded-lg">
-                   <h4 class="text-lg font-bold text-gray-900 mb-2">Resume: ${lastConv.title || 'Your last conversation'}</h4>
-                   <p class="text-gray-600 mb-4">Module: ${lastConv.module_title || 'Unknown'} • ${lastConv.message_count || 0} messages</p>
-                   <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="resumeConversation(${lastConv.id}, ${lastConv.module_id})">Continue Learning →</button>
-               </div>`
-            : `<div class="bg-white border border-gray-200 p-6 rounded-lg text-center">
-                   <h4 class="text-lg font-bold text-gray-900 mb-4">Start your first lesson</h4>
-                   <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">Begin Learning →</button>
-               </div>`;
-        document.getElementById('student-continue-learning').innerHTML = continueHTML;
+        // Group conversations by module
+        const moduleProgress = {};
+        conversations.forEach(conv => {
+            if (conv.module_id) {
+                moduleProgress[conv.module_id] = (moduleProgress[conv.module_id] || 0) + 1;
+            }
+        });
 
-        // Learning Path - simplified module list
-        const learningPathHTML = `
-            <div class="flex flex-wrap gap-3">
-                ${[...Array(totalModules)].map((_, i) => {
-                    const isCompleted = i < completedModules;
-                    const isCurrent = i === completedModules;
-                    const isLocked = i > completedModules;
-                    const bgColor = isCompleted ? 'bg-green-500' : (isCurrent ? 'bg-sage-medium' : 'bg-gray-300');
-                    const textColor = isCompleted || isCurrent ? 'text-white' : 'text-gray-500';
-                    return `<div class="flex flex-col items-center">
-                        <div class="${bgColor} ${textColor} w-12 h-12 rounded-full flex items-center justify-center font-bold mb-2">
-                            ${isCompleted ? '✓' : i + 1}
+        classesContainer.innerHTML = classes.map(cls => {
+            const classModules = cls.modules || [];
+            const completedModules = classModules.filter(m => moduleProgress[m.id]).length;
+            const totalModules = classModules.length;
+            const progressPercent = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+
+            return `
+                <div class="border-2 border-gray-300 rounded-lg p-6 hover:border-sage-medium hover:shadow-md transition-all cursor-pointer" onclick="switchSection('chat')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-bold text-gray-900">${cls.title}</h4>
+                            <p class="text-sm text-gray-600 mt-1">${cls.description || 'No description available'}</p>
                         </div>
-                        <div class="text-xs text-gray-600">Module ${i + 1}</div>
-                    </div>`;
-                }).join('')}
-            </div>
-        `;
-        document.getElementById('student-learning-path').innerHTML = learningPathHTML;
+                        <div class="text-right ml-4">
+                            <div class="text-3xl font-bold text-sage-medium">${progressPercent}%</div>
+                            <div class="text-xs text-gray-500 mt-1">Complete</div>
+                        </div>
+                    </div>
 
-        // Recent Activity
-        const activityHTML = conversations.slice(0, 3).map(conv => `
-            <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="resumeConversation(${conv.id}, ${conv.module_id})">
-                <div class="flex justify-between items-center">
-                    <strong class="text-gray-900">${conv.title || 'Untitled'}</strong>
-                    <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
+                    <!-- Progress Bar -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs text-gray-600 mb-1">
+                            <span>${completedModules} of ${totalModules} modules</span>
+                            <span>${totalModules - completedModules} remaining</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-sage-medium h-3 rounded-full transition-all" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Module List -->
+                    ${classModules.length > 0 ? `
+                        <div class="space-y-2">
+                            <div class="text-sm font-semibold text-gray-700 mb-2">Modules:</div>
+                            ${classModules.slice(0, 5).map((module, idx) => {
+                                const isStarted = moduleProgress[module.id] > 0;
+                                const convCount = moduleProgress[module.id] || 0;
+                                return `
+                                    <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-6 h-6 rounded-full ${isStarted ? 'bg-sage-medium text-white' : 'bg-gray-300 text-gray-600'} flex items-center justify-center text-xs font-bold">
+                                                ${isStarted ? '✓' : idx + 1}
+                                            </span>
+                                            <span class="text-sm text-gray-700">${module.title}</span>
+                                        </div>
+                                        ${isStarted ? `<span class="text-xs text-gray-500">${convCount} session${convCount !== 1 ? 's' : ''}</span>` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                            ${classModules.length > 5 ? `<div class="text-xs text-gray-500 text-center pt-2">+ ${classModules.length - 5} more modules</div>` : ''}
+                        </div>
+                    ` : '<p class="text-sm text-gray-500 text-center py-4">No modules in this class yet</p>'}
+
+                    <!-- Click to start indicator -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 text-center">
+                        <span class="text-sm text-sage-medium font-medium">Click to start learning →</span>
+                    </div>
                 </div>
-            </div>
-        `).join('') || '<p class="text-gray-500 text-center py-4">No recent activity</p>';
-        document.getElementById('student-recent-activity').innerHTML = activityHTML;
-
-        // Quick Stats
-        const totalTime = conversations.reduce((sum, c) => sum + (c.duration_minutes || 0), 0);
-        const totalMessages = conversations.reduce((sum, c) => sum + (c.message_count || 0), 0);
-
-        document.getElementById('student-total-time').textContent = `${totalTime}min`;
-        document.getElementById('student-messages-sent').textContent = totalMessages;
-        document.getElementById('student-concepts-mastered').textContent = memories.length;
+            `;
+        }).join('');
 
     } catch (error) {
         console.error('Error loading student dashboard:', error);
+        const classesContainer = document.getElementById('student-classes-list');
+        classesContainer.innerHTML = '<p class="text-red-500 text-center py-8">Failed to load dashboard. Please try again.</p>';
         NotificationSystem.error('Failed to load student dashboard. Please ensure you are logged in.');
+    }
+}
+
+// Show student settings modal
+async function showStudentSettings() {
+    try {
+        // Get current user info
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        // Get survey data
+        const surveyRes = await fetch(`${API_BASE}/surveys/${user.id}`, { headers: getAuthHeaders() });
+        const survey = surveyRes.ok ? await surveyRes.json() : {};
+
+        // Create settings modal
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        `;
+
+        modal.innerHTML = `
+            <h3 style="margin: 0 0 20px 0; color: #1f1f1f; font-size: 24px; font-weight: 700;">Profile Settings</h3>
+
+            <form id="student-settings-form" style="display: flex; flex-direction: column; gap: 16px;">
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Name</label>
+                    <input type="text" id="settings-name" value="${user.name || ''}"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;" />
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Email</label>
+                    <input type="email" value="${user.email}" disabled
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; background: #f5f5f5; color: #8f8f8f;" />
+                    <p style="font-size: 12px; color: #8f8f8f; margin-top: 4px;">Email cannot be changed</p>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Age/Grade Level</label>
+                    <input type="text" id="settings-age" value="${survey.age_grade_level || ''}" placeholder="e.g., 10th grade, Adult learner"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;" />
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Learning Style</label>
+                    <select id="settings-learning-style"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;">
+                        <option value="visual" ${survey.learning_style === 'visual' ? 'selected' : ''}>Visual</option>
+                        <option value="auditory" ${survey.learning_style === 'auditory' ? 'selected' : ''}>Auditory</option>
+                        <option value="reading" ${survey.learning_style === 'reading' ? 'selected' : ''}>Reading/Writing</option>
+                        <option value="kinesthetic" ${survey.learning_style === 'kinesthetic' ? 'selected' : ''}>Kinesthetic</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Familiarity Level</label>
+                    <select id="settings-familiarity"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;">
+                        <option value="beginner" ${survey.familiarity === 'beginner' ? 'selected' : ''}>Beginner</option>
+                        <option value="intermediate" ${survey.familiarity === 'intermediate' ? 'selected' : ''}>Intermediate</option>
+                        <option value="advanced" ${survey.familiarity === 'advanced' ? 'selected' : ''}>Advanced</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Learning Goals</label>
+                    <textarea id="settings-goals" rows="3" placeholder="What do you want to achieve?"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; resize: vertical;">${survey.goals || ''}</textarea>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Additional Notes</label>
+                    <textarea id="settings-notes" rows="3" placeholder="Anything else we should know?"
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; resize: vertical;">${survey.learning_notes || ''}</textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid #d4d4d4;">
+                    <button type="button" id="modal-cancel" style="
+                        padding: 10px 20px;
+                        border: 2px solid #d4d4d4;
+                        background: white;
+                        color: #2f2f2f;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 600;
+                    ">Cancel</button>
+                    <button type="submit" style="
+                        padding: 10px 20px;
+                        border: none;
+                        background: #10B981;
+                        color: white;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 600;
+                    ">Save Changes</button>
+                </div>
+            </form>
+        `;
+
+        modal.querySelector('#modal-cancel').onclick = () => ModalSystem.close();
+        modal.querySelector('#student-settings-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await saveStudentSettings(user.id);
+        };
+
+        ModalSystem.open(modal);
+
+    } catch (error) {
+        console.error('Error loading settings:', error);
+        NotificationSystem.error('Failed to load settings');
+    }
+}
+
+// Save student settings
+async function saveStudentSettings(userId) {
+    try {
+        ModalSystem.loading('Saving settings...');
+
+        const settingsData = {
+            age_grade_level: document.getElementById('settings-age').value,
+            learning_style: document.getElementById('settings-learning-style').value,
+            familiarity: document.getElementById('settings-familiarity').value,
+            goals: document.getElementById('settings-goals').value,
+            learning_notes: document.getElementById('settings-notes').value
+        };
+
+        // Update survey data
+        const response = await fetch(`${API_BASE}/surveys/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAuthHeaders()
+            },
+            body: JSON.stringify(settingsData)
+        });
+
+        if (!response.ok) throw new Error('Failed to update settings');
+
+        ModalSystem.close();
+        NotificationSystem.success('Settings updated successfully!');
+
+        // Reload dashboard to show updated info
+        loadStudentDashboard();
+
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        ModalSystem.close();
+        NotificationSystem.error('Failed to save settings');
+    }
+}
+
+// Load Students Table
+async function loadUsersTable() {
+    try {
+        const response = await fetch(`${API_BASE}/users`, { headers: getAuthHeaders() });
+        const data = await response.json();
+        const users = Array.isArray(data) ? data : (data.users || []);
+
+        const adminsTableBody = document.getElementById('admins-table-body');
+        const studentsTableBody = document.getElementById('students-table-body');
+
+        // Split users into admins and students
+        const admins = users.filter(u => u.is_admin);
+        const students = users.filter(u => !u.is_admin);
+
+        // Render admins table
+        if (admins.length === 0) {
+            adminsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No administrators found</td>
+                </tr>
+            `;
+        } else {
+            adminsTableBody.innerHTML = admins.map(user => `
+                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
+                    <td class="px-6 py-4">
+                        <input type="text"
+                            id="name-${user.id}"
+                            value="${user.name || ''}"
+                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-purple-500 focus:outline-none"
+                            onchange="updateUserField(${user.id}, 'name', this.value)"
+                        />
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-700">${user.email}</div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="text-2xl font-bold text-purple-600">${user.classes_created || 0}</div>
+                        <div class="text-xs text-gray-500">classes</div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="text-2xl font-bold text-purple-600">${user.modules_created || 0}</div>
+                        <div class="text-xs text-gray-500">modules</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium">
+                            View History
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render students table
+        if (students.length === 0) {
+            studentsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No students registered yet</td>
+                </tr>
+            `;
+        } else {
+            studentsTableBody.innerHTML = students.map(user => `
+                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
+                    <td class="px-6 py-4">
+                        <input type="text"
+                            id="name-${user.id}"
+                            value="${user.name || ''}"
+                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-blue-500 focus:outline-none"
+                            onchange="updateUserField(${user.id}, 'name', this.value)"
+                        />
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-700">${user.email}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm space-y-1">
+                            ${user.age_grade_level ? `<div><span class="font-medium text-gray-600">Age/Grade:</span> <span class="text-gray-800">${user.age_grade_level}</span></div>` : ''}
+                            ${user.learning_style ? `<div><span class="font-medium text-gray-600">Style:</span> <span class="text-gray-800">${user.learning_style}</span></div>` : ''}
+                            ${user.familiarity ? `<div><span class="font-medium text-gray-600">Familiarity:</span> <span class="text-gray-800">${user.familiarity}</span></div>` : ''}
+                            ${user.goals ? `<div class="text-xs text-gray-500 italic mt-1">"${user.goals.substring(0, 50)}${user.goals.length > 50 ? '...' : ''}"</div>` : ''}
+                            ${!user.age_grade_level && !user.learning_style && !user.familiarity && !user.goals ? '<span class="text-gray-400">No profile data</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex gap-4 justify-center">
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">${user.classes_completed || 0}</div>
+                                <div class="text-xs text-gray-500">classes</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">${user.modules_completed || 0}</div>
+                                <div class="text-xs text-gray-500">modules</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
+                            View History
+                        </button>
+                        <button onclick="deleteStudent(${user.id}, '${user.name}')" class="text-red-600 hover:text-red-800 font-medium">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+    } catch (error) {
+        console.error('Error loading users:', error);
+        const adminsTableBody = document.getElementById('admins-table-body');
+        const studentsTableBody = document.getElementById('students-table-body');
+        adminsTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load administrators</td>
+            </tr>
+        `;
+        studentsTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load students</td>
+            </tr>
+        `;
+    }
+}
+
+// Update user field (inline editing)
+async function updateUserField(userId, field, value) {
+    try {
+        const response = await fetch(`${API_BASE}/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAuthHeaders()
+            },
+            body: JSON.stringify({ [field]: value })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user');
+        }
+
+        NotificationSystem.success(`User ${field} updated successfully`);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        NotificationSystem.error(`Failed to update user ${field}`);
+        // Reload the table to revert the change
+        loadUsersTable();
     }
 }
 
@@ -2164,6 +2542,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     await populateMemoryFilters();
                     await loadMemorySummaries();
                 }, 200);
+            } else if (section === 'users') {
+                setTimeout(async () => {
+                    await loadUsersTable();
+                }, 100);
             } else if (section === 'chat') {
                 setTimeout(loadChatProviders, 100);
             }

@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 from app.database import get_db
-from app.models import Class, Module, ClassCorpus, Document
+from app.models import Class, Module, ClassCorpus, Document, Conversation, ModuleCorpusEntry, UserProgress
 from app.auth import require_admin
 
 router = APIRouter()
@@ -75,20 +75,18 @@ class ClassCorpusResponse(ClassCorpusBase):
 
 @router.get("/classes", response_model=List[ClassWithModules])
 def get_all_classes(
-    db: Session = Depends(get_db),
-    current_user = Depends(require_admin())
+    db: Session = Depends(get_db)
 ):
-    """Get all classes with their modules"""
+    """Get all classes with their modules (accessible to all authenticated users)"""
     classes = db.query(Class).all()
     return classes
 
 @router.get("/classes/{class_id}", response_model=ClassWithModules)
 def get_class(
     class_id: int,
-    db: Session = Depends(get_db),
-    current_user = Depends(require_admin())
+    db: Session = Depends(get_db)
 ):
-    """Get a specific class with its modules"""
+    """Get a specific class with its modules (accessible to all authenticated users)"""
     class_obj = db.query(Class).filter(Class.id == class_id).first()
     if not class_obj:
         raise HTTPException(status_code=404, detail="Class not found")
@@ -137,8 +135,38 @@ def delete_class(
     if not class_obj:
         raise HTTPException(status_code=404, detail="Class not found")
 
+    # Get all module IDs in this class
+    module_ids = [m.id for m in class_obj.modules]
+
+    if module_ids:
+        # Delete conversations for these modules
+        db.query(Conversation).filter(Conversation.module_id.in_(module_ids)).delete(synchronize_session=False)
+
+        # Delete module corpus entries
+        db.query(ModuleCorpusEntry).filter(ModuleCorpusEntry.module_id.in_(module_ids)).delete(synchronize_session=False)
+
+        # Delete user progress for these modules
+        db.query(UserProgress).filter(UserProgress.module_id.in_(module_ids)).delete(synchronize_session=False)
+
+        # Delete documents for these modules
+        db.query(Document).filter(Document.module_id.in_(module_ids)).delete(synchronize_session=False)
+
+        # Delete the modules themselves
+        db.query(Module).filter(Module.id.in_(module_ids)).delete(synchronize_session=False)
+
+    # Delete class-level corpus entries
+    db.query(ClassCorpus).filter(ClassCorpus.class_id == class_id).delete(synchronize_session=False)
+
+    # Delete class-level documents
+    db.query(Document).filter(Document.class_id == class_id).delete(synchronize_session=False)
+
+    # Delete class-level progress
+    db.query(UserProgress).filter(UserProgress.class_id == class_id).delete(synchronize_session=False)
+
+    # Finally delete the class
     db.delete(class_obj)
     db.commit()
+
     return {"message": "Class deleted successfully"}
 
 # ===== CLASS CORPUS ENDPOINTS =====

@@ -23,10 +23,12 @@ class Class(Base):
     outline = Column(Text)
     learning_objectives = Column(Text)
     system_prompt = Column(Text)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"))  # Track who created this class
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships (lazy-loaded via strings)
+    creator = relationship("User", foreign_keys=[created_by], backref="created_classes")
     modules = relationship("Module", back_populates="class_parent", cascade="all, delete-orphan", lazy="dynamic")
     class_corpus_entries = relationship("ClassCorpus", back_populates="class_parent", cascade="all, delete-orphan")
     documents = relationship("Document", back_populates="class_parent", foreign_keys="Document.class_id")
@@ -70,10 +72,12 @@ class Module(Base):
     dynamic_corpus = Column(Text)
     api_endpoint = Column(String, default="https://api.openai.com/v1/chat/completions")
     learning_objectives = Column(Text)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"))  # Track who created this module
 
     # Note: created_at, updated_at don't exist in your DB yet
 
     # Relationships
+    creator = relationship("User", foreign_keys=[created_by], backref="created_modules")
     class_parent = relationship("Class", back_populates="modules")  # NEW
     conversations = relationship("Conversation", back_populates="module")
     progress = relationship("UserProgress", back_populates="module")
