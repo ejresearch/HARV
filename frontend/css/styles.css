@@ -9,27 +9,27 @@
    ============================================ */
 
 :root {
-    /* Color Palette - Sophisticated & Professional */
-    --color-primary: #2D5F4F;           /* Deep forest green */
-    --color-primary-light: #3D7A66;     /* Medium forest */
-    --color-primary-lighter: #5A9B82;   /* Light forest */
-    --color-primary-lightest: #E8F3EF;  /* Subtle tint */
+    /* Color Palette - Flat & Simple with Better Readability */
+    --color-primary: #10B981;           /* Inviting emerald green */
+    --color-primary-light: #059669;     /* Darker green */
+    --color-primary-lighter: #6EE7B7;   /* Light green */
+    --color-primary-lightest: #ECFDF5;  /* Very light green */
 
-    --color-secondary: #F4A460;         /* Warm amber accent */
-    --color-secondary-light: #F7BC80;
-    --color-secondary-lighter: #FCDDB8;
+    --color-secondary: #6e6e80;         /* Neutral purple-gray */
+    --color-secondary-light: #8e8ea0;
+    --color-secondary-lighter: #c5c5d0;
 
-    --color-neutral-900: #1A1F1C;       /* Almost black */
-    --color-neutral-800: #2C3430;
-    --color-neutral-700: #47524D;
-    --color-neutral-600: #6B7772;
-    --color-neutral-500: #8E9A95;
-    --color-neutral-400: #ADB8B3;
-    --color-neutral-300: #CBD4D0;
-    --color-neutral-200: #E3E9E6;
-    --color-neutral-100: #F2F5F3;
-    --color-neutral-50: #F9FBFA;
-    --color-white: #FFFFFF;
+    --color-neutral-900: #1f1f1f;       /* Dark text */
+    --color-neutral-800: #2f2f2f;       /* Sidebar dark */
+    --color-neutral-700: #565656;       /* Medium dark */
+    --color-neutral-600: #717171;       /* Secondary text */
+    --color-neutral-500: #8f8f8f;       /* Muted text */
+    --color-neutral-400: #b4b4b4;       /* Borders */
+    --color-neutral-300: #d4d4d4;       /* Light borders */
+    --color-neutral-200: #e5e5e5;       /* Subtle backgrounds */
+    --color-neutral-100: #f5f5f5;       /* Light backgrounds */
+    --color-neutral-50: #ffffff;        /* White */
+    --color-white: #ffffff;
 
     --color-success: #22C55E;
     --color-success-light: #86EFAC;
@@ -81,12 +81,12 @@
     --radius-2xl: 24px;
     --radius-full: 9999px;
 
-    /* Shadows */
+    /* Shadows - Flat & Minimal */
     --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 4px 6px 0 rgba(0, 0, 0, 0.07);
+    --shadow-xl: 0 6px 8px 0 rgba(0, 0, 0, 0.08);
 
     /* Transitions */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -121,7 +121,7 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-normal);
     color: var(--color-neutral-900);
-    background: var(--color-neutral-50);
+    background: var(--color-neutral-100);
     overflow-x: hidden;
 }
 
@@ -132,7 +132,7 @@ body {
 .container {
     display: flex;
     min-height: 100vh;
-    background: var(--color-neutral-50);
+    background: var(--color-neutral-100);
 }
 
 /* ============================================
@@ -145,7 +145,7 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-lg);
+    border-right: 1px solid var(--color-primary-light);
     position: fixed;
     left: 0;
     top: 0;
@@ -181,11 +181,12 @@ body {
     font-weight: var(--font-weight-extrabold);
     margin-bottom: var(--space-1);
     letter-spacing: -0.5px;
+    color: white;
 }
 
 .logo .subtitle {
     font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.8);
     font-weight: var(--font-weight-normal);
 }
 
@@ -199,7 +200,7 @@ body {
     padding: var(--space-4) var(--space-6);
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     text-align: left;
@@ -301,10 +302,12 @@ p {
     margin-bottom: var(--space-4);
     color: var(--color-neutral-700);
     line-height: var(--line-height-relaxed);
+    font-size: var(--font-size-base);
 }
 
 .text-muted {
     color: var(--color-neutral-600);
+    font-size: var(--font-size-sm);
 }
 
 .text-small {
@@ -348,8 +351,6 @@ p {
 
 .btn-primary:hover:not(:disabled) {
     background: var(--color-primary-light);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
@@ -359,8 +360,6 @@ p {
 
 .btn-secondary:hover:not(:disabled) {
     background: var(--color-secondary-light);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
@@ -407,14 +406,13 @@ p {
 .card {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-neutral-200);
+    border: 1px solid var(--color-neutral-300);
     overflow: hidden;
     transition: all var(--transition-base);
 }
 
 .card:hover {
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-400);
 }
 
 .card-header {
@@ -432,7 +430,7 @@ p {
 
 .card-footer {
     padding: var(--space-6);
-    background: var(--color-neutral-50);
+    background: var(--color-neutral-100);
     border-top: 1px solid var(--color-neutral-200);
 }
 
@@ -441,8 +439,7 @@ p {
 }
 
 .card-clickable:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--color-neutral-300);
 }
 
 /* ============================================
@@ -457,7 +454,7 @@ p {
     display: block;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-700);
+    color: var(--color-neutral-900);
     margin-bottom: var(--space-2);
 }
 
@@ -814,14 +811,12 @@ textarea.form-control {
     background: white;
     padding: var(--space-6);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     transition: all var(--transition-base);
 }
 
 .metric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-300);
 }
 
 .metric-value {
@@ -834,8 +829,8 @@ textarea.form-control {
 
 .metric-label {
     font-size: var(--font-size-sm);
-    color: var(--color-neutral-600);
-    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-700);
+    font-weight: var(--font-weight-semibold);
 }
 
 .metric-change {
@@ -884,7 +879,6 @@ textarea.form-control {
 .class-card {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     overflow: hidden;
     transition: all var(--transition-base);
@@ -892,13 +886,12 @@ textarea.form-control {
 }
 
 .class-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--color-neutral-300);
 }
 
 .class-card-header {
     padding: var(--space-6);
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    background: var(--color-primary);
     color: white;
 }
 
@@ -917,7 +910,7 @@ textarea.form-control {
     display: flex;
     gap: var(--space-4);
     font-size: var(--font-size-sm);
-    color: var(--color-neutral-600);
+    color: var(--color-neutral-700);
 }
 
 /* Empty State */
@@ -941,11 +934,12 @@ textarea.form-control {
 
 .empty-state-description {
     font-size: var(--font-size-base);
-    color: var(--color-neutral-600);
+    color: var(--color-neutral-700);
     margin-bottom: var(--space-8);
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+    line-height: var(--line-height-relaxed);
 }
 
 /* Modal/Dialog */
@@ -966,7 +960,7 @@ textarea.form-control {
 .modal {
     background: white;
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-neutral-200);
     max-width: 600px;
     width: 90%;
     max-height: 90vh;
@@ -1001,7 +995,6 @@ textarea.form-control {
 .table-container {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     overflow: hidden;
 }
@@ -1012,13 +1005,13 @@ textarea.form-control {
 }
 
 .table th {
-    background: var(--color-neutral-50);
+    background: var(--color-neutral-100);
     padding: var(--space-4) var(--space-6);
     text-align: left;
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-700);
-    border-bottom: 2px solid var(--color-neutral-200);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-900);
+    border-bottom: 2px solid var(--color-neutral-300);
 }
 
 .table td {
@@ -1084,15 +1077,12 @@ textarea.form-control {
     border-color: var(--color-primary);
     color: var(--color-primary);
     background: var(--color-primary-lightest);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
 }
 
 /* Activity Feed */
 .activity-feed {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     padding: var(--space-6);
 }
@@ -1126,7 +1116,6 @@ textarea.form-control {
 .continue-card {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     padding: var(--space-6);
     cursor: pointer;
@@ -1134,8 +1123,7 @@ textarea.form-control {
 }
 
 .continue-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-300);
 }
 
 .continue-card h4 {
@@ -1152,7 +1140,7 @@ textarea.form-control {
 
 .continue-card .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    background: var(--color-primary);
     border-radius: var(--radius-full);
     transition: width var(--transition-base);
 }
@@ -1171,15 +1159,13 @@ textarea.form-control {
     padding: var(--space-4);
     background: white;
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
 .path-item:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-300);
 }
 
 .path-item-icon {
@@ -1260,12 +1246,12 @@ textarea.form-control {
     background: white;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-neutral-200);
 }
 
 .chat-sidebar {
     width: 320px;
-    background: var(--color-neutral-50);
+    background: white;
     border-right: 1px solid var(--color-neutral-200);
     display: flex;
     flex-direction: column;
@@ -1370,9 +1356,8 @@ textarea.form-control {
 }
 
 .conversation-item:hover {
-    background: var(--color-primary-lightest);
-    border-color: var(--color-primary-lighter);
-    transform: translateX(4px);
+    background: var(--color-neutral-100);
+    border-color: var(--color-neutral-300);
 }
 
 .conversation-item-title {
@@ -1506,7 +1491,7 @@ textarea.form-control {
 }
 
 .feature-card {
-    background: var(--color-neutral-50);
+    background: white;
     padding: var(--space-6);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-neutral-200);
@@ -1514,9 +1499,7 @@ textarea.form-control {
 }
 
 .feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-primary-lighter);
+    border-color: var(--color-neutral-300);
 }
 
 .feature-icon {
@@ -1618,7 +1601,7 @@ textarea.form-control {
 .message-role {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-700);
+    color: var(--color-neutral-900);
 }
 
 .message-text {
@@ -1626,15 +1609,15 @@ textarea.form-control {
     line-height: var(--line-height-relaxed);
     color: var(--color-neutral-900);
     padding: var(--space-4);
-    background: var(--color-neutral-50);
+    background: white;
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-neutral-200);
+    border: 1px solid var(--color-neutral-300);
 }
 
 .chat-input-section {
     padding: var(--space-6);
     border-top: 1px solid var(--color-neutral-200);
-    background: var(--color-neutral-50);
+    background: white;
 }
 
 .input-wrapper {
@@ -1679,8 +1662,6 @@ textarea.form-control {
 
 .send-btn:hover:not(:disabled) {
     background: var(--color-primary-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
 }
 
 .send-btn:disabled {
@@ -1761,8 +1742,6 @@ textarea.form-control {
 
 .add-btn:hover {
     background: var(--color-primary-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
 }
 
 /* ============================================
@@ -1812,7 +1791,6 @@ textarea.form-control {
 .conversation-card {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     padding: var(--space-6);
     cursor: pointer;
@@ -1820,8 +1798,7 @@ textarea.form-control {
 }
 
 .conversation-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-300);
 }
 
 .conversation-header {
@@ -1850,7 +1827,7 @@ textarea.form-control {
     display: flex;
     gap: var(--space-6);
     font-size: var(--font-size-sm);
-    color: var(--color-neutral-600);
+    color: var(--color-neutral-700);
 }
 
 .conv-user, .conv-module, .conv-date {
@@ -1881,7 +1858,6 @@ textarea.form-control {
     background: white;
     padding: var(--space-6);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     margin-bottom: var(--space-8);
 }
@@ -1900,7 +1876,6 @@ textarea.form-control {
 .memory-layer {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     overflow: hidden;
 }
@@ -1930,17 +1905,18 @@ textarea.form-control {
 
 .memory-field-label {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-700);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-900);
     margin-bottom: var(--space-2);
 }
 
 .memory-field-value {
     padding: var(--space-3) var(--space-4);
-    background: var(--color-neutral-50);
+    background: white;
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-neutral-200);
+    border: 1px solid var(--color-neutral-300);
     font-size: var(--font-size-sm);
+    color: var(--color-neutral-900);
     line-height: var(--line-height-relaxed);
 }
 
@@ -1956,7 +1932,6 @@ textarea.form-control {
 .auth-card {
     background: white;
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
     border: 1px solid var(--color-neutral-200);
     padding: var(--space-10);
 }
@@ -1998,7 +1973,6 @@ textarea.form-control {
 .system-section {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-neutral-200);
     padding: var(--space-8);
     margin-bottom: var(--space-8);
@@ -2036,7 +2010,7 @@ textarea.form-control {
 .alert-card {
     background: white;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-neutral-200);
     border-left: 4px solid;
     padding: var(--space-6);
     margin-bottom: var(--space-4);
@@ -2044,7 +2018,7 @@ textarea.form-control {
 }
 
 .alert-card:hover {
-    box-shadow: var(--shadow-md);
+    border-color: var(--color-neutral-300);
 }
 
 .alert-card.info {

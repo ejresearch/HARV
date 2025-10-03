@@ -16,23 +16,23 @@ const sections = {
                 <!-- Top Metrics -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-sage-darkest" id="admin-total-students">-</div>
+                        <div class="text-4xl font-bold text-gray-900" id="admin-total-students">-</div>
                         <div class="text-sm text-gray-600 mt-2 font-medium">Total Students</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-sage-darkest" id="admin-classes-built">-</div>
+                        <div class="text-4xl font-bold text-gray-900" id="admin-classes-built">-</div>
                         <div class="text-sm text-gray-600 mt-2 font-medium">Classes Built</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-sage-darkest" id="admin-modules-created">-</div>
+                        <div class="text-4xl font-bold text-gray-900" id="admin-modules-created">-</div>
                         <div class="text-sm text-gray-600 mt-2 font-medium">Modules Created</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-sage-darkest" id="admin-active-conversations">-</div>
+                        <div class="text-4xl font-bold text-gray-900" id="admin-active-conversations">-</div>
                         <div class="text-sm text-gray-600 mt-2 font-medium">Active Conversations</div>
                     </div>
                     <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
-                        <div class="text-4xl font-bold text-sage-darkest" id="admin-memory-summaries">-</div>
+                        <div class="text-4xl font-bold text-gray-900" id="admin-memory-summaries">-</div>
                         <div class="text-sm text-gray-600 mt-2 font-medium">Memory Summaries</div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ const sections = {
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Recent Activity -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Recent Activity</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
                         <div class="space-y-3" id="admin-activity-feed">
                             <p class="text-gray-500 text-center py-4">Loading activity...</p>
                         </div>
@@ -49,7 +49,7 @@ const sections = {
 
                     <!-- Course Building Status -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Course Building Status</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Course Building Status</h3>
                         <div id="admin-course-status">
                             <p class="text-gray-500 text-center py-4">Loading status...</p>
                         </div>
@@ -57,7 +57,7 @@ const sections = {
 
                     <!-- Student Insights -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Student Insights</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Student Insights</h3>
                         <div id="admin-student-insights">
                             <p class="text-gray-500 text-center py-4">Loading insights...</p>
                         </div>
@@ -65,12 +65,12 @@ const sections = {
 
                     <!-- Quick Actions -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Quick Actions</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
                         <div class="space-y-2">
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('classes')">📚 Manage Classes</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('memory')">🧠 Memory Inspector</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('conversations')">💬 All Conversations</button>
-                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">🤖 Chat Interface</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('classes')">Manage Classes</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('memory')">Memory Inspector</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('conversations')">All Conversations</button>
+                            <button class="w-full bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">Chat Interface</button>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ const sections = {
         content: `
             <div class="p-6 space-y-6">
                 <!-- Welcome Header -->
-                <div class="bg-gradient-to-r from-sage-medium to-sage-dark text-white rounded-lg p-8 shadow-md" id="student-welcome">
+                <div class="bg-sage-medium text-white rounded-lg p-8" id="student-welcome">
                     <h2 class="text-3xl font-bold">Welcome back, <span id="student-name">Student</span></h2>
                     <p class="text-sage-lightest mt-2" id="student-subtitle">Loading your learning profile...</p>
                 </div>
@@ -97,17 +97,17 @@ const sections = {
                                 stroke-width="10" stroke-dasharray="565" stroke-dashoffset="565"
                                 transform="rotate(-90 100 100)" stroke-linecap="round"/>
                         </svg>
-                        <div class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-sage-darkest" id="student-progress-text">0%</div>
+                        <div class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-gray-900" id="student-progress-text">0%</div>
                     </div>
                     <div class="flex-1 text-center md:text-left">
-                        <h3 class="text-2xl font-bold text-sage-darkest mb-2">Overall Progress</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Overall Progress</h3>
                         <p class="text-gray-600" id="student-progress-desc">Loading your progress...</p>
                     </div>
                 </div>
 
                 <!-- Continue Learning -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-4">Continue Learning</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Continue Learning</h3>
                     <div id="student-continue-learning">
                         <p class="text-gray-500 text-center py-4">Loading your next steps...</p>
                     </div>
@@ -115,7 +115,7 @@ const sections = {
 
                 <!-- Learning Path -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-4">Your Learning Path</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Your Learning Path</h3>
                     <div id="student-learning-path" class="space-y-4">
                         <p class="text-gray-500 text-center py-4">Loading learning path...</p>
                     </div>
@@ -124,25 +124,25 @@ const sections = {
                 <!-- Recent Activity & Stats -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Recent Activity</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
                         <div id="student-recent-activity">
                             <p class="text-gray-500 text-center py-4">Loading recent activity...</p>
                         </div>
                     </div>
 
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Quick Stats</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Quick Stats</h3>
                         <div class="grid grid-cols-3 gap-4" id="student-stats">
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-sage-darkest" id="student-total-time">-</div>
+                                <div class="text-3xl font-bold text-gray-900" id="student-total-time">-</div>
                                 <div class="text-sm text-gray-600 mt-1">Total Time</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-sage-darkest" id="student-messages-sent">-</div>
+                                <div class="text-3xl font-bold text-gray-900" id="student-messages-sent">-</div>
                                 <div class="text-sm text-gray-600 mt-1">Messages Sent</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-sage-darkest" id="student-concepts-mastered">-</div>
+                                <div class="text-3xl font-bold text-gray-900" id="student-concepts-mastered">-</div>
                                 <div class="text-sm text-gray-600 mt-1">Concepts Mastered</div>
                             </div>
                         </div>
@@ -157,21 +157,21 @@ const sections = {
         content: `
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-2">Root Endpoint</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Root Endpoint</h3>
                     <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /</p>
                     <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testRootEndpoint()">Test Endpoint</button>
                     <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="root-result">Click test to run...</pre>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-2">Health Check</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Health Check</h3>
                     <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /health</p>
                     <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testHealthEndpoint()">Test Endpoint</button>
                     <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="health-result">Click test to run...</pre>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-2">System Status</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">System Status</h3>
                     <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /system/status</p>
                     <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testStatusEndpoint()">Test Endpoint</button>
                     <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="status-result">Click test to run...</pre>
@@ -186,7 +186,7 @@ const sections = {
             <div class="p-6 max-w-md mx-auto">
                 <!-- Login Form -->
                 <div class="bg-white rounded-lg shadow-sm p-8" id="login-card">
-                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Login</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Login</h3>
                     <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -205,7 +205,7 @@ const sections = {
 
                 <!-- Register Form -->
                 <div class="bg-white rounded-lg shadow-sm p-8" id="register-card" style="display: none;">
-                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Create New User</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Create New User</h3>
                     <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
@@ -253,7 +253,7 @@ const sections = {
 
                 <!-- User Info Display -->
                 <div class="bg-white rounded-lg shadow-sm p-8" id="user-info" style="display: none;">
-                    <h3 class="text-2xl font-bold text-sage-darkest mb-6">Authenticated User</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Authenticated User</h3>
                     <div id="user-details" class="mb-6"></div>
                     <button class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors font-medium" onclick="handleLogout()">Logout</button>
                 </div>
@@ -268,9 +268,9 @@ const sections = {
                 <!-- Class Selector Dropdown -->
                 <div class="bg-white rounded-lg shadow-sm p-5">
                     <div class="flex items-center gap-4">
-                        <label class="font-semibold text-sage-darkest whitespace-nowrap">Classes:</label>
+                        <label class="font-semibold text-gray-900 whitespace-nowrap">Classes:</label>
                         <select id="class-selector" onchange="selectClassFromDropdown()"
-                            class="flex-1 px-4 py-2 border-2 border-sage-light rounded-lg text-sm text-sage-darkest cursor-pointer focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                            class="flex-1 px-4 py-2 border-2 border-sage-light rounded-lg text-sm text-gray-900 cursor-pointer focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                             <option value="">Select a class...</option>
                         </select>
                         <button onclick="createNewClass()"
@@ -402,7 +402,7 @@ const sections = {
         content: `
             <div class="flex h-[calc(100vh-80px)]">
                 <!-- Left Sidebar: Conversations & Controls -->
-                <div class="w-80 bg-gradient-to-b from-sage-darkest to-sage-dark text-white flex flex-col">
+                <div class="w-80 bg-sage-darkest text-white flex flex-col border-r border-gray-700">
                     <div class="p-4 border-b border-sage-medium/30 flex items-center justify-between">
                         <h3 class="text-lg font-bold">Conversations</h3>
                         <button onclick="startNewChat()" title="Start new conversation"
@@ -466,17 +466,17 @@ const sections = {
                     <!-- Chat Header -->
                     <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
                         <div>
-                            <h2 class="text-xl font-bold text-sage-darkest" id="chat-module-title">HARV AI Tutor</h2>
+                            <h2 class="text-xl font-bold text-gray-900" id="chat-module-title">HARV AI Tutor</h2>
                             <p class="text-sm text-gray-600" id="chat-module-description">Select a module to begin learning</p>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="toggleMemoryPanel()" title="View memory context"
                                 class="px-4 py-2 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm">
-                                🧠 Memory
+                                Memory
                             </button>
                             <button onclick="exportConversation()" title="Export conversation"
                                 class="px-4 py-2 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm">
-                                📥 Export
+                                Export
                             </button>
                         </div>
                     </div>
@@ -484,36 +484,27 @@ const sections = {
                     <!-- Chat Messages -->
                     <div class="flex-1 overflow-y-auto p-6" id="chat-messages">
                         <div class="max-w-3xl mx-auto text-center py-12">
-                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-sage-medium to-sage-dark rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-sage-medium rounded-full flex items-center justify-center text-white text-2xl font-bold">
                                 HARV
                             </div>
-                            <h2 class="text-3xl font-bold text-sage-darkest mb-2">Welcome to HARV</h2>
+                            <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome to HARV</h2>
                             <p class="text-gray-600 mb-8">Your AI-Powered Socratic Tutor</p>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                                 <div class="bg-white rounded-lg p-6 shadow-sm">
-                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
-                                        🧠
-                                    </div>
-                                    <strong class="block text-sage-darkest mb-1">4-Layer Memory</strong>
+                                    <strong class="block text-gray-900 mb-1">4-Layer Memory</strong>
                                     <span class="text-sm text-gray-600">Personalized learning context</span>
                                 </div>
                                 <div class="bg-white rounded-lg p-6 shadow-sm">
-                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
-                                        💡
-                                    </div>
-                                    <strong class="block text-sage-darkest mb-1">Socratic Method</strong>
+                                    <strong class="block text-gray-900 mb-1">Socratic Method</strong>
                                     <span class="text-sm text-gray-600">Learn through guided discovery</span>
                                 </div>
                                 <div class="bg-white rounded-lg p-6 shadow-sm">
-                                    <div class="w-12 h-12 mx-auto mb-3 bg-sage-lightest rounded-full flex items-center justify-center text-sage-dark text-xl">
-                                        📚
-                                    </div>
-                                    <strong class="block text-sage-darkest mb-1">Context-Aware</strong>
+                                    <strong class="block text-gray-900 mb-1">Context-Aware</strong>
                                     <span class="text-sm text-gray-600">Remembers your progress</span>
                                 </div>
                             </div>
                             <div class="bg-white rounded-lg p-6 shadow-sm text-left max-w-md mx-auto">
-                                <h4 class="font-bold text-sage-darkest mb-3">Getting Started:</h4>
+                                <h4 class="font-bold text-gray-900 mb-3">Getting Started:</h4>
                                 <ol class="space-y-2 text-gray-700">
                                     <li class="flex gap-3">
                                         <span class="font-bold text-sage-medium">1.</span>
@@ -631,11 +622,11 @@ const sections = {
             <div class="p-6 space-y-6">
                 <!-- Hierarchical Selectors -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-sage-darkest mb-5">Select Context to Inspect</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-5">Select Context to Inspect</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
-                            <label class="block font-semibold mb-2 text-sage-darkest">1. Class:</label>
+                            <label class="block font-semibold mb-2 text-gray-900">1. Class:</label>
                             <select id="inspector-class" onchange="inspectorClassChanged()"
                                 class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                                 <option value="">Select a class...</option>
@@ -643,7 +634,7 @@ const sections = {
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2 text-sage-darkest">2. Module:</label>
+                            <label class="block font-semibold mb-2 text-gray-900">2. Module:</label>
                             <select id="inspector-module" onchange="inspectorModuleChanged()"
                                 class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
                                 <option value="">Select class first...</option>
@@ -651,7 +642,7 @@ const sections = {
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2 text-sage-darkest">3. Student:</label>
+                            <label class="block font-semibold mb-2 text-gray-900">3. Student:</label>
                             <select id="inspector-student" onchange="inspectorStudentChanged()"
                                 class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
                                 <option value="">Select module first...</option>
@@ -679,7 +670,7 @@ const sections = {
                 <div id="inspector-results" style="display: none;" class="space-y-6">
                     <!-- Assembled Prompt Section -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-4">Assembled Prompt for LLM</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Assembled Prompt for LLM</h3>
                         <div id="assembled-prompt-display"
                             class="bg-gray-900 text-green-400 p-5 rounded-lg overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono text-sm max-h-[500px] overflow-y-auto">
                             <!-- Prompt will be shown here -->
@@ -688,7 +679,7 @@ const sections = {
 
                     <!-- 4-Layer Data Breakdown -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-sage-darkest mb-5">4-Layer Memory Breakdown</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-5">4-Layer Memory Breakdown</h3>
 
                         <!-- Layer Tabs -->
                         <div class="flex gap-2 mb-5 border-b-2 border-gray-200">
@@ -730,7 +721,7 @@ function loadSection(sectionName) {
 
     contentDiv.innerHTML = `
         <div class="bg-white border-b border-gray-200 px-6 py-4">
-            <h2 class="text-2xl font-bold text-sage-darkest">${section.title}</h2>
+            <h2 class="text-2xl font-bold text-gray-900">${section.title}</h2>
             <p class="text-gray-600 mt-1">${section.description}</p>
         </div>
         ${section.content}
@@ -762,7 +753,6 @@ function loadSection(sectionName) {
     // Auto-load chat section
     if (sectionName === 'chat') {
         setTimeout(() => {
-            loadModulesList();
             loadChatProviders();
         }, 100);
     }
@@ -858,10 +848,10 @@ async function handleLogin(event) {
             displayUserInfo(data.user, data.access_token);
             document.getElementById('login-form').reset();
         } else {
-            alert(data.detail || 'Login failed');
+            NotificationSystem.error(data.detail || 'Login failed');
         }
     } catch (error) {
-        alert('Login error: ' + error.message);
+        NotificationSystem.error('Login error: ' + error.message);
     }
 }
 
@@ -900,13 +890,13 @@ async function handleRegister(event) {
 
         if (response.ok && data.success) {
             // Registration successful, show login form
-            alert(`${role === 'admin' ? 'Admin' : 'Student'} account created successfully! Please log in.`);
+            NotificationSystem.success(`${role === 'admin' ? 'Admin' : 'Student'} account created successfully! Please log in.`);
             showLogin();
         } else {
-            alert(data.detail || 'Registration failed');
+            NotificationSystem.error(data.detail || 'Registration failed');
         }
     } catch (error) {
-        alert('Registration error: ' + error.message);
+        NotificationSystem.error('Registration error: ' + error.message);
     }
 }
 
@@ -1007,7 +997,7 @@ async function loadDashboardAnalytics() {
             data.avg_time_minutes && data.avg_time_minutes > 0 ? data.avg_time_minutes : 'N/A';
     } catch (error) {
         console.error('Error loading dashboard analytics:', error);
-        alert('Failed to load dashboard analytics. Make sure you are logged in as admin.');
+        NotificationSystem.error('Failed to load dashboard analytics. Make sure you are logged in as admin.');
     }
 }
 
@@ -1152,7 +1142,7 @@ async function loadAdminDashboard() {
                 <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="viewConversation(${conv.id})">
                     <div class="flex justify-between items-start">
                         <div>
-                            <strong class="text-sage-darkest">${student?.name || 'Unknown'}</strong>
+                            <strong class="text-gray-900">${student?.name || 'Unknown'}</strong>
                             <p class="text-sm text-gray-600 mt-1">${conv.title || 'Untitled conversation'}</p>
                         </div>
                         <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
@@ -1183,8 +1173,8 @@ async function loadAdminDashboard() {
                    ${activeStudents.map(s => {
                        const convCount = conversations.filter(c => c.user_id === s.id).length;
                        return `<div class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors" onclick="viewStudentConversations(${s.id})">
-                           <strong class="text-sage-darkest">${s.name}</strong>
-                           <span class="text-sm bg-sage-light text-sage-darkest px-3 py-1 rounded-full">${convCount} conversation${convCount !== 1 ? 's' : ''}</span>
+                           <strong class="text-gray-900">${s.name}</strong>
+                           <span class="text-sm bg-sage-light text-gray-900 px-3 py-1 rounded-full">${convCount} conversation${convCount !== 1 ? 's' : ''}</span>
                        </div>`;
                    }).join('')}
                </div>`
@@ -1193,7 +1183,7 @@ async function loadAdminDashboard() {
 
     } catch (error) {
         console.error('Error loading admin dashboard:', error);
-        alert('Failed to load admin dashboard. Please ensure you are logged in as admin.');
+        NotificationSystem.error('Failed to load admin dashboard. Please ensure you are logged in as admin.');
     }
 }
 
@@ -1244,13 +1234,13 @@ async function loadStudentDashboard() {
         // Continue Learning section
         const lastConv = conversations[0];
         const continueHTML = lastConv
-            ? `<div class="bg-gradient-to-r from-sage-light to-sage-lightest p-6 rounded-lg">
-                   <h4 class="text-lg font-bold text-sage-darkest mb-2">Resume: ${lastConv.title || 'Your last conversation'}</h4>
+            ? `<div class="bg-white border border-gray-200 p-6 rounded-lg">
+                   <h4 class="text-lg font-bold text-gray-900 mb-2">Resume: ${lastConv.title || 'Your last conversation'}</h4>
                    <p class="text-gray-600 mb-4">Module: ${lastConv.module_title || 'Unknown'} • ${lastConv.message_count || 0} messages</p>
                    <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="resumeConversation(${lastConv.id}, ${lastConv.module_id})">Continue Learning →</button>
                </div>`
-            : `<div class="bg-gradient-to-r from-sage-light to-sage-lightest p-6 rounded-lg text-center">
-                   <h4 class="text-lg font-bold text-sage-darkest mb-4">Start your first lesson</h4>
+            : `<div class="bg-white border border-gray-200 p-6 rounded-lg text-center">
+                   <h4 class="text-lg font-bold text-gray-900 mb-4">Start your first lesson</h4>
                    <button class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium" onclick="switchSection('chat')">Begin Learning →</button>
                </div>`;
         document.getElementById('student-continue-learning').innerHTML = continueHTML;
@@ -1279,7 +1269,7 @@ async function loadStudentDashboard() {
         const activityHTML = conversations.slice(0, 3).map(conv => `
             <div class="p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="resumeConversation(${conv.id}, ${conv.module_id})">
                 <div class="flex justify-between items-center">
-                    <strong class="text-sage-darkest">${conv.title || 'Untitled'}</strong>
+                    <strong class="text-gray-900">${conv.title || 'Untitled'}</strong>
                     <span class="text-xs text-gray-500">${new Date(conv.created_at).toLocaleDateString()}</span>
                 </div>
             </div>
@@ -1296,7 +1286,7 @@ async function loadStudentDashboard() {
 
     } catch (error) {
         console.error('Error loading student dashboard:', error);
-        alert('Failed to load student dashboard. Please ensure you are logged in.');
+        NotificationSystem.error('Failed to load student dashboard. Please ensure you are logged in.');
     }
 }
 
@@ -1333,20 +1323,24 @@ async function chatModuleChanged() {
         sendBtn.disabled = false;
 
         // Update status
-        const statusDot = document.querySelector('.status-dot');
-        statusDot.classList.add('active');
-        document.getElementById('chat-status').innerHTML = '<span class="status-dot active"></span> Ready to chat';
+        document.getElementById('chat-status').innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span> Ready to chat';
 
         // Update active model badge
         const providerSelect = document.getElementById('chat-provider-select');
-        const selectedProvider = providerSelect.options[providerSelect.selectedIndex].text;
-        document.getElementById('active-model-name').textContent = selectedProvider;
+        if (providerSelect && providerSelect.selectedIndex >= 0) {
+            const selectedProvider = providerSelect.options[providerSelect.selectedIndex].text;
+            document.getElementById('active-model-name').textContent = selectedProvider;
+        }
 
-        // Load memory stats
-        await loadChatMemoryStats(selectedModuleId);
+        // Load memory stats (don't fail if this errors)
+        loadChatMemoryStats(selectedModuleId).catch(err => {
+            console.warn('Could not load memory stats:', err);
+        });
 
-        // Load conversation history for this module
-        await loadChatHistory(selectedModuleId);
+        // Load conversation history for this module (don't fail if this errors)
+        loadChatHistory(selectedModuleId).catch(err => {
+            console.warn('Could not load chat history:', err);
+        });
 
         // Clear welcome message and show empty chat
         const chatMessages = document.getElementById('chat-messages');
@@ -1354,7 +1348,7 @@ async function chatModuleChanged() {
 
     } catch (error) {
         console.error('Error loading module:', error);
-        alert('Failed to load module details');
+        NotificationSystem.error('Failed to load module details: ' + error.message);
     }
 }
 
@@ -1424,9 +1418,7 @@ function resetChatInterface() {
     sendBtn.disabled = true;
     chatInput.value = '';
 
-    const statusDot = document.querySelector('.status-dot');
-    statusDot.classList.remove('active');
-    document.getElementById('chat-status').innerHTML = '<span class="status-dot"></span> Select a module to begin';
+    document.getElementById('chat-status').innerHTML = '<span class="w-2 h-2 bg-gray-400 rounded-full"></span> Select a module to begin';
     document.getElementById('active-model-name').textContent = 'No model selected';
 
     // Reset memory stats
@@ -1443,12 +1435,12 @@ function resetChatInterface() {
 }
 
 function toggleMemoryPanel() {
-    alert('Memory panel feature - Coming soon!\n\nThis will show:\n- Full memory context\n- 4-layer breakdown\n- Token usage\n- Optimization stats');
+    NotificationSystem.info('Memory panel feature - Coming soon!\n\nThis will show:\n- Full memory context\n- 4-layer breakdown\n- Token usage\n- Optimization stats');
 }
 
 function exportConversation() {
     if (!chatMessages || chatMessages.length === 0) {
-        alert('No conversation to export');
+        NotificationSystem.warning('No conversation to export');
         return;
     }
 
@@ -1500,7 +1492,7 @@ async function loadConversationMessages(conversationId) {
 
     } catch (error) {
         console.error('Error loading conversation messages:', error);
-        alert('Failed to load conversation');
+        NotificationSystem.error('Failed to load conversation');
     }
 }
 
@@ -1586,7 +1578,7 @@ function addChatMessage(role, content, isLoading = false) {
     avatar.textContent = isUser ? 'U' : 'AI';
 
     const content_div = document.createElement('div');
-    content_div.className = `max-w-xl px-4 py-3 rounded-lg ${isUser ? 'bg-sage-lightest text-sage-darkest' : 'bg-white border border-gray-200 text-gray-700'}`;
+    content_div.className = `max-w-xl px-4 py-3 rounded-lg ${isUser ? 'bg-sage-lightest text-gray-900' : 'bg-white border border-gray-200 text-gray-700'}`;
     content_div.textContent = isLoading ? 'Thinking...' : content;
     if (isLoading) {
         content_div.classList.add('animate-pulse');
@@ -1625,7 +1617,7 @@ async function sendChatMessage(event) {
     console.log('Sending chat:', { userId, moduleId, provider, message });
 
     if (!moduleId) {
-        alert('Please select a module first');
+        NotificationSystem.warning('Please select a module first');
         return;
     }
 
@@ -1737,7 +1729,7 @@ async function loadConversations() {
 
             html += `
                 <div class="p-3 hover:bg-sage-lightest rounded-lg cursor-pointer transition-colors border-b border-gray-100 last:border-0" onclick="loadConversationDetail(${conv.id})">
-                    <div class="font-semibold text-sage-darkest mb-1">${conv.title}</div>
+                    <div class="font-semibold text-gray-900 mb-1">${conv.title}</div>
                     <div class="flex gap-2 text-xs text-gray-600 mb-2">
                         <span class="bg-gray-100 px-2 py-1 rounded">${conv.user_name}</span>
                         <span class="bg-sage-light px-2 py-1 rounded">${conv.module_title}</span>
@@ -1837,7 +1829,7 @@ async function loadConversationDetail(conversationId) {
 
         let html = `
             <div class="border-b border-gray-200 pb-4 mb-4">
-                <h2 class="text-2xl font-bold text-sage-darkest mb-3">${conv.title}</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">${conv.title}</h2>
                 <div class="grid grid-cols-2 gap-3 text-sm mb-3">
                     <div><strong class="text-gray-700">User:</strong> <span class="text-gray-600">${conv.user.name} (${conv.user.email})</span></div>
                     <div><strong class="text-gray-700">Module:</strong> <span class="text-gray-600">${conv.module.title}</span></div>
@@ -1851,7 +1843,7 @@ async function loadConversationDetail(conversationId) {
             </div>
 
             <div class="space-y-4">
-                <h3 class="text-lg font-bold text-sage-darkest">Messages (${conv.messages.length})</h3>
+                <h3 class="text-lg font-bold text-gray-900">Messages (${conv.messages.length})</h3>
         `;
 
         if (conv.messages && conv.messages.length > 0) {
@@ -1877,7 +1869,7 @@ async function loadConversationDetail(conversationId) {
         if (conv.memory_summary) {
             html += `
                 <div class="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <h3 class="text-lg font-bold text-sage-darkest mb-3">Memory Summary</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Memory Summary</h3>
                     <div class="text-gray-700 whitespace-pre-wrap">${conv.memory_summary}</div>
                 </div>
             `;
@@ -1910,7 +1902,7 @@ async function loadModulesList() {
         });
     } catch (error) {
         console.error('Error loading modules:', error);
-        alert('Failed to load modules');
+        NotificationSystem.error('Failed to load modules');
     }
 }
 
@@ -1943,7 +1935,7 @@ async function loadModuleData() {
         document.getElementById('module-editor').style.display = 'block';
     } catch (error) {
         console.error('Error loading module:', error);
-        alert('Failed to load module data');
+        NotificationSystem.error('Failed to load module data');
     }
 }
 
@@ -1951,7 +1943,7 @@ async function saveModule(event) {
     event.preventDefault();
 
     if (!currentModuleId) {
-        alert('No module selected');
+        NotificationSystem.warning('No module selected');
         return;
     }
 
@@ -1981,58 +1973,55 @@ async function saveModule(event) {
         const result = await response.json();
 
         if (response.ok) {
-            alert('Module saved successfully!');
+            NotificationSystem.success('Module saved successfully!');
             loadModulesList();
         } else {
-            alert(result.detail || 'Failed to save module');
+            NotificationSystem.error(result.detail || 'Failed to save module');
         }
     } catch (error) {
         console.error('Error saving module:', error);
-        alert('Failed to save module');
+        NotificationSystem.error('Failed to save module');
     }
 }
 
 async function createNewModule() {
-    const title = prompt('Enter new module title:');
-    if (!title) return;
+    ModalSystem.prompt('Create New Module', 'Enter new module title:', '', async (title) => {
+        try {
+            const response = await fetch(`${API_BASE}/modules`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: '',
+                    resources: '',
+                    api_endpoint: 'https://api.openai.com/v1/chat/completions'
+                })
+            });
 
-    try {
-        const response = await fetch(`${API_BASE}/modules`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...getAuthHeaders()
-            },
-            body: JSON.stringify({
-                title: title,
-                description: '',
-                resources: '',
-                api_endpoint: 'https://api.openai.com/v1/chat/completions'
-            })
-        });
+            const result = await response.json();
 
-        const result = await response.json();
-
-        if (response.ok) {
-            alert('Module created successfully!');
-            await loadModulesList();
-            document.getElementById('module-select').value = result.module.id;
-            await loadModuleData();
-        } else {
-            alert(result.detail || 'Failed to create module');
+            if (response.ok) {
+                NotificationSystem.success('Module created successfully!');
+                await loadModulesList();
+                document.getElementById('module-select').value = result.module.id;
+                await loadModuleData();
+            } else {
+                NotificationSystem.error(result.detail || 'Failed to create module');
+            }
+        } catch (error) {
+            console.error('Error creating module:', error);
+            NotificationSystem.error('Failed to create module');
         }
-    } catch (error) {
-        console.error('Error creating module:', error);
-        alert('Failed to create module');
-    }
+    });
 }
 
 async function deleteModule() {
     if (!currentModuleId) return;
 
-    if (!confirm('Are you sure you want to delete this module? This action cannot be undone.')) {
-        return;
-    }
+    ModalSystem.confirm('Delete Module', 'Are you sure you want to delete this module? This action cannot be undone.', async () => {
 
     try {
         const response = await fetch(`${API_BASE}/modules/${currentModuleId}`, {
@@ -2045,17 +2034,18 @@ async function deleteModule() {
         const result = await response.json();
 
         if (response.ok) {
-            alert('Module deleted successfully!');
+            NotificationSystem.success('Module deleted successfully!');
             currentModuleId = null;
             document.getElementById('module-editor').style.display = 'none';
             await loadModulesList();
         } else {
-            alert(result.detail || 'Failed to delete module');
+            NotificationSystem.error(result.detail || 'Failed to delete module');
         }
     } catch (error) {
         console.error('Error deleting module:', error);
-        alert('Failed to delete module');
+        NotificationSystem.error('Failed to delete module');
     }
+    });
 }
 
 // Resume a conversation (student dashboard)
@@ -2416,7 +2406,7 @@ async function saveCourseCorpusEntry(entryId) {
     const content = document.getElementById('course-corpus-content').value;
 
     if (!title || !content) {
-        alert('Title and content are required');
+        NotificationSystem.warning('Title and content are required');
         return;
     }
 
@@ -2453,31 +2443,31 @@ async function saveCourseCorpusEntry(entryId) {
 
     } catch (error) {
         console.error('Error saving entry:', error);
-        alert('Failed to save entry');
+        NotificationSystem.error('Failed to save entry');
     }
 }
 
 async function deleteCourseCorpusEntry(entryId) {
-    if (!confirm('Are you sure you want to delete this entry?')) return;
+    ModalSystem.confirm('Delete Entry', 'Are you sure you want to delete this entry?', async () => {
+        try {
+            const response = await fetch(`${API_BASE}/course-corpus/${entryId}`, {
+                method: 'DELETE',
+                headers: {
+                    ...getAuthHeaders()
+                }
+            });
 
-    try {
-        const response = await fetch(`${API_BASE}/course-corpus/${entryId}`, {
-            method: 'DELETE',
-            headers: {
-                ...getAuthHeaders()
-            }
-        });
+            if (!response.ok) throw new Error('Failed to delete entry');
 
-        if (!response.ok) throw new Error('Failed to delete entry');
+            selectedCourseCorpusId = null;
+            cancelCourseCorpusForm();
+            await loadCourseCorpusEntries();
 
-        selectedCourseCorpusId = null;
-        cancelCourseCorpusForm();
-        await loadCourseCorpusEntries();
-
-    } catch (error) {
-        console.error('Error deleting entry:', error);
-        alert('Failed to delete entry');
-    }
+        } catch (error) {
+            console.error('Error deleting entry:', error);
+            NotificationSystem.error('Failed to delete entry');
+        }
+    });
 }
 
 function cancelCourseCorpusForm() {
@@ -2640,7 +2630,7 @@ function showModuleCorpusForm(entry = null) {
 function createNewModuleEntry() {
     const moduleId = document.getElementById('corpus-module-select').value;
     if (!moduleId) {
-        alert('Please select a module first');
+        NotificationSystem.warning('Please select a module first');
         return;
     }
 
@@ -2660,7 +2650,7 @@ async function saveModuleCorpusEntry(entryId) {
     const content = document.getElementById('module-corpus-form-content')?.value;
 
     if (!title || !content) {
-        alert('Title and content are required');
+        NotificationSystem.warning('Title and content are required');
         return;
     }
 
@@ -2702,31 +2692,31 @@ async function saveModuleCorpusEntry(entryId) {
 
     } catch (error) {
         console.error('Error saving module corpus entry:', error);
-        alert('Failed to save entry: ' + error.message);
+        NotificationSystem.error('Failed to save entry: ' + error.message);
     }
 }
 
 async function deleteModuleCorpusEntry(entryId) {
-    if (!confirm('Are you sure you want to delete this entry?')) return;
+    ModalSystem.confirm('Delete Entry', 'Are you sure you want to delete this entry?', async () => {
+        try {
+            const response = await fetch(`${API_BASE}/module-corpus/${entryId}`, {
+                method: 'DELETE',
+                headers: {
+                    ...getAuthHeaders()
+                }
+            });
 
-    try {
-        const response = await fetch(`${API_BASE}/module-corpus/${entryId}`, {
-            method: 'DELETE',
-            headers: {
-                ...getAuthHeaders()
-            }
-        });
+            if (!response.ok) throw new Error('Failed to delete entry');
 
-        if (!response.ok) throw new Error('Failed to delete entry');
+            selectedModuleCorpusId = null;
+            cancelModuleCorpusForm();
+            await loadModuleCorpusEntries();
 
-        selectedModuleCorpusId = null;
-        cancelModuleCorpusForm();
-        await loadModuleCorpusEntries();
-
-    } catch (error) {
-        console.error('Error deleting entry:', error);
-        alert('Failed to delete entry');
-    }
+        } catch (error) {
+            console.error('Error deleting entry:', error);
+            NotificationSystem.error('Failed to delete entry');
+        }
+    });
 }
 
 function cancelModuleCorpusForm() {
@@ -2832,7 +2822,7 @@ async function selectDocument(docId, clickEvent = null) {
 
     } catch (error) {
         console.error('Error loading document:', error);
-        alert('Failed to load document');
+        NotificationSystem.error('Failed to load document');
     }
 }
 
@@ -2973,7 +2963,7 @@ async function uploadDocument() {
     const moduleId = document.getElementById('upload-module-select').value;
 
     if (!fileInput.files || fileInput.files.length === 0) {
-        alert('Please select a file');
+        NotificationSystem.warning('Please select a file');
         return;
     }
 
@@ -2999,43 +2989,43 @@ async function uploadDocument() {
         }
 
         const result = await response.json();
-        alert(`Document uploaded successfully: ${result.filename}`);
+        NotificationSystem.success(`Document uploaded successfully: ${result.filename}`);
         closeUploadDialog();
         await loadDocuments();
 
     } catch (error) {
         console.error('Error uploading document:', error);
-        alert('Failed to upload document: ' + error.message);
+        NotificationSystem.error('Failed to upload document: ' + error.message);
     }
 }
 
 async function deleteDocument(docId) {
-    if (!confirm('Are you sure you want to delete this document?')) return;
+    ModalSystem.confirm('Delete Document', 'Are you sure you want to delete this document?', async () => {
+        try {
+            const response = await fetch(`${API_BASE}/documents/${docId}`, {
+                method: 'DELETE',
+                headers: {
+                    ...getAuthHeaders()
+                }
+            });
 
-    try {
-        const response = await fetch(`${API_BASE}/documents/${docId}`, {
-            method: 'DELETE',
-            headers: {
-                ...getAuthHeaders()
-            }
-        });
+            if (!response.ok) throw new Error('Failed to delete document');
 
-        if (!response.ok) throw new Error('Failed to delete document');
+            NotificationSystem.success('Document deleted successfully');
+            selectedDocumentId = null;
+            document.getElementById('document-viewer').innerHTML = `
+                <div class="empty-state">
+                    <h3>No Document Selected</h3>
+                    <p>Select a document to view its content</p>
+                </div>
+            `;
+            await loadDocuments();
 
-        alert('Document deleted successfully');
-        selectedDocumentId = null;
-        document.getElementById('document-viewer').innerHTML = `
-            <div class="empty-state">
-                <h3>No Document Selected</h3>
-                <p>Select a document to view its content</p>
-            </div>
-        `;
-        await loadDocuments();
-
-    } catch (error) {
-        console.error('Error deleting document:', error);
-        alert('Failed to delete document');
-    }
+        } catch (error) {
+            console.error('Error deleting document:', error);
+            NotificationSystem.error('Failed to delete document');
+        }
+    });
 }
 
 async function exportDocument(docId, format) {
@@ -3060,7 +3050,7 @@ async function exportDocument(docId, format) {
 
     } catch (error) {
         console.error('Error exporting document:', error);
-        alert('Failed to export document');
+        NotificationSystem.error('Failed to export document');
     }
 }
 
@@ -3080,7 +3070,7 @@ async function exportAllDocuments() {
         const data = await response.json();
 
         if (!data.documents || data.documents.length === 0) {
-            alert('No documents to export');
+            NotificationSystem.warning('No documents to export');
             return;
         }
 
@@ -3109,7 +3099,7 @@ async function exportAllDocuments() {
             ).join('\n');
 
         if (!combined) {
-            alert('No text documents to export (PDFs are skipped in bulk export)');
+            NotificationSystem.warning('No text documents to export (PDFs are skipped in bulk export)');
             return;
         }
 
@@ -3123,7 +3113,7 @@ async function exportAllDocuments() {
 
     } catch (error) {
         console.error('Error exporting all documents:', error);
-        alert('Failed to export documents');
+        NotificationSystem.error('Failed to export documents');
     }
 }
 
@@ -3667,7 +3657,7 @@ Remember: Never give direct answers. Guide through questions and encourage indep
 
     } catch (error) {
         console.error('Error assembling prompt:', error);
-        alert('Error loading prompt preview: ' + error.message);
+        NotificationSystem.error('Error loading prompt preview: ' + error.message);
     }
 }
 
@@ -3788,7 +3778,7 @@ function inspectorStudentChanged() {
 
 async function loadInspectorData() {
     if (!inspectorData.selectedClass) {
-        alert('Please select at least a Class');
+        NotificationSystem.warning('Please select at least a Class');
         return;
     }
 
@@ -3879,7 +3869,7 @@ async function loadInspectorData() {
 
     } catch (error) {
         console.error('Error loading inspector data:', error);
-        alert('Error loading data: ' + error.message);
+        NotificationSystem.error('Error loading data: ' + error.message);
     }
 }
 
@@ -4048,7 +4038,7 @@ function showInspectorLayer(layerNum) {
 async function searchInspector() {
     const searchTerm = document.getElementById('inspector-search').value.trim();
     if (!searchTerm) {
-        alert('Please enter a search term');
+        NotificationSystem.warning('Please enter a search term');
         return;
     }
 
@@ -4085,20 +4075,20 @@ async function searchInspector() {
         );
 
         if (matchedUser) {
-            alert(`Found user: ${matchedUser.name} (${matchedUser.email})\nPlease select their class and module to analyze.`);
+            NotificationSystem.success(`Found user: ${matchedUser.name} (${matchedUser.email})\nPlease select their class and module to analyze.`);
             // Auto-select the user
             document.getElementById('inspector-student').value = matchedUser.id;
             inspectorData.selectedStudent = matchedUser.id;
         } else if (matchedConv) {
-            alert(`Found conversation: "${matchedConv.title}"\nUser ID: ${matchedConv.user_id}, Module ID: ${matchedConv.module_id}`);
+            NotificationSystem.success(`Found conversation: "${matchedConv.title}"\nUser ID: ${matchedConv.user_id}, Module ID: ${matchedConv.module_id}`);
         } else if (matchedMem) {
-            alert(`Found memory: "${matchedMem.what_learned}"\nUser ID: ${matchedMem.user_id}`);
+            NotificationSystem.success(`Found memory: "${matchedMem.what_learned}"\nUser ID: ${matchedMem.user_id}`);
         } else {
-            alert('No matches found. Try searching by student name, email, or conversation title.');
+            NotificationSystem.info('No matches found. Try searching by student name, email, or conversation title.');
         }
     } catch (error) {
         console.error('Error searching:', error);
-        alert('Error searching: ' + error.message);
+        NotificationSystem.error('Error searching: ' + error.message);
     }
 }
 

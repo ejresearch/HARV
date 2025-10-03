@@ -18,76 +18,76 @@
                     },
                     colors: {
                         sage: {
-                            lightest: '#f0f4f2',
-                            lighter: '#e1ebe6',
-                            light: '#c4d9cc',
-                            medium: '#8fae9d',
-                            dark: '#5a7a68',
-                            darkest: '#2d3d34',
+                            lightest: '#ECFDF5',
+                            lighter: '#6EE7B7',
+                            light: '#10B981',
+                            medium: '#10B981',
+                            dark: '#059669',
+                            darkest: '#10B981',
                         }
                     }
                 }
             }
         }
     </script>
-    <link rel="stylesheet" href="css/styles.css?v=10">
+    <link rel="stylesheet" href="css/styles.css?v=15">
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-<body class="bg-gray-50 font-sans antialiased">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="container">
         <!-- Left Sidebar Menu -->
-        <aside class="w-64 bg-gradient-to-b from-sage-darkest to-sage-dark text-white flex-shrink-0 shadow-xl">
-            <div class="p-6 border-b border-sage-medium/30">
-                <h1 class="text-3xl font-bold tracking-tight">HARV</h1>
-                <p class="text-sage-light text-sm mt-1">Learning Platform</p>
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>HARV</h1>
+                <p class="subtitle">Learning Platform</p>
             </div>
 
-            <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100vh-100px)]">
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 active:bg-sage-medium text-white" data-section="admin-dashboard">
-                    <span class="label font-medium">📊 Admin Dashboard</span>
+            <nav class="menu">
+                <button class="menu-item active" data-section="admin-dashboard">
+                    <span class="label">Admin Dashboard</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="student-dashboard">
-                    <span class="label font-medium">🎓 Student Dashboard</span>
+                <button class="menu-item" data-section="student-dashboard">
+                    <span class="label">Student Dashboard</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="system">
-                    <span class="label font-medium">⚙️ System</span>
+                <button class="menu-item" data-section="system">
+                    <span class="label">System</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="auth">
-                    <span class="label font-medium">🔐 Authentication</span>
+                <button class="menu-item" data-section="auth">
+                    <span class="label">Authentication</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="classes">
-                    <span class="label font-medium">📚 Classes</span>
+                <button class="menu-item" data-section="classes">
+                    <span class="label">Classes</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="conversations">
-                    <span class="label font-medium">💬 Conversations</span>
+                <button class="menu-item" data-section="conversations">
+                    <span class="label">Conversations</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="chat">
-                    <span class="label font-medium">🤖 Chat Interface</span>
+                <button class="menu-item" data-section="chat">
+                    <span class="label">Chat Interface</span>
                 </button>
 
-                <button class="menu-item w-full text-left px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 text-sage-light hover:text-white" data-section="memory">
-                    <span class="label font-medium">🧠 Memory Inspector</span>
+                <button class="menu-item" data-section="memory">
+                    <span class="label">Memory Inspector</span>
                 </button>
             </nav>
         </aside>
 
         <!-- Main Canvas -->
-        <main class="flex-1 overflow-auto bg-gray-50">
-            <div id="content" class="h-full">
+        <main class="canvas">
+            <div id="content">
                 <!-- Content will be dynamically loaded here -->
             </div>
         </main>
     </div>
 
     <script src="js/notifications.js?v=1"></script>
-    <script src="js/app.js?v=25"></script>
-    <script src="js/classes.js?v=8"></script>
+    <script src="js/app.js?v=30"></script>
+    <script src="js/classes.js?v=10"></script>
 </body>
 </html>

@@ -77,17 +77,17 @@ function renderClassEditor() {
 
     container.innerHTML = `
         <!-- Class Header -->
-        <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--sage-lighter);">
-            <h2 style="margin: 0 0 8px 0; color: var(--sage-darkest);">${currentClass.title}</h2>
-            <p style="margin: 0; color: var(--text-medium);">${currentClass.description || 'No description'}</p>
+        <div class="mb-6 pb-5 border-b-2 border-sage-lighter">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">${currentClass.title}</h2>
+            <p class="text-gray-600">${currentClass.description || 'No description'}</p>
         </div>
 
         <!-- Tabs -->
-        <div class="tab-navigation" style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #ddd;">
-            <button class="tab-btn active" onclick="showClassTab('details')">Class Details</button>
-            <button class="tab-btn" onclick="showClassTab('corpus')">Class Corpus</button>
-            <button class="tab-btn" onclick="showClassTab('documents')">Class Documents</button>
-            <button class="tab-btn" onclick="showClassTab('modules')">Modules</button>
+        <div class="flex gap-2 mb-6 border-b-2 border-gray-200">
+            <button class="tab-btn px-4 py-2 font-semibold border-b-2 border-sage-dark text-sage-dark" onclick="showClassTab('details')">Class Details</button>
+            <button class="tab-btn px-4 py-2 font-semibold border-b-2 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showClassTab('corpus')">Class Corpus</button>
+            <button class="tab-btn px-4 py-2 font-semibold border-b-2 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showClassTab('documents')">Class Documents</button>
+            <button class="tab-btn px-4 py-2 font-semibold border-b-2 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showClassTab('modules')">Modules</button>
         </div>
 
         <!-- Tab Content -->
@@ -100,8 +100,12 @@ function renderClassEditor() {
 // Show class tab
 function showClassTab(tab) {
     // Update active tab
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event?.target?.classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-sage-dark', 'text-sage-dark');
+        btn.classList.add('border-transparent', 'text-gray-600');
+    });
+    event?.target?.classList.remove('border-transparent', 'text-gray-600');
+    event?.target?.classList.add('border-sage-dark', 'text-sage-dark');
 
     const content = document.getElementById('class-tab-content');
 
@@ -126,39 +130,46 @@ function showClassTab(tab) {
 // Render class details tab
 function renderClassDetailsTab() {
     return `
-        <form id="class-form" onsubmit="saveClass(event)">
-            <div class="form-section">
-                <h3 class="section-title">Class Information</h3>
+        <form id="class-form" onsubmit="saveClass(event)" class="space-y-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Class Information</h3>
 
-                <div class="form-group">
-                    <label>Class Title</label>
-                    <input type="text" id="class-title" value="${currentClass.title || ''}" required>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Class Title</label>
+                <input type="text" id="class-title" value="${currentClass.title || ''}" required
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+            </div>
 
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="class-description" rows="3">${currentClass.description || ''}</textarea>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea id="class-description" rows="3"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none resize-none">${currentClass.description || ''}</textarea>
+            </div>
 
-                <div class="form-group">
-                    <label>Outline</label>
-                    <textarea id="class-outline" rows="5" placeholder="Course outline, topics covered...">${currentClass.outline || ''}</textarea>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Outline</label>
+                <textarea id="class-outline" rows="8" placeholder="Course outline, topics covered..."
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none font-mono text-sm">${currentClass.outline || ''}</textarea>
+            </div>
 
-                <div class="form-group">
-                    <label>Learning Objectives</label>
-                    <textarea id="class-objectives" rows="4" placeholder="What students will learn...">${currentClass.learning_objectives || ''}</textarea>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Learning Objectives</label>
+                <textarea id="class-objectives" rows="6" placeholder="What students will learn..."
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none font-mono text-sm">${currentClass.learning_objectives || ''}</textarea>
+            </div>
 
-                <div class="form-group">
-                    <label>System Prompt</label>
-                    <textarea id="class-system-prompt" rows="6" placeholder="Teaching philosophy for this class...">${currentClass.system_prompt || ''}</textarea>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">System Prompt</label>
+                <textarea id="class-system-prompt" rows="8" placeholder="Teaching philosophy for this class..."
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none font-mono text-sm">${currentClass.system_prompt || ''}</textarea>
+            </div>
 
-                <div style="display: flex; gap: 10px; align-items: center; padding-top: 20px; border-top: 1px solid var(--sage-lighter); margin-top: 20px;">
-                    <button type="submit" class="save-btn">Save Class</button>
-                    <button type="button" class="delete-btn" onclick="deleteClass()" style="margin-left: auto;">Delete Class</button>
-                </div>
+            <div class="flex gap-3 items-center pt-6 border-t border-gray-200">
+                <button type="submit" class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                    💾 Save Class
+                </button>
+                <button type="button" onclick="deleteClass()" class="ml-auto bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-colors font-medium">
+                    🗑️ Delete Class
+                </button>
             </div>
         </form>
     `;
@@ -167,19 +178,21 @@ function renderClassDetailsTab() {
 // Render class corpus tab
 function renderClassCorpusTab() {
     return `
-        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 20px;">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Corpus List -->
-            <div style="background: var(--sage-lighter); border-radius: 8px; padding: 15px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h4 style="margin: 0;">Corpus Entries</h4>
-                    <button class="create-btn" onclick="createClassCorpus()" style="padding: 6px 12px; font-size: 13px;">+ Add</button>
+            <div class="bg-sage-lightest rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-bold text-gray-900">Corpus Entries</h4>
+                    <button onclick="createClassCorpus()" class="bg-sage-medium text-white px-3 py-1 rounded text-sm hover:bg-sage-dark transition-colors">
+                        + Add
+                    </button>
                 </div>
-                <div id="class-corpus-list"></div>
+                <div id="class-corpus-list" class="space-y-2"></div>
             </div>
 
             <!-- Corpus Editor -->
-            <div id="class-corpus-editor" style="background: white; border: 1px solid var(--sage-lighter); border-radius: 8px; padding: 20px;">
-                <p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>
+            <div id="class-corpus-editor" class="lg:col-span-2 bg-white border border-gray-200 rounded-lg p-6">
+                <p class="text-center text-gray-400 py-10">Select a corpus entry or create a new one</p>
             </div>
         </div>
     `;
@@ -189,11 +202,13 @@ function renderClassCorpusTab() {
 function renderClassDocumentsTab() {
     return `
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h4 style="margin: 0;">Class Documents</h4>
-                <button class="create-btn" onclick="uploadClassDocument()">Upload Document</button>
+            <div class="flex justify-between items-center mb-5">
+                <h4 class="text-lg font-bold text-gray-900">Class Documents</h4>
+                <button onclick="uploadClassDocument()" class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                    📤 Upload Document
+                </button>
             </div>
-            <div id="class-documents-list"></div>
+            <div id="class-documents-list" class="space-y-3"></div>
         </div>
     `;
 }
@@ -202,9 +217,11 @@ function renderClassDocumentsTab() {
 function renderClassModulesTab() {
     return `
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h4 style="margin: 0;">Modules in ${currentClass.title}</h4>
-                <button class="create-btn" onclick="createModuleInClass()">+ Add Module</button>
+            <div class="flex justify-between items-center mb-5">
+                <h4 class="text-lg font-bold text-gray-900">Modules in ${currentClass.title}</h4>
+                <button onclick="createModuleInClass()" class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                    + Add Module
+                </button>
             </div>
             <div id="class-modules-list">
                 ${renderModulesList()}
@@ -216,24 +233,30 @@ function renderClassModulesTab() {
 // Render modules list
 function renderModulesList() {
     if (!currentClass.modules || currentClass.modules.length === 0) {
-        return '<p style="text-align: center; color: #95a5a6; padding: 40px;">No modules yet</p>';
+        return '<p class="text-center text-gray-400 py-10">No modules yet. Click "Add Module" to create one.</p>';
     }
 
     return `
-        <div style="display: grid; gap: 15px;">
+        <div class="space-y-4">
             ${currentClass.modules.map((module, index) => `
-                <div style="background: var(--sage-lighter); border-radius: 8px; padding: 20px; border-left: 4px solid var(--sage-medium);">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div style="flex: 1;">
-                            <h5 style="margin: 0 0 8px 0; color: var(--sage-darkest);">${index + 1}. ${module.title}</h5>
-                            <p style="margin: 0 0 12px 0; font-size: 14px; color: var(--text-medium);">${module.description || 'No description'}</p>
-                            <div style="font-size: 13px; color: var(--text-light);">
-                                ${module.learning_objectives ? `<div>Objectives: ${module.learning_objectives.substring(0, 100)}...</div>` : ''}
-                            </div>
+                <div class="bg-sage-lightest rounded-lg p-5 border-l-4 border-sage-medium hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start gap-4">
+                        <div class="flex-1">
+                            <h5 class="text-lg font-bold text-gray-900 mb-2">${index + 1}. ${module.title}</h5>
+                            <p class="text-sm text-gray-600 mb-3">${module.description || 'No description'}</p>
+                            ${module.learning_objectives ? `
+                                <div class="text-xs text-gray-500 bg-white rounded px-3 py-2">
+                                    <strong>Objectives:</strong> ${module.learning_objectives.substring(0, 150)}${module.learning_objectives.length > 150 ? '...' : ''}
+                                </div>
+                            ` : ''}
                         </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="test-btn" onclick="editModule(${module.id})" style="padding: 8px 16px;">Edit</button>
-                            <button class="delete-btn" onclick="deleteModule(${module.id})" style="padding: 8px 16px;">Delete</button>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="editModule(${module.id})" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium">
+                                ✏️ Edit
+                            </button>
+                            <button onclick="deleteModule(${module.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
+                                🗑️ Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -404,11 +427,10 @@ async function loadClassDocuments() {
 
 // Create module in class
 function createModuleInClass() {
-    const title = prompt('Enter module title:');
-    if (!title) return;
-
-    // Module creation logic here
-    alert('Module creation will be implemented with full form');
+    ModalSystem.prompt('Create Module', 'Enter module title:', '', (title) => {
+        // Module creation logic here
+        NotificationSystem.info('Module creation will be implemented with full form');
+    });
 }
 
 // Create class corpus entry
@@ -726,23 +748,31 @@ function renderModuleEditor() {
         </div>
 
         <!-- Module Tabs -->
-        <div class="tab-navigation" style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd;">
-            <button class="tab-btn active" onclick="showModuleTab('details')">Module Details</button>
-            <button class="tab-btn" onclick="showModuleTab('corpus')">Module Corpus</button>
-            <button class="tab-btn" onclick="showModuleTab('documents')">Module Documents</button>
+        <div class="flex gap-2 mb-6 border-b-2 border-gray-200">
+            <button class="tab-btn px-6 py-3 font-semibold text-gray-600 border-b-2 border-transparent hover:text-sage-dark hover:border-sage-light transition-all"
+                onclick="showModuleTab('details')">Module Details</button>
+            <button class="tab-btn px-6 py-3 font-semibold text-gray-600 border-b-2 border-transparent hover:text-sage-dark hover:border-sage-light transition-all"
+                onclick="showModuleTab('corpus')">Module Corpus</button>
+            <button class="tab-btn px-6 py-3 font-semibold text-gray-600 border-b-2 border-transparent hover:text-sage-dark hover:border-sage-light transition-all"
+                onclick="showModuleTab('documents')">Documents</button>
         </div>
 
         <!-- Module Tab Content -->
-        <div id="module-tab-content"></div>
+        <div id="module-tab-content" class="py-4"></div>
     `;
 
     showModuleTab('details');
 }
 
 function showModuleTab(tab) {
-    // Update active tab
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event?.target?.classList.add('active');
+    // Update active tab styling
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-sage-dark', 'border-sage-medium');
+        btn.classList.add('text-gray-600', 'border-transparent');
+    });
+
+    event?.target?.classList.remove('text-gray-600', 'border-transparent');
+    event?.target?.classList.add('text-sage-dark', 'border-sage-medium');
 
     const content = document.getElementById('module-tab-content');
 
@@ -763,34 +793,51 @@ function showModuleTab(tab) {
 
 function renderModuleDetailsTab() {
     return `
-        <form id="module-form" onsubmit="updateModule(event)">
-            <div class="form-section">
-                <div class="form-group">
-                    <label>Module Title</label>
-                    <input type="text" id="module-title" value="${currentModule.title || ''}" required>
-                </div>
+        <form id="module-form" onsubmit="updateModule(event)" class="max-w-4xl space-y-6">
+            <!-- Module Title -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Module Title</label>
+                <input type="text" id="module-title" value="${currentModule.title || ''}" required
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-base">
+            </div>
 
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="module-description" rows="3">${currentModule.description || ''}</textarea>
-                </div>
+            <!-- Description -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                <textarea id="module-description" rows="4"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y">${currentModule.description || ''}</textarea>
+            </div>
 
-                <div class="form-group">
-                    <label>Outline</label>
-                    <textarea id="module-outline" rows="5">${currentModule.outline || ''}</textarea>
-                </div>
+            <!-- Outline -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Outline</label>
+                <textarea id="module-outline" rows="8"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none font-mono text-sm leading-relaxed resize-y">${currentModule.outline || ''}</textarea>
+                <p class="text-xs text-gray-500 mt-1">Topics and structure for this module</p>
+            </div>
 
-                <div class="form-group">
-                    <label>Learning Objectives</label>
-                    <textarea id="module-objectives" rows="4">${currentModule.learning_objectives || ''}</textarea>
-                </div>
+            <!-- Learning Objectives -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Learning Objectives</label>
+                <textarea id="module-objectives" rows="6"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y">${currentModule.learning_objectives || ''}</textarea>
+                <p class="text-xs text-gray-500 mt-1">What students should learn from this module</p>
+            </div>
 
-                <div class="form-group">
-                    <label>System Prompt</label>
-                    <textarea id="module-system-prompt" rows="6">${currentModule.system_prompt || ''}</textarea>
-                </div>
+            <!-- System Prompt -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">System Prompt</label>
+                <textarea id="module-system-prompt" rows="8"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none font-mono text-sm leading-relaxed resize-y bg-gray-50">${currentModule.system_prompt || ''}</textarea>
+                <p class="text-xs text-gray-500 mt-1">AI tutor instructions for this module</p>
+            </div>
 
-                <button type="submit" class="save-btn">Save Module</button>
+            <!-- Save Button -->
+            <div class="pt-4 border-t border-gray-200">
+                <button type="submit"
+                    class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
+                    💾 Save Module
+                </button>
             </div>
         </form>
     `;
@@ -798,19 +845,22 @@ function renderModuleDetailsTab() {
 
 function renderModuleCorpusTab() {
     return `
-        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 20px;">
+        <div class="grid grid-cols-[350px_1fr] gap-6">
             <!-- Module Corpus List -->
-            <div style="background: var(--sage-lighter); border-radius: 8px; padding: 15px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h4 style="margin: 0;">Corpus Entries</h4>
-                    <button class="create-btn" onclick="createModuleCorpus()" style="padding: 6px 12px; font-size: 13px;">+ Add</button>
+            <div class="bg-sage-lightest rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-bold text-gray-900">Corpus Entries</h4>
+                    <button onclick="createModuleCorpus()"
+                        class="px-3 py-1.5 bg-sage-medium text-white rounded-md hover:bg-sage-dark transition-colors text-sm font-medium">
+                        + Add
+                    </button>
                 </div>
-                <div id="module-corpus-list"></div>
+                <div id="module-corpus-list" class="space-y-2"></div>
             </div>
 
             <!-- Module Corpus Editor -->
-            <div id="module-corpus-editor" style="background: white; border: 1px solid var(--sage-lighter); border-radius: 8px; padding: 20px;">
-                <p style="text-align: center; color: #95a5a6;">Select a corpus entry or create a new one</p>
+            <div id="module-corpus-editor" class="bg-white border-2 border-gray-200 rounded-lg p-6">
+                <p class="text-center text-gray-400 py-12">Select a corpus entry or create a new one</p>
             </div>
         </div>
     `;
@@ -819,11 +869,14 @@ function renderModuleCorpusTab() {
 function renderModuleDocumentsTab() {
     return `
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h4 style="margin: 0;">Module Documents</h4>
-                <button class="create-btn" onclick="uploadModuleDocument()">Upload Document</button>
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-lg font-bold text-gray-900">Module Documents</h4>
+                <button onclick="uploadModuleDocument()"
+                    class="px-5 py-2.5 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                    📤 Upload Document
+                </button>
             </div>
-            <div id="module-documents-list"></div>
+            <div id="module-documents-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     `;
 }
@@ -921,15 +974,18 @@ async function loadModuleCorpus() {
 function createModuleCorpus() {
     const editor = document.getElementById('module-corpus-editor');
     editor.innerHTML = `
-        <h4 style="margin: 0 0 20px 0;">Create Module Corpus Entry</h4>
-        <form id="module-corpus-form" onsubmit="saveModuleCorpus(event)">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="m-corpus-title" required>
+        <h4 class="text-lg font-bold text-gray-900 mb-6">Create Module Corpus Entry</h4>
+        <form id="module-corpus-form" onsubmit="saveModuleCorpus(event)" class="space-y-5">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+                <input type="text" id="m-corpus-title" required
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
             </div>
-            <div class="form-group">
-                <label>Type</label>
-                <select id="m-corpus-type" required>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                <select id="m-corpus-type" required
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none bg-white">
                     <option value="theory">Theory</option>
                     <option value="concept">Concept</option>
                     <option value="example">Example</option>
@@ -938,15 +994,26 @@ function createModuleCorpus() {
                     <option value="case_study">Case Study</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="m-corpus-content" rows="10" required></textarea>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Content</label>
+                <textarea id="m-corpus-content" rows="12" required
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y"></textarea>
             </div>
-            <div class="form-group">
-                <label>Order</label>
-                <input type="number" id="m-corpus-order" value="0" min="0">
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
+                <input type="number" id="m-corpus-order" value="0" min="0"
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                <p class="text-xs text-gray-500 mt-1">Display order (lower numbers appear first)</p>
             </div>
-            <button type="submit" class="save-btn">Save Corpus Entry</button>
+
+            <div class="pt-4 border-t border-gray-200">
+                <button type="submit"
+                    class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
+                    💾 Save Corpus Entry
+                </button>
+            </div>
         </form>
     `;
 }
@@ -967,18 +1034,24 @@ async function selectModuleCorpus(id) {
 
         const editor = document.getElementById('module-corpus-editor');
         editor.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h4 style="margin: 0;">Edit Module Corpus Entry</h4>
-                <button class="delete-btn" onclick="deleteModuleCorpus(${id})" style="padding: 6px 12px; font-size: 13px;">Delete</button>
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-lg font-bold text-gray-900">Edit Module Corpus Entry</h4>
+                <button onclick="deleteModuleCorpus(${id})"
+                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
+                    🗑️ Delete
+                </button>
             </div>
-            <form id="module-corpus-form" onsubmit="updateModuleCorpus(event, ${id})">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="m-corpus-title" value="${entry.title}" required>
+            <form id="module-corpus-form" onsubmit="updateModuleCorpus(event, ${id})" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+                    <input type="text" id="m-corpus-title" value="${entry.title}" required
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                 </div>
-                <div class="form-group">
-                    <label>Type</label>
-                    <select id="m-corpus-type" required>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                    <select id="m-corpus-type" required
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none bg-white">
                         <option value="theory" ${entry.type === 'theory' ? 'selected' : ''}>Theory</option>
                         <option value="concept" ${entry.type === 'concept' ? 'selected' : ''}>Concept</option>
                         <option value="example" ${entry.type === 'example' ? 'selected' : ''}>Example</option>
@@ -987,15 +1060,26 @@ async function selectModuleCorpus(id) {
                         <option value="case_study" ${entry.type === 'case_study' ? 'selected' : ''}>Case Study</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Content</label>
-                    <textarea id="m-corpus-content" rows="10" required>${entry.content}</textarea>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Content</label>
+                    <textarea id="m-corpus-content" rows="12" required
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y">${entry.content}</textarea>
                 </div>
-                <div class="form-group">
-                    <label>Order</label>
-                    <input type="number" id="m-corpus-order" value="${entry.order_index}" min="0">
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
+                    <input type="number" id="m-corpus-order" value="${entry.order_index}" min="0"
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                    <p class="text-xs text-gray-500 mt-1">Display order (lower numbers appear first)</p>
                 </div>
-                <button type="submit" class="save-btn">Update Corpus Entry</button>
+
+                <div class="pt-4 border-t border-gray-200">
+                    <button type="submit"
+                        class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
+                        💾 Update Corpus Entry
+                    </button>
+                </div>
             </form>
         `;
     } catch (error) {
