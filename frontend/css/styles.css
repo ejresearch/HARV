@@ -9,36 +9,36 @@
    ============================================ */
 
 :root {
-    /* Color Palette - Flat & Simple with Better Readability */
-    --color-primary: #10B981;           /* Inviting emerald green */
-    --color-primary-light: #059669;     /* Darker green */
-    --color-primary-lighter: #6EE7B7;   /* Light green */
-    --color-primary-lightest: #ECFDF5;  /* Very light green */
+    /* Color Palette - Pantone Inspired Earthy Tones */
+    --color-primary: #9CAA5A;           /* Olive Green - main color */
+    --color-primary-light: #88954D;     /* Darker olive */
+    --color-primary-lighter: #B5C080;   /* Light olive */
+    --color-primary-lightest: #E8E5D3;  /* Very light cream */
 
-    --color-secondary: #6e6e80;         /* Neutral purple-gray */
-    --color-secondary-light: #8e8ea0;
-    --color-secondary-lighter: #c5c5d0;
+    --color-secondary: #C07047;         /* Brown Sugar - accent */
+    --color-secondary-light: #D08D68;
+    --color-secondary-lighter: #E5B99E;
 
-    --color-neutral-900: #1f1f1f;       /* Dark text */
-    --color-neutral-800: #2f2f2f;       /* Sidebar dark */
-    --color-neutral-700: #565656;       /* Medium dark */
-    --color-neutral-600: #717171;       /* Secondary text */
-    --color-neutral-500: #8f8f8f;       /* Muted text */
-    --color-neutral-400: #b4b4b4;       /* Borders */
-    --color-neutral-300: #d4d4d4;       /* Light borders */
-    --color-neutral-200: #e5e5e5;       /* Subtle backgrounds */
-    --color-neutral-100: #f5f5f5;       /* Light backgrounds */
-    --color-neutral-50: #ffffff;        /* White */
+    --color-neutral-900: #514B35;       /* Stallion Brown - for text */
+    --color-neutral-800: #5D5640;       /* Slightly lighter */
+    --color-neutral-700: #6E685A;       /* Medium dark */
+    --color-neutral-600: #88826F;       /* Secondary text */
+    --color-neutral-500: #9F9A8A;       /* Muted text */
+    --color-neutral-400: #B8B3A3;       /* Borders */
+    --color-neutral-300: #C9C4B6;       /* Light borders */
+    --color-neutral-200: #D4C296;       /* Desert Haze - background */
+    --color-neutral-100: #E3DEC9;       /* Light backgrounds */
+    --color-neutral-50: #F5F3ED;        /* Very light cream */
     --color-white: #ffffff;
 
-    --color-success: #22C55E;
-    --color-success-light: #86EFAC;
-    --color-warning: #F59E0B;
-    --color-warning-light: #FCD34D;
-    --color-error: #EF4444;
-    --color-error-light: #FCA5A5;
-    --color-info: #3B82F6;
-    --color-info-light: #93C5FD;
+    --color-success: #7A9D54;
+    --color-success-light: #A8C686;
+    --color-warning: #D4A574;
+    --color-warning-light: #E8C9A6;
+    --color-error: #C07957;
+    --color-error-light: #D19675;
+    --color-info: #8B9A7A;
+    --color-info-light: #B5C4A7;
 
     /* Typography Scale (8px base) */
     --font-size-xs: 0.75rem;      /* 12px */
@@ -2167,4 +2167,34 @@ textarea.form-control {
 :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
+}
+
+/* ============================================
+   HAMBURGER MENU NAV ITEMS
+   ============================================ */
+
+.menu-nav-item {
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+    background: none;
+    border: none;
+    color: white;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    transition: all var(--transition-base);
+    border-left: 3px solid transparent;
+}
+
+.menu-nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: var(--space-8);
+}
+
+.menu-nav-item span {
+    flex: 1;
 }

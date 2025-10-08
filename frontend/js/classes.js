@@ -165,10 +165,10 @@ function renderClassDetailsTab() {
 
             <div class="flex gap-3 items-center pt-6 border-t border-gray-200">
                 <button type="submit" class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-medium">
-                    💾 Save Class
+                    Save Class
                 </button>
                 <button type="button" onclick="deleteClass()" class="ml-auto bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-colors font-medium">
-                    🗑️ Delete Class
+                    Delete Class
                 </button>
             </div>
         </form>
@@ -205,7 +205,7 @@ function renderClassDocumentsTab() {
             <div class="flex justify-between items-center mb-5">
                 <h4 class="text-lg font-bold text-gray-900">Class Documents</h4>
                 <button onclick="uploadClassDocument()" class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">
-                    📤 Upload Document
+                    Upload Document
                 </button>
             </div>
             <div id="class-documents-list" class="space-y-3"></div>
@@ -251,11 +251,12 @@ function renderModulesList() {
                             ` : ''}
                         </div>
                         <div class="flex gap-2 flex-shrink-0">
-                            <button onclick="editModule(${module.id})" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium">
-                                ✏️ Edit
+                            <button onclick="editModule(${module.id})" class="bg-terracotta-500 text-white px-4 py-2 rounded-lg hover:bg-terracotta-600 transition-colors text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="edit" style="width: 16px; height: 16px; color: white;"></i>
+                                Edit
                             </button>
                             <button onclick="deleteModule(${module.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
-                                🗑️ Delete
+                                Delete
                             </button>
                         </div>
                     </div>
@@ -437,15 +438,17 @@ function createModuleInClass() {
 function createClassCorpus() {
     const editor = document.getElementById('class-corpus-editor');
     editor.innerHTML = `
-        <h4 style="margin: 0 0 20px 0;">Create Corpus Entry</h4>
-        <form id="corpus-form" onsubmit="saveClassCorpus(event)">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="corpus-title" required>
+        <h4 class="text-lg font-bold text-gray-900 mb-6">Create Corpus Entry</h4>
+        <form id="corpus-form" onsubmit="saveClassCorpus(event)" class="space-y-5">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+                <input type="text" id="corpus-title" required
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
             </div>
-            <div class="form-group">
-                <label>Type</label>
-                <select id="corpus-type" required>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                <select id="corpus-type" required
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none bg-white">
                     <option value="theory">Theory</option>
                     <option value="concept">Concept</option>
                     <option value="example">Example</option>
@@ -454,15 +457,19 @@ function createClassCorpus() {
                     <option value="framework">Framework</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="corpus-content" rows="10" required></textarea>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Content</label>
+                <textarea id="corpus-content" rows="10" required
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y"></textarea>
             </div>
-            <div class="form-group">
-                <label>Order</label>
-                <input type="number" id="corpus-order" value="0" min="0">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
+                <input type="number" id="corpus-order" value="0" min="0"
+                    class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
             </div>
-            <button type="submit" class="save-btn">Save Corpus Entry</button>
+            <button type="submit" class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
+                Save Corpus Entry
+            </button>
         </form>
     `;
 }
@@ -482,18 +489,20 @@ async function selectClassCorpus(id) {
 
         const editor = document.getElementById('class-corpus-editor');
         editor.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h4 style="margin: 0;">Edit Corpus Entry</h4>
-                <button class="delete-btn" onclick="deleteClassCorpus(${id})" style="padding: 6px 12px; font-size: 13px;">Delete</button>
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-lg font-bold text-gray-900">Edit Corpus Entry</h4>
+                <button onclick="deleteClassCorpus(${id})" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium">Delete</button>
             </div>
-            <form id="corpus-form" onsubmit="updateClassCorpus(event, ${id})">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="corpus-title" value="${entry.title}" required>
+            <form id="corpus-form" onsubmit="updateClassCorpus(event, ${id})" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+                    <input type="text" id="corpus-title" value="${entry.title}" required
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                 </div>
-                <div class="form-group">
-                    <label>Type</label>
-                    <select id="corpus-type" required>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                    <select id="corpus-type" required
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none bg-white">
                         <option value="theory" ${entry.type === 'theory' ? 'selected' : ''}>Theory</option>
                         <option value="concept" ${entry.type === 'concept' ? 'selected' : ''}>Concept</option>
                         <option value="example" ${entry.type === 'example' ? 'selected' : ''}>Example</option>
@@ -502,15 +511,19 @@ async function selectClassCorpus(id) {
                         <option value="framework" ${entry.type === 'framework' ? 'selected' : ''}>Framework</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Content</label>
-                    <textarea id="corpus-content" rows="10" required>${entry.content}</textarea>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Content</label>
+                    <textarea id="corpus-content" rows="10" required
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none text-sm leading-relaxed resize-y">${entry.content}</textarea>
                 </div>
-                <div class="form-group">
-                    <label>Order</label>
-                    <input type="number" id="corpus-order" value="${entry.order_index}" min="0">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
+                    <input type="number" id="corpus-order" value="${entry.order_index}" min="0"
+                        class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
                 </div>
-                <button type="submit" class="save-btn">Update Corpus Entry</button>
+                <button type="submit" class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
+                    Update Corpus Entry
+                </button>
             </form>
         `;
     } catch (error) {
@@ -742,8 +755,8 @@ function renderModuleEditor() {
                 <p style="margin: 0; color: var(--text-medium); font-size: 14px;">${currentModule.description || 'No description'}</p>
             </div>
             <div style="display: flex; gap: 10px;">
-                <button class="cancel-btn" onclick="showClassTab('modules')" style="padding: 8px 16px;">Back to Modules</button>
-                <button class="delete-btn" onclick="deleteModule(${currentModule.id})" style="padding: 8px 16px;">Delete Module</button>
+                <button onclick="showClassTab('modules')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium">Back to Modules</button>
+                <button onclick="deleteModule(${currentModule.id})" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors font-medium">Delete Module</button>
             </div>
         </div>
 
@@ -836,7 +849,7 @@ function renderModuleDetailsTab() {
             <div class="pt-4 border-t border-gray-200">
                 <button type="submit"
                     class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
-                    💾 Save Module
+                    Save Module
                 </button>
             </div>
         </form>
@@ -873,7 +886,7 @@ function renderModuleDocumentsTab() {
                 <h4 class="text-lg font-bold text-gray-900">Module Documents</h4>
                 <button onclick="uploadModuleDocument()"
                     class="px-5 py-2.5 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium">
-                    📤 Upload Document
+                    Upload Document
                 </button>
             </div>
             <div id="module-documents-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -1011,7 +1024,7 @@ function createModuleCorpus() {
             <div class="pt-4 border-t border-gray-200">
                 <button type="submit"
                     class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
-                    💾 Save Corpus Entry
+                    Save Corpus Entry
                 </button>
             </div>
         </form>
@@ -1038,7 +1051,7 @@ async function selectModuleCorpus(id) {
                 <h4 class="text-lg font-bold text-gray-900">Edit Module Corpus Entry</h4>
                 <button onclick="deleteModuleCorpus(${id})"
                     class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
-                    🗑️ Delete
+                    Delete
                 </button>
             </div>
             <form id="module-corpus-form" onsubmit="updateModuleCorpus(event, ${id})" class="space-y-5">
@@ -1077,7 +1090,7 @@ async function selectModuleCorpus(id) {
                 <div class="pt-4 border-t border-gray-200">
                     <button type="submit"
                         class="px-6 py-3 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-semibold shadow-sm">
-                        💾 Update Corpus Entry
+                        Update Corpus Entry
                     </button>
                 </div>
             </form>

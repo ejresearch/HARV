@@ -16,35 +16,43 @@ const sections = {
                 <!-- Quick Actions Bar -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('classes')">
-                        <div class="text-2xl mb-2">📚</div>
-                        <div class="font-bold text-gray-900">Manage Classes</div>
-                        <div class="text-sm text-gray-600 mt-1">Edit classes & modules</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="book-open" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Manage Classes</div>
+                        </div>
+                        <div class="text-sm text-gray-600">Edit classes & modules</div>
                     </button>
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('memory')">
-                        <div class="text-2xl mb-2">🧠</div>
-                        <div class="font-bold text-gray-900">Memory Inspector</div>
-                        <div class="text-sm text-gray-600 mt-1">View student learning</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="brain" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Memory Inspector</div>
+                        </div>
+                        <div class="text-sm text-gray-600">View student learning</div>
                     </button>
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('system')">
-                        <div class="text-2xl mb-2">⚙️</div>
-                        <div class="font-bold text-gray-900">Settings</div>
-                        <div class="text-sm text-gray-600 mt-1">System configuration</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="settings" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Settings</div>
+                        </div>
+                        <div class="text-sm text-gray-600">System configuration</div>
                     </button>
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('chat')">
-                        <div class="text-2xl mb-2">💬</div>
-                        <div class="font-bold text-gray-900">Test Chat</div>
-                        <div class="text-sm text-gray-600 mt-1">Try the AI tutor</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="message-circle" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Test Chat</div>
+                        </div>
+                        <div class="text-sm text-gray-600">Try the AI tutor</div>
                     </button>
                 </div>
 
                 <!-- Administrators Section -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-4 bg-purple-50 border-b-2 border-purple-200 flex justify-between items-center">
+                    <div class="p-4 border-b-2 border-gray-300 flex justify-between items-center" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
                         <div>
-                            <h3 class="text-lg font-bold text-purple-900">Administrators</h3>
-                            <p class="text-sm text-purple-700 mt-1">System administrators with full access</p>
+                            <h3 class="text-lg font-bold text-white">Administrators</h3>
+                            <p class="text-sm text-white/90 mt-1">System administrators with full access</p>
                         </div>
-                        <button onclick="showAddUserModal('admin')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                        <button onclick="showAddUserModal('admin')" class="bg-white text-sage-dark px-4 py-2 rounded-lg hover:bg-sage-lightest transition-colors font-semibold border-2 border-white shadow-md">
                             + Add Admin
                         </button>
                     </div>
@@ -70,12 +78,12 @@ const sections = {
 
                 <!-- Student Management Section -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-4 bg-blue-50 border-b-2 border-blue-200 flex justify-between items-center">
+                    <div class="p-4 border-b-2 border-gray-300 flex justify-between items-center" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
                         <div>
-                            <h3 class="text-lg font-bold text-blue-900">Student Management</h3>
-                            <p class="text-sm text-blue-700 mt-1">View and manage all registered students</p>
+                            <h3 class="text-lg font-bold text-white">Student Management</h3>
+                            <p class="text-sm text-white/90 mt-1">View and manage all registered students</p>
                         </div>
-                        <button onclick="showAddUserModal('student')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        <button onclick="showAddUserModal('student')" class="bg-white text-sage-dark px-4 py-2 rounded-lg hover:bg-sage-lightest transition-colors font-semibold border-2 border-white shadow-md">
                             + Add Student
                         </button>
                     </div>
@@ -102,31 +110,34 @@ const sections = {
         `
     },
     'student-dashboard': {
-        title: 'Student Dashboard',
-        description: 'Your personal learning journey',
+        title: 'My Classes',
+        description: 'Your learning journey',
         content: `
             <div class="p-6 space-y-6">
-                <!-- Welcome Header with Settings -->
-                <div class="bg-sage-medium text-white rounded-lg p-8 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-3xl font-bold">Welcome back, <span id="student-name">Student</span>!</h2>
-                        <p class="text-white opacity-90 mt-2" id="student-subtitle">Loading your learning profile...</p>
+                <!-- Welcome Card -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-6" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
+                        <h2 class="text-3xl font-bold text-white mb-2">Welcome back, <span id="student-name">Student</span>!</h2>
+                        <p class="text-white/90 text-lg" id="student-subtitle">Keep learning, keep growing</p>
                     </div>
-                    <button onclick="showStudentSettings()" class="bg-white text-sage-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium flex items-center gap-2">
-                        <span>⚙️</span>
-                        <span>Settings</span>
-                    </button>
                 </div>
 
-                <!-- Your Classes -->
-                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300">
-                    <div class="p-6 border-b border-gray-200">
-                        <h3 class="text-xl font-bold text-gray-900">Your Classes</h3>
-                        <p class="text-sm text-gray-600 mt-1">Track your progress across all enrolled classes</p>
+                <!-- My Classes Section -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-4 border-b-2 border-gray-300 flex justify-between items-center" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">My Classes</h3>
+                            <p class="text-sm text-white/90 mt-1">Your enrolled courses and learning materials</p>
+                        </div>
+                        <button onclick="showJoinClassModal()" class="bg-white text-sage-dark px-4 py-2 rounded-lg hover:bg-sage-lightest transition-colors font-semibold border-2 border-white shadow-md">
+                            + Join Class
+                        </button>
                     </div>
                     <div class="p-6">
-                        <div id="student-classes-list" class="space-y-4">
-                            <p class="text-gray-500 text-center py-8">Loading your classes...</p>
+                        <div id="student-classes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="col-span-full text-center py-12 text-gray-500">
+                                <p>Loading your classes...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -140,9 +151,9 @@ const sections = {
             <div class="p-6 space-y-6">
                 <!-- API Key Configuration -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 bg-blue-50">
-                        <h3 class="text-xl font-bold text-blue-900">API Key Configuration</h3>
-                        <p class="text-sm text-blue-700 mt-1">Configure API keys for AI service providers</p>
+                    <div class="p-6 border-b border-gray-200" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
+                        <h3 class="text-xl font-bold text-white">API Key Configuration</h3>
+                        <p class="text-sm text-white/90 mt-1">Configure API keys for AI service providers</p>
                     </div>
                     <div class="p-6 space-y-4" id="api-keys-container">
                         <p class="text-gray-500 text-center">Loading API key settings...</p>
@@ -151,30 +162,30 @@ const sections = {
 
                 <!-- Health Checks -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 bg-green-50">
-                        <h3 class="text-xl font-bold text-green-900">System Health Checks</h3>
-                        <p class="text-sm text-green-700 mt-1">Monitor backend endpoints and system status</p>
+                    <div class="p-6 border-b border-gray-200" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
+                        <h3 class="text-xl font-bold text-white">System Health Checks</h3>
+                        <p class="text-sm text-white/90 mt-1">Monitor backend endpoints and system status</p>
                     </div>
                     <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="border-2 border-gray-200 rounded-lg p-4">
                             <h4 class="font-bold text-gray-900 mb-2">Root Endpoint</h4>
-                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /</p>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded-lg mb-3">GET /</p>
                             <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testRootEndpoint()">Test</button>
-                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="root-result">Click test...</pre>
+                            <pre class="bg-gray-50 p-2 rounded-lg text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="root-result">Click test...</pre>
                         </div>
 
                         <div class="border-2 border-gray-200 rounded-lg p-4">
                             <h4 class="font-bold text-gray-900 mb-2">Health Check</h4>
-                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /health</p>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded-lg mb-3">GET /health</p>
                             <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testHealthEndpoint()">Test</button>
-                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="health-result">Click test...</pre>
+                            <pre class="bg-gray-50 p-2 rounded-lg text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="health-result">Click test...</pre>
                         </div>
 
                         <div class="border-2 border-gray-200 rounded-lg p-4">
                             <h4 class="font-bold text-gray-900 mb-2">System Status</h4>
-                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /system/status</p>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded-lg mb-3">GET /system/status</p>
                             <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testStatusEndpoint()">Test</button>
-                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="status-result">Click test...</pre>
+                            <pre class="bg-gray-50 p-2 rounded-lg text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="status-result">Click test...</pre>
                         </div>
                     </div>
                 </div>
@@ -377,7 +388,7 @@ const sections = {
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-250px)]">
                     <!-- Left: Conversation List (like ChatGPT sidebar) -->
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col">
-                        <div class="bg-sage-darkest text-white p-4">
+                        <div class="p-4 text-white" style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%);">
                             <h3 class="text-lg font-bold">Conversation History</h3>
                         </div>
                         <div id="conversations-list-content" class="flex-1 overflow-y-auto p-4">
@@ -404,35 +415,35 @@ const sections = {
         content: `
             <div class="flex h-[calc(100vh-80px)]">
                 <!-- Left Sidebar: Conversations & Controls -->
-                <div class="w-80 bg-sage-darkest text-white flex flex-col border-r border-gray-700">
-                    <div class="p-4 border-b border-sage-medium/30 flex items-center justify-between">
+                <div class="w-80 text-white flex flex-col border-r border-gray-300" style="background: linear-gradient(180deg, #B5C080 0%, #9CAA5A 100%);">
+                    <div class="p-4 border-b border-white/20 flex items-center justify-between">
                         <h3 class="text-lg font-bold">Conversations</h3>
                         <button onclick="startNewChat()" title="Start new conversation"
-                            class="bg-sage-medium hover:bg-sage-light text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                            <span class="text-xl">+</span>
+                            class="bg-terracotta-500 hover:bg-terracotta-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-md">
+                            <span class="text-xl font-bold">+</span>
                         </button>
                     </div>
 
                     <!-- Class, Module & Model Selection -->
-                    <div class="p-4 space-y-3 border-b border-sage-medium/30">
+                    <div class="p-4 space-y-3 border-b border-white/20">
                         <div>
-                            <label class="block text-sm font-medium mb-1 text-sage-lightest">Class</label>
+                            <label class="block text-sm font-medium mb-1 text-white">Class</label>
                             <select id="chat-class-select" onchange="chatClassChanged()"
-                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                class="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-terracotta-500 outline-none backdrop-blur-sm">
                                 <option value="">All Classes</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1 text-sage-lightest">Module</label>
+                            <label class="block text-sm font-medium mb-1 text-white">Module</label>
                             <select id="chat-module-select" onchange="chatModuleChanged()"
-                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                class="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-terracotta-500 outline-none backdrop-blur-sm">
                                 <option value="">Select Module...</option>
                             </select>
                         </div>
                         <div id="chat-model-selector-container">
-                            <label class="block text-sm font-medium mb-1 text-sage-lightest">AI Model</label>
+                            <label class="block text-sm font-medium mb-1 text-white">AI Model</label>
                             <select id="chat-provider-select"
-                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                class="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-terracotta-500 outline-none backdrop-blur-sm">
                                 <option value="openai-gpt5">GPT-5 (OpenAI)</option>
                             </select>
                         </div>
@@ -440,29 +451,29 @@ const sections = {
 
                     <!-- Conversation History -->
                     <div class="flex-1 overflow-y-auto p-4">
-                        <div class="text-sm font-semibold mb-2 text-sage-lightest">Recent Chats</div>
+                        <div class="text-sm font-semibold mb-2 text-white">Recent Chats</div>
                         <div id="chat-history-list">
-                            <div class="text-sage-light text-sm py-4 text-center">No conversations yet</div>
+                            <div class="text-white/70 text-sm py-4 text-center">No conversations yet</div>
                         </div>
                     </div>
 
                     <!-- Memory Context Indicator -->
-                    <div class="p-4 border-t border-sage-medium/30 bg-sage-darkest/50">
-                        <div class="text-sm font-semibold mb-2 text-sage-lightest">Memory Context</div>
+                    <div class="p-4 border-t border-white/20" style="background: rgba(0,0,0,0.1);">
+                        <div class="text-sm font-semibold mb-2 text-white">Memory Context</div>
                         <div class="space-y-1 text-xs" id="chat-memory-stats">
-                            <div class="flex justify-between text-sage-light">
+                            <div class="flex justify-between text-white/80">
                                 <span>Profile:</span>
                                 <span class="font-mono" id="memory-profile-status">—</span>
                             </div>
-                            <div class="flex justify-between text-sage-light">
+                            <div class="flex justify-between text-white/80">
                                 <span>Module Data:</span>
                                 <span class="font-mono" id="memory-module-status">—</span>
                             </div>
-                            <div class="flex justify-between text-sage-light">
+                            <div class="flex justify-between text-white/80">
                                 <span>Conversations:</span>
                                 <span class="font-mono" id="memory-conv-status">—</span>
                             </div>
-                            <div class="flex justify-between text-sage-light">
+                            <div class="flex justify-between text-white/80">
                                 <span>Context Size:</span>
                                 <span class="font-mono" id="memory-size-status">—</span>
                             </div>
@@ -662,7 +673,7 @@ const sections = {
                     <div class="flex gap-3 items-center">
                         <button onclick="loadInspectorData()"
                             class="bg-sage-dark text-white px-6 py-3 rounded-lg hover:bg-sage-darkest transition-colors font-semibold">
-                            🔍 Analyze Memory Context
+                            Analyze Memory Context
                         </button>
                         <div class="flex-1 relative">
                             <input type="text" id="inspector-search" placeholder="Or search by student name, email, conversation..."
@@ -681,7 +692,7 @@ const sections = {
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Assembled Prompt for LLM</h3>
                         <div id="assembled-prompt-display"
-                            class="bg-gray-900 text-green-400 p-5 rounded-lg overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono text-sm max-h-[500px] overflow-y-auto">
+                            class="bg-gray-900 text-sage-lighter p-5 rounded-lg overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono text-sm max-h-[500px] overflow-y-auto">
                             <!-- Prompt will be shown here -->
                         </div>
                     </div>
@@ -729,7 +740,7 @@ function loadSection(sectionName) {
     const contentDiv = document.getElementById('content');
 
     contentDiv.innerHTML = `
-        <div class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="bg-white rounded-lg border-2 border-gray-300 px-6 py-4 mb-6 shadow-sm">
             <h2 class="text-2xl font-bold text-gray-900">${section.title}</h2>
             <p class="text-gray-600 mt-1">${section.description}</p>
         </div>
@@ -738,7 +749,13 @@ function loadSection(sectionName) {
 
     // Auto-load admin dashboard
     if (sectionName === 'admin-dashboard') {
-        setTimeout(() => loadAdminDashboard(), 100);
+        setTimeout(() => {
+            loadAdminDashboard();
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }, 100);
     }
 
     // Auto-load student dashboard
@@ -811,19 +828,24 @@ async function initializeApp() {
 
                 // Hide auth overlay, show main app
                 document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'block';
+
+                // Set user name in top bar
+                document.getElementById('user-name').textContent = user.name || user.email;
+
+                // Build navigation menu based on role
+                buildNavigationMenu();
 
                 // Navigate to appropriate dashboard
                 const targetSection = user.is_admin ? 'admin-dashboard' : 'student-dashboard';
                 switchSection(targetSection);
 
-                // Set active menu item
-                document.querySelectorAll('.menu-item').forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.section === targetSection) {
-                        item.classList.add('active');
+                // Initialize Lucide icons
+                setTimeout(() => {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
                     }
-                });
+                }, 200);
 
                 return;
             }
@@ -882,19 +904,24 @@ async function handleAuthLogin(event) {
 
             // Hide auth overlay, show main app
             document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'block';
+
+            // Set user name in top bar
+            document.getElementById('user-name').textContent = data.user.name || data.user.email;
+
+            // Build navigation menu based on role
+            buildNavigationMenu();
 
             // Navigate to appropriate dashboard
             const targetSection = data.user.is_admin ? 'admin-dashboard' : 'student-dashboard';
             switchSection(targetSection);
 
-            // Set active menu item
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.dataset.section === targetSection) {
-                    item.classList.add('active');
+            // Initialize Lucide icons
+            setTimeout(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
                 }
-            });
+            }, 200);
 
             NotificationSystem.success(`Welcome back, ${data.user.name}!`);
             document.getElementById('auth-login-form').reset();
@@ -1134,7 +1161,7 @@ async function loadApiKeySettings() {
                             <h4 class="font-bold text-gray-900 text-lg">${provider.name}</h4>
                             <p class="text-sm text-gray-600 mt-1">${provider.description}</p>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs font-medium ${provider.key ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${provider.key ? 'bg-sage-lighter text-sage-darkest' : 'bg-gray-100 text-gray-600'}">
                             ${provider.key ? 'Configured' : 'Not Set'}
                         </span>
                     </div>
@@ -1151,7 +1178,7 @@ async function loadApiKeySettings() {
                             class="px-3 py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
                             title="Toggle visibility"
                         >
-                            👁️
+                            Show
                         </button>
                         <button
                             onclick="saveApiKey('${providerId}')"
@@ -1421,7 +1448,7 @@ async function loadAdminDashboard() {
                         <input type="text"
                             id="name-${user.id}"
                             value="${user.name || ''}"
-                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-purple-500 focus:outline-none"
+                            class="w-full border-2 border-gray-300 rounded-lg px-2 py-1 text-sm font-medium text-gray-900 focus:border-terracotta-500 focus:outline-none"
                             onchange="updateUserField(${user.id}, 'name', this.value)"
                         />
                     </td>
@@ -1429,15 +1456,15 @@ async function loadAdminDashboard() {
                         <div class="text-sm text-gray-700">${user.email}</div>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600">${user.classes_created || 0}</div>
+                        <div class="text-2xl font-bold text-terracotta-600">${user.classes_created || 0}</div>
                         <div class="text-xs text-gray-500">classes</div>
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600">${user.modules_created || 0}</div>
+                        <div class="text-2xl font-bold text-terracotta-600">${user.modules_created || 0}</div>
                         <div class="text-xs text-gray-500">modules</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-terracotta-600 hover:text-terracotta-800 font-medium mr-2">
                             View History
                         </button>
                         <button onclick="deleteUser(${user.id}, '${user.name}', 'admin')" class="text-red-600 hover:text-red-800 font-medium">
@@ -1462,7 +1489,7 @@ async function loadAdminDashboard() {
                         <input type="text"
                             id="name-${user.id}"
                             value="${user.name || ''}"
-                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-blue-500 focus:outline-none"
+                            class="w-full border-2 border-gray-300 rounded-lg px-2 py-1 text-sm font-medium text-gray-900 focus:border-terracotta-500 focus:outline-none"
                             onchange="updateUserField(${user.id}, 'name', this.value)"
                         />
                     </td>
@@ -1481,17 +1508,17 @@ async function loadAdminDashboard() {
                     <td class="px-6 py-4 text-center">
                         <div class="flex gap-4 justify-center">
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">${user.classes_completed || 0}</div>
+                                <div class="text-2xl font-bold text-terracotta-600">${user.classes_completed || 0}</div>
                                 <div class="text-xs text-gray-500">classes</div>
                             </div>
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">${user.modules_completed || 0}</div>
+                                <div class="text-2xl font-bold text-terracotta-600">${user.modules_completed || 0}</div>
                                 <div class="text-xs text-gray-500">modules</div>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-terracotta-600 hover:text-terracotta-800 font-medium mr-2">
                             View History
                         </button>
                         <button onclick="deleteUser(${user.id}, '${user.name}', 'student')" class="text-red-600 hover:text-red-800 font-medium">
@@ -1617,11 +1644,16 @@ async function loadStudentDashboard() {
         const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
         const allModules = Array.isArray(modulesData) ? modulesData : (modulesData.modules || []);
 
-        // Build classes list with progress
-        const classesContainer = document.getElementById('student-classes-list');
+        // Build classes grid with cards
+        const classesContainer = document.getElementById('student-classes-grid');
 
         if (classes.length === 0) {
-            classesContainer.innerHTML = '<p class="text-gray-500 text-center py-8">No classes available yet. Check back soon!</p>';
+            classesContainer.innerHTML = `
+                <div style="text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: #6b7280;">
+                    <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No classes yet</p>
+                    <p style="font-size: 14px;">Join a class to start learning!</p>
+                </div>
+            `;
             return;
         }
 
@@ -1640,55 +1672,46 @@ async function loadStudentDashboard() {
             const progressPercent = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
 
             return `
-                <div class="border-2 border-gray-300 rounded-lg p-6 hover:border-sage-medium hover:shadow-md transition-all cursor-pointer" onclick="switchSection('chat')">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex-1">
-                            <h4 class="text-lg font-bold text-gray-900">${cls.title}</h4>
-                            <p class="text-sm text-gray-600 mt-1">${cls.description || 'No description available'}</p>
-                        </div>
-                        <div class="text-right ml-4">
-                            <div class="text-3xl font-bold text-sage-medium">${progressPercent}%</div>
-                            <div class="text-xs text-gray-500 mt-1">Complete</div>
-                        </div>
+                <div style="background: white; border-radius: 16px; border: 2px solid #C9C4B6; overflow: hidden; transition: all 0.3s; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
+                     onmouseover="this.style.borderColor='#9CAA5A'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'"
+                     onmouseout="this.style.borderColor='#C9C4B6'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)'"
+                     onclick="navigateTo('chat')">
+
+                    <!-- Card Header -->
+                    <div style="background: linear-gradient(135deg, #9CAA5A 0%, #88954D 100%); padding: 24px; color: white;">
+                        <h4 style="font-size: 20px; font-weight: 700; margin: 0 0 8px 0; color: white;">${cls.title}</h4>
+                        <p style="font-size: 14px; opacity: 0.95; margin: 0; color: white;">${totalModules} module${totalModules !== 1 ? 's' : ''}</p>
                     </div>
 
-                    <!-- Progress Bar -->
-                    <div class="mb-4">
-                        <div class="flex justify-between text-xs text-gray-600 mb-1">
-                            <span>${completedModules} of ${totalModules} modules</span>
-                            <span>${totalModules - completedModules} remaining</span>
+                    <!-- Card Body -->
+                    <div style="padding: 24px;">
+                        <!-- Progress -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 14px; font-weight: 600; color: #88826F;">Progress</span>
+                                <span style="font-size: 24px; font-weight: 800; color: #9CAA5A;">${progressPercent}%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #E3DEC9; border-radius: 999px; overflow: hidden;">
+                                <div style="height: 100%; background: #9CAA5A; border-radius: 999px; width: ${progressPercent}%; transition: width 0.3s;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: #9F9A8A; margin-top: 6px;">
+                                ${completedModules} of ${totalModules} completed
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="bg-sage-medium h-3 rounded-full transition-all" style="width: ${progressPercent}%"></div>
-                        </div>
-                    </div>
 
-                    <!-- Module List -->
-                    ${classModules.length > 0 ? `
-                        <div class="space-y-2">
-                            <div class="text-sm font-semibold text-gray-700 mb-2">Modules:</div>
-                            ${classModules.slice(0, 5).map((module, idx) => {
-                                const isStarted = moduleProgress[module.id] > 0;
-                                const convCount = moduleProgress[module.id] || 0;
-                                return `
-                                    <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-6 h-6 rounded-full ${isStarted ? 'bg-sage-medium text-white' : 'bg-gray-300 text-gray-600'} flex items-center justify-center text-xs font-bold">
-                                                ${isStarted ? '✓' : idx + 1}
-                                            </span>
-                                            <span class="text-sm text-gray-700">${module.title}</span>
-                                        </div>
-                                        ${isStarted ? `<span class="text-xs text-gray-500">${convCount} session${convCount !== 1 ? 's' : ''}</span>` : ''}
-                                    </div>
-                                `;
-                            }).join('')}
-                            ${classModules.length > 5 ? `<div class="text-xs text-gray-500 text-center pt-2">+ ${classModules.length - 5} more modules</div>` : ''}
-                        </div>
-                    ` : '<p class="text-sm text-gray-500 text-center py-4">No modules in this class yet</p>'}
+                        <!-- Description -->
+                        ${cls.description ? `
+                            <p style="font-size: 14px; color: #6E685A; margin: 0 0 16px 0; line-height: 1.6;">
+                                ${cls.description.length > 100 ? cls.description.substring(0, 100) + '...' : cls.description}
+                            </p>
+                        ` : ''}
 
-                    <!-- Click to start indicator -->
-                    <div class="mt-4 pt-4 border-t border-gray-200 text-center">
-                        <span class="text-sm text-sage-medium font-medium">Click to start learning →</span>
+                        <!-- Action Button -->
+                        <button style="width: 100%; background: #9CAA5A; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.background='#88954D'"
+                                onmouseout="this.style.background='#9CAA5A'">
+                            ${progressPercent === 0 ? 'Start Learning →' : 'Continue Learning →'}
+                        </button>
                     </div>
                 </div>
             `;
@@ -1696,10 +1719,22 @@ async function loadStudentDashboard() {
 
     } catch (error) {
         console.error('Error loading student dashboard:', error);
-        const classesContainer = document.getElementById('student-classes-list');
-        classesContainer.innerHTML = '<p class="text-red-500 text-center py-8">Failed to load dashboard. Please try again.</p>';
-        NotificationSystem.error('Failed to load student dashboard. Please ensure you are logged in.');
+        const classesContainer = document.getElementById('student-classes-grid');
+        if (classesContainer) {
+            classesContainer.innerHTML = `
+                <div style="text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: #ef4444;">
+                    <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Failed to load classes</p>
+                    <p style="font-size: 14px;">Please refresh the page and try again.</p>
+                </div>
+            `;
+        }
+        NotificationSystem.error('Failed to load student dashboard');
     }
+}
+
+// Show join class modal
+function showJoinClassModal() {
+    NotificationSystem.info('Join Class feature coming soon! For now, admins can assign you to classes.');
 }
 
 // Show student settings modal
@@ -1733,26 +1768,26 @@ async function showStudentSettings() {
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Name</label>
                     <input type="text" id="settings-name" value="${user.name || ''}"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;" />
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px;" />
                 </div>
 
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Email</label>
                     <input type="email" value="${user.email}" disabled
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; background: #f5f5f5; color: #8f8f8f;" />
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; background: #f5f5f5; color: #8f8f8f;" />
                     <p style="font-size: 12px; color: #8f8f8f; margin-top: 4px;">Email cannot be changed</p>
                 </div>
 
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Age/Grade Level</label>
                     <input type="text" id="settings-age" value="${survey.age_grade_level || ''}" placeholder="e.g., 10th grade, Adult learner"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;" />
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px;" />
                 </div>
 
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Learning Style</label>
                     <select id="settings-learning-style"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;">
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px;">
                         <option value="visual" ${survey.learning_style === 'visual' ? 'selected' : ''}>Visual</option>
                         <option value="auditory" ${survey.learning_style === 'auditory' ? 'selected' : ''}>Auditory</option>
                         <option value="reading" ${survey.learning_style === 'reading' ? 'selected' : ''}>Reading/Writing</option>
@@ -1763,7 +1798,7 @@ async function showStudentSettings() {
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Familiarity Level</label>
                     <select id="settings-familiarity"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px;">
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px;">
                         <option value="beginner" ${survey.familiarity === 'beginner' ? 'selected' : ''}>Beginner</option>
                         <option value="intermediate" ${survey.familiarity === 'intermediate' ? 'selected' : ''}>Intermediate</option>
                         <option value="advanced" ${survey.familiarity === 'advanced' ? 'selected' : ''}>Advanced</option>
@@ -1773,13 +1808,13 @@ async function showStudentSettings() {
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Learning Goals</label>
                     <textarea id="settings-goals" rows="3" placeholder="What do you want to achieve?"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; resize: vertical;">${survey.goals || ''}</textarea>
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; resize: vertical;">${survey.goals || ''}</textarea>
                 </div>
 
                 <div>
                     <label style="display: block; font-weight: 600; color: #2f2f2f; margin-bottom: 6px; font-size: 14px;">Additional Notes</label>
                     <textarea id="settings-notes" rows="3" placeholder="Anything else we should know?"
-                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; resize: vertical;">${survey.learning_notes || ''}</textarea>
+                        style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; resize: vertical;">${survey.learning_notes || ''}</textarea>
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid #d4d4d4;">
@@ -1788,7 +1823,7 @@ async function showStudentSettings() {
                         border: 2px solid #d4d4d4;
                         background: white;
                         color: #2f2f2f;
-                        border-radius: 6px;
+                        border-radius: 8px;
                         cursor: pointer;
                         font-size: 14px;
                         font-weight: 600;
@@ -1796,9 +1831,9 @@ async function showStudentSettings() {
                     <button type="submit" style="
                         padding: 10px 20px;
                         border: none;
-                        background: #10B981;
+                        background: #9CAA5A;
                         color: white;
-                        border-radius: 6px;
+                        border-radius: 8px;
                         cursor: pointer;
                         font-size: 14px;
                         font-weight: 600;
@@ -1889,7 +1924,7 @@ async function updateUserField(userId, field, value) {
 function showAddUserModal(role) {
     const isAdmin = role === 'admin';
     const title = isAdmin ? 'Add New Administrator' : 'Add New Student';
-    const buttonColor = isAdmin ? '#7C3AED' : '#2563EB';
+    const buttonColor = isAdmin ? '#C07047' : '#C07047';
 
     const modal = document.createElement('div');
     modal.style.cssText = `
@@ -1907,17 +1942,17 @@ function showAddUserModal(role) {
             <div>
                 <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Name</label>
                 <input type="text" id="new-user-name" required placeholder="Full name"
-                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
             </div>
             <div>
                 <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Email</label>
                 <input type="email" id="new-user-email" required placeholder="user@example.com"
-                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
             </div>
             <div>
                 <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Password</label>
                 <input type="password" id="new-user-password" required placeholder="Minimum 6 characters"
-                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
             </div>
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px;">
                 <button type="button" id="modal-cancel" style="
@@ -1925,7 +1960,7 @@ function showAddUserModal(role) {
                     border: 2px solid #d4d4d4;
                     background: white;
                     color: #2f2f2f;
-                    border-radius: 6px;
+                    border-radius: 8px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
@@ -1935,7 +1970,7 @@ function showAddUserModal(role) {
                     border: none;
                     background: ${buttonColor};
                     color: white;
-                    border-radius: 6px;
+                    border-radius: 8px;
                     cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
@@ -2051,7 +2086,7 @@ async function chatModuleChanged() {
         sendBtn.disabled = false;
 
         // Update status
-        document.getElementById('chat-status').innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span> Ready to chat';
+        document.getElementById('chat-status').innerHTML = '<span class="w-2 h-2 bg-terracotta-500 rounded-full"></span> Ready to chat';
 
         // Update active model badge
         const providerSelect = document.getElementById('chat-provider-select');
@@ -2188,18 +2223,18 @@ async function toggleMemoryPanel() {
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Memory Context for ${currentModuleData.title}</h3>
 
                 <div class="bg-sage-lightest rounded-lg p-4">
-                    <h4 class="font-bold text-sage-darkest mb-2">📝 Your Profile</h4>
+                    <h4 class="font-bold text-sage-darkest mb-2">Your Profile</h4>
                     <div class="text-sm text-gray-700">
                         <p><strong>Name:</strong> ${user.name}</p>
                         <p><strong>Email:</strong> ${user.email}</p>
                     </div>
                 </div>
 
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <h4 class="font-bold text-blue-900 mb-2">🧠 Memories (${memories.length})</h4>
+                <div class="bg-terracotta-50 rounded-lg p-4">
+                    <h4 class="font-bold text-terracotta-900 mb-2">Memories (${memories.length})</h4>
                     <div class="space-y-2 max-h-40 overflow-y-auto">
                         ${memories.length > 0 ? memories.map(m => `
-                            <div class="text-sm bg-white rounded p-2">
+                            <div class="text-sm bg-white rounded-lg p-2">
                                 <strong>${m.what_learned}</strong>
                                 <p class="text-gray-600 text-xs mt-1">${m.notes || 'No notes'}</p>
                             </div>
@@ -2207,11 +2242,11 @@ async function toggleMemoryPanel() {
                     </div>
                 </div>
 
-                <div class="bg-purple-50 rounded-lg p-4">
-                    <h4 class="font-bold text-purple-900 mb-2">💬 Conversations (${conversations.length})</h4>
+                <div class="bg-terracotta-50 rounded-lg p-4">
+                    <h4 class="font-bold text-terracotta-900 mb-2">Conversations (${conversations.length})</h4>
                     <div class="space-y-2 max-h-40 overflow-y-auto">
                         ${conversations.length > 0 ? conversations.slice(0, 5).map(c => `
-                            <div class="text-sm bg-white rounded p-2">
+                            <div class="text-sm bg-white rounded-lg p-2">
                                 <strong>${c.title || 'Untitled'}</strong>
                                 <p class="text-gray-600 text-xs">${new Date(c.created_at).toLocaleDateString()}</p>
                             </div>
@@ -2219,8 +2254,8 @@ async function toggleMemoryPanel() {
                     </div>
                 </div>
 
-                <div class="bg-green-50 rounded-lg p-4">
-                    <h4 class="font-bold text-green-900 mb-2">📚 Module Corpus (${moduleCorpus.entries ? moduleCorpus.entries.length : 0})</h4>
+                <div class="bg-terracotta-50 rounded-lg p-4">
+                    <h4 class="font-bold text-terracotta-900 mb-2">Module Corpus (${moduleCorpus.entries ? moduleCorpus.entries.length : 0})</h4>
                     <p class="text-sm text-gray-700">Knowledge base entries loaded for this module</p>
                 </div>
             </div>
@@ -2434,7 +2469,7 @@ function addChatMessage(role, content, isLoading = false) {
     messageDiv.className = `flex gap-3 mb-4 ${isUser ? 'justify-end' : 'justify-start'}`;
 
     const avatar = document.createElement('div');
-    avatar.className = `w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isUser ? 'bg-sage-medium order-2' : 'bg-blue-500'}`;
+    avatar.className = `w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${isUser ? 'bg-terracotta-500 order-2' : 'bg-sage-medium'}`;
     avatar.textContent = isUser ? 'U' : 'AI';
 
     const content_div = document.createElement('div');
@@ -2599,8 +2634,8 @@ async function loadConversations() {
                         <span>${date} ${time}</span>
                     </div>
                     <div class="flex gap-2 mt-2">
-                        ${conv.finalized ? '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Finalized</span>' : ''}
-                        ${conv.current_grade ? `<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Grade: ${conv.current_grade}</span>` : ''}
+                        ${conv.finalized ? '<span class="text-xs bg-terracotta-100 text-terracotta-800 px-2 py-1 rounded">Finalized</span>' : ''}
+                        ${conv.current_grade ? `<span class="text-xs bg-terracotta-100 text-terracotta-800 px-2 py-1 rounded">Grade: ${conv.current_grade}</span>` : ''}
                     </div>
                 </div>
             `;
@@ -2697,7 +2732,7 @@ async function loadConversationDetail(conversationId) {
                     <div><strong class="text-gray-700">Updated:</strong> <span class="text-gray-600">${updated}</span></div>
                 </div>
                 <div class="flex gap-2">
-                    ${conv.finalized ? '<span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Finalized</span>' : '<span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full">Active</span>'}
+                    ${conv.finalized ? '<span class="text-xs bg-terracotta-100 text-terracotta-800 px-3 py-1 rounded-full">Finalized</span>' : '<span class="text-xs bg-terracotta-100 text-terracotta-800 px-3 py-1 rounded-full">Active</span>'}
                     ${conv.current_grade ? `<span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">Grade: ${conv.current_grade}</span>` : ''}
                 </div>
             </div>
@@ -2711,7 +2746,7 @@ async function loadConversationDetail(conversationId) {
                 const isUser = msg.role === 'user';
                 const bgColor = isUser ? 'bg-sage-lightest' : 'bg-white border border-gray-200';
                 const roleName = isUser ? 'Student' : 'AI Tutor';
-                const roleColor = isUser ? 'text-sage-dark' : 'text-blue-600';
+                const roleColor = isUser ? 'text-sage-dark' : 'text-terracotta-600';
 
                 html += `
                     <div class="${bgColor} rounded-lg p-4">
@@ -2975,6 +3010,94 @@ function switchSection(sectionName) {
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================
+// NEW NAVIGATION SYSTEM
+// ============================================
+
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    const overlay = document.getElementById('menu-overlay');
+    const isOpen = menu.style.left === '0px';
+
+    if (isOpen) {
+        menu.style.left = '-320px';
+        overlay.style.display = 'none';
+    } else {
+        menu.style.left = '0px';
+        overlay.style.display = 'block';
+    }
+}
+
+function buildNavigationMenu() {
+    const menuItems = document.getElementById('menu-items');
+
+    if (!currentUser) {
+        menuItems.innerHTML = '<p style="padding: 20px; color: rgba(255,255,255,0.8);">Loading...</p>';
+        return;
+    }
+
+    const isAdmin = currentUser.is_admin;
+
+    let menuHTML = '';
+
+    if (isAdmin) {
+        // Admin menu
+        menuHTML = `
+            <button class="menu-nav-item" onclick="navigateTo('admin-dashboard')">
+                <i data-lucide="layout-dashboard" style="width: 20px; height: 20px;"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('classes')">
+                <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
+                <span>Classes & Modules</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('conversations')">
+                <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                <span>Student Activity</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('memory')">
+                <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
+                <span>Memory Inspector</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('chat')">
+                <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
+                <span>Test Chat</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('system')">
+                <i data-lucide="settings" style="width: 20px; height: 20px;"></i>
+                <span>System Settings</span>
+            </button>
+        `;
+    } else {
+        // Student menu - simplified
+        menuHTML = `
+            <button class="menu-nav-item" onclick="navigateTo('student-dashboard')">
+                <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                <span>My Classes</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('chat')">
+                <i data-lucide="graduation-cap" style="width: 20px; height: 20px;"></i>
+                <span>Study</span>
+            </button>
+        `;
+    }
+
+    menuItems.innerHTML = menuHTML;
+
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+function navigateTo(sectionName) {
+    // Close menu
+    toggleMenu();
+
+    // Load section
+    switchSection(sectionName);
 }
 
 // Handle menu clicks
@@ -4405,7 +4528,7 @@ function loadMemoryAssemblyFlow() {
             </div>
 
             <div style="margin-top: 20px; text-align: center;">
-                <button onclick="viewAssembledPrompt()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600;">
+                <button onclick="viewAssembledPrompt()" style="background: var(--sage-dark); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600;">
                     View Sample Assembled Prompt
                 </button>
             </div>

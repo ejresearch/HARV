@@ -30,17 +30,17 @@ const NotificationSystem = {
         notification.className = `notification notification-${type}`;
 
         const icons = {
-            success: '✓',
-            error: '✕',
-            warning: '⚠',
-            info: 'ℹ'
+            success: 'check-circle',
+            error: 'x-circle',
+            warning: 'alert-triangle',
+            info: 'info'
         };
 
         const colors = {
-            success: '#10b981',
-            error: '#ef4444',
-            warning: '#f59e0b',
-            info: '#3b82f6'
+            success: '#9CAA5A',
+            error: '#C07047',
+            warning: '#D4A574',
+            info: '#9CAA5A'
         };
 
         notification.style.cssText = `
@@ -72,7 +72,7 @@ const NotificationSystem = {
                 justify-content: center;
                 font-weight: bold;
                 flex-shrink: 0;
-            ">${icons[type]}</div>
+            "><i data-lucide="${icons[type]}" style="width: 14px; height: 14px;"></i></div>
             <div style="flex: 1; font-size: 14px; line-height: 1.5;">${message}</div>
             <button onclick="this.parentElement.remove()" style="
                 background: none;
@@ -87,6 +87,11 @@ const NotificationSystem = {
         `;
 
         this.container.appendChild(notification);
+
+        // Initialize Lucide icons for this notification
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
         // Auto-remove after duration
         if (duration > 0) {
@@ -288,7 +293,7 @@ const ModalSystem = {
                 <button id="modal-submit" style="
                     padding: 10px 20px;
                     border: none;
-                    background: #10B981;
+                    background: #9CAA5A;
                     color: white;
                     border-radius: 6px;
                     cursor: pointer;
@@ -297,7 +302,7 @@ const ModalSystem = {
                     transition: all 0.2s;
                 "
                 onmouseover="this.style.background='#059669'"
-                onmouseout="this.style.background='#10B981'">Submit</button>
+                onmouseout="this.style.background='#9CAA5A'">Submit</button>
             </div>
         `;
 
@@ -337,7 +342,7 @@ const ModalSystem = {
                 width: 40px;
                 height: 40px;
                 border: 4px solid #ECFDF5;
-                border-top-color: #10B981;
+                border-top-color: #9CAA5A;
                 border-radius: 50%;
                 animation: spin 1s linear infinite;
                 margin: 0 auto 16px;

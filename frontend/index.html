@@ -18,31 +18,48 @@
                     },
                     colors: {
                         sage: {
-                            lightest: '#ECFDF5',
-                            lighter: '#6EE7B7',
-                            light: '#10B981',
-                            medium: '#10B981',
-                            dark: '#059669',
-                            darkest: '#10B981',
+                            lightest: '#E8E5D3',
+                            lighter: '#B5C080',
+                            light: '#9CAA5A',
+                            medium: '#9CAA5A',
+                            dark: '#88954D',
+                            darkest: '#514B35',
+                        },
+                        terracotta: {
+                            50: '#FDF6F3',
+                            100: '#F9EBE5',
+                            200: '#E5B99E',
+                            300: '#D89A76',
+                            400: '#CC8458',
+                            500: '#C07047',
+                            600: '#A85D38',
+                            700: '#8F4F30',
+                            800: '#75412A',
+                            900: '#5C3422',
+                            light: '#E5B99E',
+                            DEFAULT: '#C07047',
+                            dark: '#A85D38',
                         }
                     }
                 }
             }
         }
     </script>
-    <link rel="stylesheet" href="css/styles.css?v=15">
+    <link rel="stylesheet" href="css/styles.css?v=17">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <!-- Authentication Overlay -->
-    <div id="auth-overlay" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #ECFDF5 0%, #10B981 100%); z-index: 10000; align-items: center; justify-content: center;">
+    <div id="auth-overlay" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #E8E5D3 0%, #9CAA5A 100%); z-index: 10000; align-items: center; justify-content: center;">
         <div style="background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); padding: 40px; max-width: 450px; width: 90%;">
             <!-- Login Form -->
             <div id="auth-login-card">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 style="font-size: 36px; font-weight: 800; color: #10B981; margin: 0;">HARV</h1>
-                    <p style="color: #6b7280; margin-top: 8px;">Learning Platform</p>
+                    <h1 style="font-size: 36px; font-weight: 800; color: #9CAA5A; margin: 0;">HARV</h1>
+                    <p style="color: #514B35; margin-top: 8px;">Learning Platform</p>
                 </div>
                 <h3 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 24px;">Welcome Back</h3>
                 <form id="auth-login-form" onsubmit="handleAuthLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
@@ -56,16 +73,16 @@
                         <input type="password" id="auth-login-password" required placeholder="********"
                             style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
                     </div>
-                    <button type="submit" style="width: 100%; background: #10B981; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Login</button>
-                    <button type="button" onclick="showAuthRegister()" style="width: 100%; background: transparent; color: #10B981; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Don't have an account? Sign up</button>
+                    <button type="submit" style="width: 100%; background: #9CAA5A; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Login</button>
+                    <button type="button" onclick="showAuthRegister()" style="width: 100%; background: transparent; color: #9CAA5A; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Don't have an account? Sign up</button>
                 </form>
             </div>
 
             <!-- Register Form -->
             <div id="auth-register-card" style="display: none;">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 style="font-size: 36px; font-weight: 800; color: #10B981; margin: 0;">HARV</h1>
-                    <p style="color: #6b7280; margin-top: 8px;">Learning Platform</p>
+                    <h1 style="font-size: 36px; font-weight: 800; color: #9CAA5A; margin: 0;">HARV</h1>
+                    <p style="color: #514B35; margin-top: 8px;">Learning Platform</p>
                 </div>
                 <h3 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 24px;">Create Account</h3>
                 <form id="auth-register-form" onsubmit="handleAuthRegister(event)" style="display: flex; flex-direction: column; gap: 16px;">
@@ -105,72 +122,54 @@
                                 style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box; resize: none;"></textarea>
                         </div>
                     </div>
-                    <button type="submit" style="width: 100%; background: #10B981; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Create Account</button>
-                    <button type="button" onclick="showAuthLogin()" style="width: 100%; background: transparent; color: #10B981; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Already have an account? Log in</button>
+                    <button type="submit" style="width: 100%; background: #9CAA5A; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Create Account</button>
+                    <button type="button" onclick="showAuthLogin()" style="width: 100%; background: transparent; color: #9CAA5A; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Already have an account? Log in</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="container" id="main-app" style="display: none;">
-        <!-- Left Sidebar Menu -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h1>HARV</h1>
-                <p class="subtitle">Learning Platform</p>
+    <!-- New Main App Layout -->
+    <div id="main-app" style="display: none;">
+        <!-- Top Navigation Bar -->
+        <header style="position: fixed; top: 0; left: 0; right: 0; height: 64px; background: white; border-bottom: 1px solid #C9C4B6; display: flex; align-items: center; padding: 0 24px; z-index: 1000; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <button id="hamburger-btn" onclick="toggleMenu()" style="background: none; border: none; cursor: pointer; padding: 8px; color: #9CAA5A; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
+                </button>
+                <h1 style="font-size: 28px; font-weight: 800; color: #9CAA5A; margin: 0;">HARV</h1>
             </div>
-
-            <nav class="menu">
-                <button class="menu-item active" data-section="admin-dashboard">
-                    <span class="label">Admin Dashboard</span>
-                </button>
-
-                <button class="menu-item" data-section="student-dashboard">
-                    <span class="label">Student Dashboard</span>
-                </button>
-
-                <button class="menu-item" data-section="system">
-                    <span class="label">System</span>
-                </button>
-
-                <button class="menu-item" data-section="auth">
-                    <span class="label">Authentication</span>
-                </button>
-
-                <button class="menu-item" data-section="classes">
-                    <span class="label">Classes</span>
-                </button>
-
-                <button class="menu-item" data-section="conversations">
-                    <span class="label">Conversations</span>
-                </button>
-
-                <button class="menu-item" data-section="chat">
-                    <span class="label">Chat Interface</span>
-                </button>
-
-                <button class="menu-item" data-section="memory">
-                    <span class="label">Memory Inspector</span>
-                </button>
-            </nav>
-
-            <div style="margin-top: auto; padding: 16px;">
-                <button onclick="handleAppLogout()" style="width: 100%; background: #EF4444; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span id="user-name" style="font-size: 14px; font-weight: 600; color: #514B35;"></span>
+                <button onclick="handleAppLogout()" style="background: #C07047; color: white; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
                     Logout
                 </button>
             </div>
-        </aside>
+        </header>
 
-        <!-- Main Canvas -->
-        <main class="canvas">
-            <div id="content">
+        <!-- Slide-out Navigation Menu -->
+        <nav id="nav-menu" style="position: fixed; top: 0; left: -320px; width: 320px; height: 100vh; background: #9CAA5A; color: white; z-index: 2000; transition: left 0.3s ease; box-shadow: 4px 0 8px rgba(0,0,0,0.1); overflow-y: auto;">
+            <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h2 style="font-size: 24px; font-weight: 800; margin: 0; color: white;">Menu</h2>
+            </div>
+            <div id="menu-items" style="padding: 16px 0;">
+                <!-- Menu items will be dynamically loaded -->
+            </div>
+        </nav>
+
+        <!-- Menu Overlay (click to close) -->
+        <div id="menu-overlay" onclick="toggleMenu()" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1500; display: none;"></div>
+
+        <!-- Main Content Area -->
+        <main style="margin-top: 64px; min-height: calc(100vh - 64px); background: #E3DEC9;">
+            <div id="content" style="padding: 32px; max-width: 1400px; margin: 0 auto;">
                 <!-- Content will be dynamically loaded here -->
             </div>
         </main>
     </div>
 
     <script src="js/notifications.js?v=3"></script>
-    <script src="js/app.js?v=53"></script>
-    <script src="js/classes.js?v=11"></script>
+    <script src="js/app.js?v=63"></script>
+    <script src="js/classes.js?v=12"></script>
 </body>
 </html>
