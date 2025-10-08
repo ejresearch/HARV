@@ -39,7 +39,7 @@ class ChatRequest(BaseModel):
     module_id: int
     message: str
     conversation_id: Optional[str] = None
-    provider: Optional[str] = "openai-gpt4"  # Default to GPT-4
+    provider: Optional[str] = "openai-gpt5"  # Default to GPT-5
 
 class ChatResponse(BaseModel):
     reply: str
@@ -339,9 +339,9 @@ async def list_providers():
         return {
             "providers": [
                 {
-                    "id": "openai-gpt4",
-                    "name": "OpenAI GPT-4",
-                    "model": "gpt-4",
+                    "id": "openai-gpt5",
+                    "name": "OpenAI GPT-5",
+                    "model": "gpt-5",
                     "available": bool(os.getenv("OPENAI_API_KEY")),
                     "error": None if os.getenv("OPENAI_API_KEY") else "OPENAI_API_KEY not configured"
                 }

@@ -35,7 +35,84 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <!-- Authentication Overlay -->
+    <div id="auth-overlay" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #ECFDF5 0%, #10B981 100%); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); padding: 40px; max-width: 450px; width: 90%;">
+            <!-- Login Form -->
+            <div id="auth-login-card">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 36px; font-weight: 800; color: #10B981; margin: 0;">HARV</h1>
+                    <p style="color: #6b7280; margin-top: 8px;">Learning Platform</p>
+                </div>
+                <h3 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 24px;">Welcome Back</h3>
+                <form id="auth-login-form" onsubmit="handleAuthLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Email</label>
+                        <input type="email" id="auth-login-email" required placeholder="user@example.com"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Password</label>
+                        <input type="password" id="auth-login-password" required placeholder="********"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+                    <button type="submit" style="width: 100%; background: #10B981; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Login</button>
+                    <button type="button" onclick="showAuthRegister()" style="width: 100%; background: transparent; color: #10B981; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Don't have an account? Sign up</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="auth-register-card" style="display: none;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 36px; font-weight: 800; color: #10B981; margin: 0;">HARV</h1>
+                    <p style="color: #6b7280; margin-top: 8px;">Learning Platform</p>
+                </div>
+                <h3 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 24px;">Create Account</h3>
+                <form id="auth-register-form" onsubmit="handleAuthRegister(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">I am a</label>
+                        <select id="auth-register-role" required onchange="toggleAuthStudentFields()"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                            <option value="">Select...</option>
+                            <option value="student">Student</option>
+                            <option value="admin">Teacher/Admin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Name</label>
+                        <input type="text" id="auth-register-name" required placeholder="John Doe"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Email</label>
+                        <input type="email" id="auth-register-email" required placeholder="user@example.com"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Password</label>
+                        <input type="password" id="auth-register-password" required placeholder="Min 8 characters"
+                            style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                    </div>
+                    <div id="auth-student-fields" style="display: none;">
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">Age / Grade Level</label>
+                            <input type="text" id="auth-register-age-grade" placeholder="e.g., 10th grade"
+                                style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box;" />
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;">How do you learn best?</label>
+                            <textarea id="auth-register-learning-notes" rows="3" placeholder="Optional: Tell us about your learning style"
+                                style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box; resize: none;"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" style="width: 100%; background: #10B981; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Create Account</button>
+                    <button type="button" onclick="showAuthLogin()" style="width: 100%; background: transparent; color: #10B981; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">Already have an account? Log in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-app" style="display: none;">
         <!-- Left Sidebar Menu -->
         <aside class="sidebar">
             <div class="logo">
@@ -76,6 +153,12 @@
                     <span class="label">Memory Inspector</span>
                 </button>
             </nav>
+
+            <div style="margin-top: auto; padding: 16px;">
+                <button onclick="handleAppLogout()" style="width: 100%; background: #EF4444; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+                    Logout
+                </button>
+            </div>
         </aside>
 
         <!-- Main Canvas -->
@@ -87,7 +170,7 @@
     </div>
 
     <script src="js/notifications.js?v=3"></script>
-    <script src="js/app.js?v=50"></script>
+    <script src="js/app.js?v=53"></script>
     <script src="js/classes.js?v=11"></script>
 </body>
 </html>

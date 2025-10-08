@@ -22,9 +22,9 @@ class AIProvider:
 
 
 class OpenAIProvider(AIProvider):
-    """OpenAI GPT-4 / GPT-3.5 Provider"""
+    """OpenAI GPT-5 / o3 / o4 Provider"""
 
-    def __init__(self, model: str = "gpt-4"):
+    def __init__(self, model: str = "gpt-5"):
         super().__init__()
         self.model = model
         api_key = os.getenv("OPENAI_API_KEY")
@@ -60,7 +60,7 @@ class OpenAIProvider(AIProvider):
 class ClaudeProvider(AIProvider):
     """Anthropic Claude Provider"""
 
-    def __init__(self, model: str = "claude-3-5-sonnet-20241022"):
+    def __init__(self, model: str = "claude-opus-4-1"):
         super().__init__()
         self.model = model
         api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -92,7 +92,7 @@ class ClaudeProvider(AIProvider):
 class GeminiProvider(AIProvider):
     """Google Gemini Provider"""
 
-    def __init__(self, model: str = "gemini-1.5-flash"):
+    def __init__(self, model: str = "gemini-2.5-pro"):
         super().__init__()
         self.model = model
         api_key = os.getenv("GOOGLE_API_KEY")
@@ -181,19 +181,91 @@ class GrokProvider(AIProvider):
         return response.choices[0].message.content
 
 
+class PerplexityProvider(AIProvider):
+    """Perplexity AI Provider (OpenAI-compatible API)"""
+
+    def __init__(self, model: str = "sonar"):
+        super().__init__()
+        self.model = model
+        api_key = os.getenv("PERPLEXITY_API_KEY")
+
+        if api_key and not api_key.startswith("your-"):
+            try:
+                # Perplexity uses OpenAI-compatible API
+                self.client = OpenAI(
+                    api_key=api_key,
+                    base_url="https://api.perplexity.ai"
+                )
+                self.available = True
+            except Exception as e:
+                self.error = str(e)
+        else:
+            self.error = "PERPLEXITY_API_KEY not configured"
+
+    def chat(self, messages: List[Dict], system_prompt: str = "") -> str:
+        if not self.available:
+            raise Exception(f"Perplexity not available: {self.error}")
+
+        # Format messages for Perplexity (OpenAI-compatible)
+        perplexity_messages = []
+        if system_prompt:
+            perplexity_messages.append({"role": "system", "content": system_prompt})
+
+        perplexity_messages.extend(messages)
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=perplexity_messages
+        )
+
+        return response.choices[0].message.content
+
+
 class AIProviderManager:
     """Manages multiple AI providers"""
 
     PROVIDERS = {
-        "openai-gpt4": {"class": OpenAIProvider, "model": "gpt-4", "name": "OpenAI GPT-4"},
-        "openai-gpt4-turbo": {"class": OpenAIProvider, "model": "gpt-4-turbo", "name": "OpenAI GPT-4 Turbo"},
-        "openai-gpt35": {"class": OpenAIProvider, "model": "gpt-3.5-turbo", "name": "OpenAI GPT-3.5"},
-        "claude-sonnet": {"class": ClaudeProvider, "model": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet"},
-        "claude-opus": {"class": ClaudeProvider, "model": "claude-3-opus-20240229", "name": "Claude 3 Opus"},
-        "claude-haiku": {"class": ClaudeProvider, "model": "claude-3-haiku-20240307", "name": "Claude 3 Haiku"},
-        "gemini-flash": {"class": GeminiProvider, "model": "gemini-1.5-flash", "name": "Gemini 1.5 Flash"},
-        "gemini-pro": {"class": GeminiProvider, "model": "gemini-1.5-pro-latest", "name": "Gemini 1.5 Pro"},
-        "grok": {"class": GrokProvider, "model": "grok-3", "name": "xAI Grok 3"},
+        # OpenAI GPT-5 Series
+        "openai-gpt5": {"class": OpenAIProvider, "model": "gpt-5", "name": "OpenAI GPT-5"},
+        "openai-gpt5-mini": {"class": OpenAIProvider, "model": "gpt-5-mini", "name": "OpenAI GPT-5 Mini"},
+        "openai-gpt5-nano": {"class": OpenAIProvider, "model": "gpt-5-nano", "name": "OpenAI GPT-5 Nano"},
+        "openai-gpt5-chat": {"class": OpenAIProvider, "model": "gpt-5-chat", "name": "OpenAI GPT-5 Chat"},
+
+        # OpenAI o3/o4 Reasoning Models
+        "openai-o3": {"class": OpenAIProvider, "model": "o3", "name": "OpenAI o3 (Thinking)"},
+        "openai-o4-mini": {"class": OpenAIProvider, "model": "o4-mini", "name": "OpenAI o4 Mini"},
+
+        # OpenAI Multimodal & Open-Weight
+        "openai-gpt-image-1": {"class": OpenAIProvider, "model": "gpt-image-1", "name": "OpenAI GPT-Image-1 (Multimodal)"},
+        "openai-oss-120b": {"class": OpenAIProvider, "model": "gpt-oss-120b", "name": "OpenAI OSS 120B (Open-Weight)"},
+        "openai-oss-20b": {"class": OpenAIProvider, "model": "gpt-oss-20b", "name": "OpenAI OSS 20B (Open-Weight)"},
+
+        # Claude Opus 4 Series
+        "claude-opus-4.1": {"class": ClaudeProvider, "model": "claude-opus-4-1", "name": "Claude Opus 4.1"},
+        "claude-opus-4": {"class": ClaudeProvider, "model": "claude-opus-4", "name": "Claude Opus 4"},
+
+        # Claude Sonnet 4 Series
+        "claude-sonnet-4": {"class": ClaudeProvider, "model": "claude-sonnet-4", "name": "Claude Sonnet 4"},
+        "claude-sonnet-3.7": {"class": ClaudeProvider, "model": "claude-sonnet-3-7", "name": "Claude Sonnet 3.7"},
+        "claude-sonnet-3.5-v2": {"class": ClaudeProvider, "model": "claude-3-5-sonnet-v2", "name": "Claude Sonnet 3.5 (v2)"},
+
+        # Claude Haiku
+        "claude-haiku": {"class": ClaudeProvider, "model": "claude-3-5-haiku-20241022", "name": "Claude Haiku"},
+
+        # xAI Grok 3
+        "grok-3": {"class": GrokProvider, "model": "grok-3", "name": "xAI Grok 3"},
+        "grok-3-mini": {"class": GrokProvider, "model": "grok-3-mini", "name": "xAI Grok 3 Mini"},
+
+        # Google Gemini 2.5
+        "gemini-2.5-pro": {"class": GeminiProvider, "model": "gemini-2.5-pro", "name": "Gemini 2.5 Pro"},
+        "gemini-1.5-flash": {"class": GeminiProvider, "model": "gemini-1.5-flash", "name": "Gemini 1.5 Flash"},
+        "gemini-1.5-pro": {"class": GeminiProvider, "model": "gemini-1.5-pro", "name": "Gemini 1.5 Pro"},
+
+        # Perplexity AI
+        "perplexity-sonar": {"class": PerplexityProvider, "model": "sonar", "name": "Perplexity Sonar"},
+        "perplexity-sonar-pro": {"class": PerplexityProvider, "model": "sonar-pro", "name": "Perplexity Sonar Pro"},
+        "perplexity-sonar-reasoning": {"class": PerplexityProvider, "model": "sonar-reasoning", "name": "Perplexity Sonar Reasoning"},
+        "perplexity-sonar-chat": {"class": PerplexityProvider, "model": "sonar-chat", "name": "Perplexity Sonar Chat"},
     }
 
     @classmethod

@@ -433,7 +433,7 @@ const sections = {
                             <label class="block text-sm font-medium mb-1 text-sage-lightest">AI Model</label>
                             <select id="chat-provider-select"
                                 class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
-                                <option value="openai-gpt4">GPT-4 (OpenAI)</option>
+                                <option value="openai-gpt5">GPT-5 (OpenAI)</option>
                             </select>
                         </div>
                     </div>
@@ -784,11 +784,181 @@ function loadSection(sectionName) {
 // Authentication Functions
 let currentUser = null;
 let authToken = null;
+let isAuthenticated = false;
 
 // Helper function to get auth headers
 function getAuthHeaders() {
     const token = localStorage.getItem('access_token') || authToken;
     return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+// Initialize app - check for existing authentication
+async function initializeApp() {
+    const storedToken = localStorage.getItem('access_token');
+
+    if (storedToken) {
+        // Try to validate the token and get user info
+        try {
+            const response = await fetch(`${API_BASE}/users/me`, {
+                headers: { 'Authorization': `Bearer ${storedToken}` }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                currentUser = user;
+                authToken = storedToken;
+                isAuthenticated = true;
+
+                // Hide auth overlay, show main app
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+
+                // Navigate to appropriate dashboard
+                const targetSection = user.is_admin ? 'admin-dashboard' : 'student-dashboard';
+                switchSection(targetSection);
+
+                // Set active menu item
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.section === targetSection) {
+                        item.classList.add('active');
+                    }
+                });
+
+                return;
+            }
+        } catch (error) {
+            console.log('Token validation failed:', error);
+        }
+
+        // If token validation failed, clear it
+        localStorage.removeItem('access_token');
+    }
+
+    // Show auth overlay if not authenticated
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+}
+
+// Auth overlay functions
+function showAuthLogin() {
+    document.getElementById('auth-login-card').style.display = 'block';
+    document.getElementById('auth-register-card').style.display = 'none';
+    document.getElementById('auth-register-form').reset();
+}
+
+function showAuthRegister() {
+    document.getElementById('auth-login-card').style.display = 'none';
+    document.getElementById('auth-register-card').style.display = 'block';
+    document.getElementById('auth-login-form').reset();
+}
+
+function toggleAuthStudentFields() {
+    const role = document.getElementById('auth-register-role').value;
+    const studentFields = document.getElementById('auth-student-fields');
+    studentFields.style.display = role === 'student' ? 'block' : 'none';
+}
+
+async function handleAuthLogin(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('auth-login-email').value;
+    const password = document.getElementById('auth-login-password').value;
+
+    try {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            currentUser = data.user;
+            authToken = data.access_token;
+            isAuthenticated = true;
+            localStorage.setItem('access_token', data.access_token);
+
+            // Hide auth overlay, show main app
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+
+            // Navigate to appropriate dashboard
+            const targetSection = data.user.is_admin ? 'admin-dashboard' : 'student-dashboard';
+            switchSection(targetSection);
+
+            // Set active menu item
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === targetSection) {
+                    item.classList.add('active');
+                }
+            });
+
+            NotificationSystem.success(`Welcome back, ${data.user.name}!`);
+            document.getElementById('auth-login-form').reset();
+        } else {
+            NotificationSystem.error(data.detail || 'Login failed');
+        }
+    } catch (error) {
+        NotificationSystem.error('Login error: ' + error.message);
+    }
+}
+
+async function handleAuthRegister(event) {
+    event.preventDefault();
+
+    const role = document.getElementById('auth-register-role').value;
+    const name = document.getElementById('auth-register-name').value;
+    const email = document.getElementById('auth-register-email').value;
+    const password = document.getElementById('auth-register-password').value;
+    const ageGrade = document.getElementById('auth-register-age-grade').value;
+    const learningNotes = document.getElementById('auth-register-learning-notes').value;
+
+    try {
+        const response = await fetch(`${API_BASE}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email,
+                password,
+                name,
+                role,
+                age_grade_level: ageGrade,
+                learning_notes: learningNotes
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            NotificationSystem.success('Account created! Please log in.');
+            showAuthLogin();
+            // Pre-fill email for convenience
+            document.getElementById('auth-login-email').value = email;
+        } else {
+            NotificationSystem.error(data.detail || 'Registration failed');
+        }
+    } catch (error) {
+        NotificationSystem.error('Registration error: ' + error.message);
+    }
+}
+
+function handleAppLogout() {
+    currentUser = null;
+    authToken = null;
+    isAuthenticated = false;
+    localStorage.removeItem('access_token');
+
+    // Show auth overlay, hide main app
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+
+    // Reset to login screen
+    showAuthLogin();
+
+    NotificationSystem.info('Logged out successfully');
 }
 
 // Auto-login for testing (remove in production)
@@ -2812,7 +2982,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuItems = document.querySelectorAll('.menu-item');
 
     menuItems.forEach(item => {
-        item.addEventListener('click', async () => {
+        item.addEventListener('click', () => {
             // Remove active class from all items
             menuItems.forEach(i => i.classList.remove('active'));
 
@@ -2821,14 +2991,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Load the section
             const section = item.dataset.section;
-
-            // Auto-login based on section
-            if (section === 'student-dashboard') {
-                await autoLoginForTesting('student');
-            } else if (section === 'admin-dashboard') {
-                await autoLoginForTesting('admin');
-            }
-
             loadSection(section);
 
             // Load data when section is opened
@@ -2860,11 +3022,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Load default section (admin-dashboard)
-    loadSection('admin-dashboard');
-
-    // Auto-login for testing
-    autoLoginForTesting();
+    // Initialize app - check authentication and show appropriate screen
+    initializeApp();
 });
 
 // ===== CORPUS FUNCTIONS =====

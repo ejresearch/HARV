@@ -638,26 +638,32 @@ def get_api_keys():
         "openai": {
             "name": "OpenAI",
             "env_var": "OPENAI_API_KEY",
-            "description": "GPT-4 and GPT-3.5 models",
+            "description": "GPT-5, o3, o4, and other OpenAI models",
             "key": mask_api_key(os.getenv("OPENAI_API_KEY", ""))
         },
         "anthropic": {
             "name": "Anthropic",
             "env_var": "ANTHROPIC_API_KEY",
-            "description": "Claude 3.5 Sonnet and other Claude models",
+            "description": "Claude Opus 4.1, Sonnet 4, and other Claude models",
             "key": mask_api_key(os.getenv("ANTHROPIC_API_KEY", ""))
         },
         "google": {
             "name": "Google",
             "env_var": "GOOGLE_API_KEY",
-            "description": "Gemini 1.5 Flash and Pro models",
+            "description": "Gemini 2.5 Pro and other Gemini models",
             "key": mask_api_key(os.getenv("GOOGLE_API_KEY", ""))
         },
         "xai": {
             "name": "xAI",
             "env_var": "XAI_API_KEY",
-            "description": "Grok-3 and other xAI models",
+            "description": "Grok 3 and other xAI models",
             "key": mask_api_key(os.getenv("XAI_API_KEY", ""))
+        },
+        "perplexity": {
+            "name": "Perplexity AI",
+            "env_var": "PERPLEXITY_API_KEY",
+            "description": "Sonar, Sonar Pro, and other Perplexity models",
+            "key": mask_api_key(os.getenv("PERPLEXITY_API_KEY", ""))
         }
     }
     return providers
@@ -673,7 +679,8 @@ def update_api_key(update: ApiKeyUpdate):
         "openai": "OPENAI_API_KEY",
         "anthropic": "ANTHROPIC_API_KEY",
         "google": "GOOGLE_API_KEY",
-        "xai": "XAI_API_KEY"
+        "xai": "XAI_API_KEY",
+        "perplexity": "PERPLEXITY_API_KEY"
     }
 
     if update.provider not in provider_map:
