@@ -1242,14 +1242,4 @@ function uploadModuleDocument() {
     input.click();
 }
 
-// Initialize when classes section loads
-document.addEventListener('DOMContentLoaded', () => {
-    // Hook into section loading
-    const originalLoadSection = window.loadSection;
-    window.loadSection = function(section) {
-        originalLoadSection?.call(this, section);
-        if (section === 'classes') {
-            setTimeout(loadClassesSection, 100);
-        }
-    };
-});
+// Classes section initialization is handled by app.js loadSection() function

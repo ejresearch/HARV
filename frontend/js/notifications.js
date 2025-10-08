@@ -346,6 +346,48 @@ const ModalSystem = {
         `;
 
         this.open(modal);
+    },
+
+    custom(title, htmlContent) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        `;
+
+        modal.innerHTML = `
+            <div style="
+                padding: 20px 24px;
+                border-bottom: 2px solid #e5e7eb;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-shrink: 0;
+            ">
+                <h3 style="margin: 0; color: #1f1f1f; font-size: 20px; font-weight: 700;">${title}</h3>
+                <button onclick="ModalSystem.close()" style="
+                    background: none;
+                    border: none;
+                    color: #9ca3af;
+                    cursor: pointer;
+                    padding: 4px;
+                    font-size: 24px;
+                    line-height: 1;
+                ">×</button>
+            </div>
+            <div style="overflow-y: auto; flex: 1;">
+                ${htmlContent}
+            </div>
+        `;
+
+        this.open(modal);
     }
 };
 

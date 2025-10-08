@@ -625,6 +625,113 @@ def system_status(db: Session = Depends(get_db)):
         }
     }
 
+def mask_api_key(key: str) -> str:
+    """Mask API key for display (show first 8 and last 4 characters)"""
+    if not key or len(key) < 12:
+        return ""
+    return f"{key[:8]}...{key[-4:]}"
+
+@app.get("/system/api-keys")
+def get_api_keys():
+    """Get all API keys (masked for security)"""
+    providers = {
+        "openai": {
+            "name": "OpenAI",
+            "env_var": "OPENAI_API_KEY",
+            "description": "GPT-4 and GPT-3.5 models",
+            "key": mask_api_key(os.getenv("OPENAI_API_KEY", ""))
+        },
+        "anthropic": {
+            "name": "Anthropic",
+            "env_var": "ANTHROPIC_API_KEY",
+            "description": "Claude 3.5 Sonnet and other Claude models",
+            "key": mask_api_key(os.getenv("ANTHROPIC_API_KEY", ""))
+        },
+        "google": {
+            "name": "Google",
+            "env_var": "GOOGLE_API_KEY",
+            "description": "Gemini 1.5 Flash and Pro models",
+            "key": mask_api_key(os.getenv("GOOGLE_API_KEY", ""))
+        },
+        "xai": {
+            "name": "xAI",
+            "env_var": "XAI_API_KEY",
+            "description": "Grok-3 and other xAI models",
+            "key": mask_api_key(os.getenv("XAI_API_KEY", ""))
+        }
+    }
+    return providers
+
+class ApiKeyUpdate(BaseModel):
+    provider: str
+    api_key: str
+
+@app.post("/system/api-keys")
+def update_api_key(update: ApiKeyUpdate):
+    """Update an API key in the .env file"""
+    provider_map = {
+        "openai": "OPENAI_API_KEY",
+        "anthropic": "ANTHROPIC_API_KEY",
+        "google": "GOOGLE_API_KEY",
+        "xai": "XAI_API_KEY"
+    }
+
+    if update.provider not in provider_map:
+        raise HTTPException(status_code=400, detail="Invalid provider")
+
+    env_var = provider_map[update.provider]
+    env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+
+    try:
+        # Read .env file
+        with open(env_path, 'r') as f:
+            lines = f.readlines()
+
+        # Update or add the key
+        key_found = False
+        for i, line in enumerate(lines):
+            if line.startswith(f"{env_var}="):
+                lines[i] = f"{env_var}={update.api_key}\n"
+                key_found = True
+                break
+
+        if not key_found:
+            lines.append(f"{env_var}={update.api_key}\n")
+
+        # Write back to .env file
+        with open(env_path, 'w') as f:
+            f.writelines(lines)
+
+        # Update environment variable for current process
+        os.environ[env_var] = update.api_key
+
+        return {
+            "success": True,
+            "message": f"{provider_map[update.provider]} updated successfully",
+            "masked_key": mask_api_key(update.api_key)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update API key: {str(e)}")
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    """Delete a user and all related data (admin only in production)"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Delete related records
+    db.query(OnboardingSurvey).filter(OnboardingSurvey.user_id == user_id).delete()
+    db.query(UserProgress).filter(UserProgress.user_id == user_id).delete()
+    db.query(MemorySummary).filter(MemorySummary.user_id == user_id).delete()
+    db.query(Conversation).filter(Conversation.user_id == user_id).delete()
+
+    # Delete user
+    db.delete(user)
+    db.commit()
+
+    return {"success": True, "message": f"User {user.name} deleted successfully"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

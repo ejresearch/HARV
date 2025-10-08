@@ -37,31 +37,62 @@ const sections = {
                     </button>
                 </div>
 
-                <!-- Student Management Section -->
-                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300">
-                    <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <!-- Administrators Section -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-4 bg-purple-50 border-b-2 border-purple-200 flex justify-between items-center">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900">Student Management</h3>
-                            <p class="text-sm text-gray-600 mt-1">View and manage all registered students</p>
+                            <h3 class="text-lg font-bold text-purple-900">Administrators</h3>
+                            <p class="text-sm text-purple-700 mt-1">System administrators with full access</p>
                         </div>
-                        <button onclick="showAddStudentModal()" class="bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium">
+                        <button onclick="showAddUserModal('admin')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            + Add Admin
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Classes Created</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Modules Created</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="admin-admins-table">
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading administrators...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Student Management Section -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
+                    <div class="p-4 bg-blue-50 border-b-2 border-blue-200 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-blue-900">Student Management</h3>
+                            <p class="text-sm text-blue-700 mt-1">View and manage all registered students</p>
+                        </div>
+                        <button onclick="showAddUserModal('student')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                             + Add Student
                         </button>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead class="bg-gray-100 border-b-2 border-gray-300">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Classes</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Progress</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase">Actions</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Learning Profile</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Progress</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200" id="admin-students-table">
+                            <tbody class="bg-white divide-y divide-gray-200" id="admin-students-table">
                                 <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">Loading students...</td>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading students...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -103,87 +134,48 @@ const sections = {
         `
     },
     system: {
-        title: 'System',
-        description: 'Check if server is running and healthy',
-        content: `
-            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Root Endpoint</h3>
-                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /</p>
-                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testRootEndpoint()">Test Endpoint</button>
-                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="root-result">Click test to run...</pre>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Health Check</h3>
-                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /health</p>
-                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testHealthEndpoint()">Test Endpoint</button>
-                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="health-result">Click test to run...</pre>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">System Status</h3>
-                    <p class="text-sm font-mono text-gray-600 bg-gray-50 px-3 py-1 rounded mb-4">GET /system/status</p>
-                    <button class="w-full bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium mb-4" onclick="testStatusEndpoint()">Test Endpoint</button>
-                    <pre class="bg-gray-50 p-3 rounded text-sm text-gray-700 overflow-x-auto border border-gray-200" id="status-result">Click test to run...</pre>
-                </div>
-            </div>
-        `
-    },
-    users: {
-        title: 'User Management',
-        description: 'View and manage all users (students and admins)',
+        title: 'System Settings & Health',
+        description: 'Configure API keys and monitor system health',
         content: `
             <div class="p-6 space-y-6">
-                <!-- Admins Table -->
+                <!-- API Key Configuration -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-4 bg-purple-50 border-b-2 border-purple-200">
-                        <h3 class="text-lg font-bold text-purple-900">Administrators</h3>
-                        <p class="text-sm text-purple-700 mt-1">System administrators with full access</p>
+                    <div class="p-6 border-b border-gray-200 bg-blue-50">
+                        <h3 class="text-xl font-bold text-blue-900">API Key Configuration</h3>
+                        <p class="text-sm text-blue-700 mt-1">Configure API keys for AI service providers</p>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Classes Created</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Modules Created</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="admins-table-body">
-                                <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading administrators...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="p-6 space-y-4" id="api-keys-container">
+                        <p class="text-gray-500 text-center">Loading API key settings...</p>
                     </div>
                 </div>
 
-                <!-- Students Table -->
+                <!-- Health Checks -->
                 <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 overflow-hidden">
-                    <div class="p-4 bg-blue-50 border-b-2 border-blue-200">
-                        <h3 class="text-lg font-bold text-blue-900">Students</h3>
-                        <p class="text-sm text-blue-700 mt-1">Learners using the platform</p>
+                    <div class="p-6 border-b border-gray-200 bg-green-50">
+                        <h3 class="text-xl font-bold text-green-900">System Health Checks</h3>
+                        <p class="text-sm text-green-700 mt-1">Monitor backend endpoints and system status</p>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Learning Profile</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Progress</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="students-table-body">
-                                <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading students...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="border-2 border-gray-200 rounded-lg p-4">
+                            <h4 class="font-bold text-gray-900 mb-2">Root Endpoint</h4>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /</p>
+                            <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testRootEndpoint()">Test</button>
+                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="root-result">Click test...</pre>
+                        </div>
+
+                        <div class="border-2 border-gray-200 rounded-lg p-4">
+                            <h4 class="font-bold text-gray-900 mb-2">Health Check</h4>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /health</p>
+                            <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testHealthEndpoint()">Test</button>
+                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="health-result">Click test...</pre>
+                        </div>
+
+                        <div class="border-2 border-gray-200 rounded-lg p-4">
+                            <h4 class="font-bold text-gray-900 mb-2">System Status</h4>
+                            <p class="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded mb-3">GET /system/status</p>
+                            <button class="w-full bg-sage-medium text-white px-3 py-2 rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm mb-3" onclick="testStatusEndpoint()">Test</button>
+                            <pre class="bg-gray-50 p-2 rounded text-xs text-gray-700 overflow-x-auto border border-gray-200 max-h-32" id="status-result">Click test...</pre>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -421,8 +413,15 @@ const sections = {
                         </button>
                     </div>
 
-                    <!-- Module & Model Selection -->
+                    <!-- Class, Module & Model Selection -->
                     <div class="p-4 space-y-3 border-b border-sage-medium/30">
+                        <div>
+                            <label class="block text-sm font-medium mb-1 text-sage-lightest">Class</label>
+                            <select id="chat-class-select" onchange="chatClassChanged()"
+                                class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
+                                <option value="">All Classes</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-sm font-medium mb-1 text-sage-lightest">Module</label>
                             <select id="chat-module-select" onchange="chatModuleChanged()"
@@ -430,7 +429,7 @@ const sections = {
                                 <option value="">Select Module...</option>
                             </select>
                         </div>
-                        <div>
+                        <div id="chat-model-selector-container">
                             <label class="block text-sm font-medium mb-1 text-sage-lightest">AI Model</label>
                             <select id="chat-provider-select"
                                 class="w-full px-3 py-2 bg-white/10 border border-sage-light/30 rounded-lg text-white focus:ring-2 focus:ring-sage-light outline-none">
@@ -773,6 +772,13 @@ function loadSection(sectionName) {
             loadMemoryInspector();
         }, 100);
     }
+
+    // Auto-load system settings
+    if (sectionName === 'system') {
+        setTimeout(() => {
+            loadApiKeySettings();
+        }, 100);
+    }
 }
 
 // Authentication Functions
@@ -936,6 +942,111 @@ function handleLogout() {
     localStorage.removeItem('access_token');  // Clear localStorage token
     document.getElementById('user-info').style.display = 'none';
     showLogin();
+}
+
+// API Key Management Functions
+async function loadApiKeySettings() {
+    const container = document.getElementById('api-keys-container');
+    container.innerHTML = '<p class="text-gray-500 text-center">Loading API key settings...</p>';
+
+    try {
+        const response = await fetch(`${API_BASE}/system/api-keys`);
+        if (!response.ok) throw new Error('Failed to load API keys');
+
+        const providers = await response.json();
+
+        let html = '<div class="space-y-4">';
+        for (const [providerId, provider] of Object.entries(providers)) {
+            html += `
+                <div class="border-2 border-gray-200 rounded-lg p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-lg">${provider.name}</h4>
+                            <p class="text-sm text-gray-600 mt-1">${provider.description}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${provider.key ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
+                            ${provider.key ? 'Configured' : 'Not Set'}
+                        </span>
+                    </div>
+                    <div class="flex gap-2">
+                        <input
+                            type="password"
+                            id="api-key-${providerId}"
+                            placeholder="${provider.key ? 'Enter new key to replace' : 'Enter API key'}"
+                            value="${provider.key || ''}"
+                            class="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-sage-medium focus:outline-none text-sm"
+                        >
+                        <button
+                            onclick="toggleApiKeyVisibility('${providerId}')"
+                            class="px-3 py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                            title="Toggle visibility"
+                        >
+                            👁️
+                        </button>
+                        <button
+                            onclick="saveApiKey('${providerId}')"
+                            class="px-4 py-2 bg-sage-medium text-white rounded-lg hover:bg-sage-dark transition-colors font-medium text-sm"
+                        >
+                            Save
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Environment variable: <code class="bg-gray-100 px-2 py-1 rounded">${provider.env_var}</code></p>
+                </div>
+            `;
+        }
+        html += '</div>';
+
+        container.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading API keys:', error);
+        container.innerHTML = '<p class="text-red-500 text-center">Failed to load API key settings</p>';
+    }
+}
+
+function toggleApiKeyVisibility(providerId) {
+    const input = document.getElementById(`api-key-${providerId}`);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+async function saveApiKey(providerId) {
+    const input = document.getElementById(`api-key-${providerId}`);
+    const apiKey = input.value.trim();
+
+    if (!apiKey) {
+        NotificationSystem.warning('Please enter an API key');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/system/api-keys`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                provider: providerId,
+                api_key: apiKey
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Failed to save API key');
+        }
+
+        const result = await response.json();
+        NotificationSystem.success(`${providerId.toUpperCase()} API key saved successfully`);
+
+        // Update the input to show masked key
+        input.value = result.masked_key;
+        input.type = 'password';
+
+        // Reload the settings to show updated status
+        setTimeout(() => loadApiKeySettings(), 1000);
+    } catch (error) {
+        console.error('Error saving API key:', error);
+        NotificationSystem.error(`Failed to save API key: ${error.message}`);
+    }
 }
 
 // API Test Functions
@@ -1115,68 +1226,126 @@ async function loadAnalyticsAlerts() {
 
 async function loadAdminDashboard() {
     try {
-        // Load students and conversations
-        const [usersRes, convsRes] = await Promise.all([
-            fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/conversations`, { headers: getAuthHeaders() })
-        ]);
+        const response = await fetch(`${API_BASE}/users`, { headers: getAuthHeaders() });
+        const data = await response.json();
+        const users = Array.isArray(data) ? data : (data.users || []);
 
-        const usersData = await usersRes.json();
-        const convsData = await convsRes.json();
+        const adminsTableBody = document.getElementById('admin-admins-table');
+        const studentsTableBody = document.getElementById('admin-students-table');
 
-        const students = Array.isArray(usersData) ? usersData : (usersData.users || []);
-        const conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
+        // Split users into admins and students
+        const admins = users.filter(u => u.is_admin);
+        const students = users.filter(u => !u.is_admin);
 
-        // Build students table
-        const tableBody = document.getElementById('admin-students-table');
-
-        if (students.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No students registered yet</td></tr>';
-            return;
-        }
-
-        tableBody.innerHTML = students.map(student => {
-            const studentConvs = conversations.filter(c => c.user_id === student.id);
-            const uniqueModules = [...new Set(studentConvs.map(c => c.module_id))].filter(Boolean);
-            const classCount = uniqueModules.length > 0 ? '1 class' : '0 classes'; // Simplified
-            const progress = uniqueModules.length;
-
-            return `
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4">
-                        <div class="font-medium text-gray-900">${student.name || 'N/A'}</div>
-                        ${student.is_admin ? '<span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Admin</span>' : ''}
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">${student.email}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">${classCount}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
-                                <div class="bg-sage-medium h-2 rounded-full" style="width: ${Math.min(100, progress * 10)}%"></div>
-                            </div>
-                            <span class="text-sm text-gray-600">${progress} modules</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex gap-2">
-                            <button onclick="viewStudentConversations(${student.id})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                View History
-                            </button>
-                            ${!student.is_admin ? `
-                            <button onclick="deleteStudent(${student.id}, '${student.name}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                Delete
-                            </button>` : ''}
-                        </div>
-                    </td>
+        // Render admins table
+        if (admins.length === 0) {
+            adminsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No administrators found</td>
                 </tr>
             `;
-        }).join('');
+        } else {
+            adminsTableBody.innerHTML = admins.map(user => `
+                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
+                    <td class="px-6 py-4">
+                        <input type="text"
+                            id="name-${user.id}"
+                            value="${user.name || ''}"
+                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-purple-500 focus:outline-none"
+                            onchange="updateUserField(${user.id}, 'name', this.value)"
+                        />
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-700">${user.email}</div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="text-2xl font-bold text-purple-600">${user.classes_created || 0}</div>
+                        <div class="text-xs text-gray-500">classes</div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="text-2xl font-bold text-purple-600">${user.modules_created || 0}</div>
+                        <div class="text-xs text-gray-500">modules</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
+                            View History
+                        </button>
+                        <button onclick="deleteUser(${user.id}, '${user.name}', 'admin')" class="text-red-600 hover:text-red-800 font-medium">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render students table
+        if (students.length === 0) {
+            studentsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No students registered yet</td>
+                </tr>
+            `;
+        } else {
+            studentsTableBody.innerHTML = students.map(user => `
+                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
+                    <td class="px-6 py-4">
+                        <input type="text"
+                            id="name-${user.id}"
+                            value="${user.name || ''}"
+                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-blue-500 focus:outline-none"
+                            onchange="updateUserField(${user.id}, 'name', this.value)"
+                        />
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-700">${user.email}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm space-y-1">
+                            ${user.age_grade_level ? `<div><span class="font-medium text-gray-600">Age/Grade:</span> <span class="text-gray-800">${user.age_grade_level}</span></div>` : ''}
+                            ${user.learning_style ? `<div><span class="font-medium text-gray-600">Style:</span> <span class="text-gray-800">${user.learning_style}</span></div>` : ''}
+                            ${user.familiarity ? `<div><span class="font-medium text-gray-600">Familiarity:</span> <span class="text-gray-800">${user.familiarity}</span></div>` : ''}
+                            ${user.goals ? `<div class="text-xs text-gray-500 italic mt-1">"${user.goals.substring(0, 50)}${user.goals.length > 50 ? '...' : ''}"</div>` : ''}
+                            ${!user.age_grade_level && !user.learning_style && !user.familiarity && !user.goals ? '<span class="text-gray-400">No profile data</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex gap-4 justify-center">
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">${user.classes_completed || 0}</div>
+                                <div class="text-xs text-gray-500">classes</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">${user.modules_completed || 0}</div>
+                                <div class="text-xs text-gray-500">modules</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
+                            View History
+                        </button>
+                        <button onclick="deleteUser(${user.id}, '${user.name}', 'student')" class="text-red-600 hover:text-red-800 font-medium">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
     } catch (error) {
         console.error('Error loading admin dashboard:', error);
-        const tableBody = document.getElementById('admin-students-table');
-        tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Failed to load students</td></tr>';
-        NotificationSystem.error('Failed to load admin dashboard. Please ensure you are logged in as admin.');
+        const adminsTableBody = document.getElementById('admin-admins-table');
+        const studentsTableBody = document.getElementById('admin-students-table');
+        adminsTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load administrators</td>
+            </tr>
+        `;
+        studentsTableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load students</td>
+            </tr>
+        `;
     }
 }
 
@@ -1521,128 +1690,6 @@ async function saveStudentSettings(userId) {
 }
 
 // Load Students Table
-async function loadUsersTable() {
-    try {
-        const response = await fetch(`${API_BASE}/users`, { headers: getAuthHeaders() });
-        const data = await response.json();
-        const users = Array.isArray(data) ? data : (data.users || []);
-
-        const adminsTableBody = document.getElementById('admins-table-body');
-        const studentsTableBody = document.getElementById('students-table-body');
-
-        // Split users into admins and students
-        const admins = users.filter(u => u.is_admin);
-        const students = users.filter(u => !u.is_admin);
-
-        // Render admins table
-        if (admins.length === 0) {
-            adminsTableBody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No administrators found</td>
-                </tr>
-            `;
-        } else {
-            adminsTableBody.innerHTML = admins.map(user => `
-                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
-                    <td class="px-6 py-4">
-                        <input type="text"
-                            id="name-${user.id}"
-                            value="${user.name || ''}"
-                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-purple-500 focus:outline-none"
-                            onchange="updateUserField(${user.id}, 'name', this.value)"
-                        />
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-700">${user.email}</div>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600">${user.classes_created || 0}</div>
-                        <div class="text-xs text-gray-500">classes</div>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600">${user.modules_created || 0}</div>
-                        <div class="text-xs text-gray-500">modules</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium">
-                            View History
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Render students table
-        if (students.length === 0) {
-            studentsTableBody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No students registered yet</td>
-                </tr>
-            `;
-        } else {
-            studentsTableBody.innerHTML = students.map(user => `
-                <tr class="hover:bg-gray-50 transition-colors" id="user-row-${user.id}">
-                    <td class="px-6 py-4">
-                        <input type="text"
-                            id="name-${user.id}"
-                            value="${user.name || ''}"
-                            class="w-full border-2 border-gray-300 rounded px-2 py-1 text-sm font-medium text-gray-900 focus:border-blue-500 focus:outline-none"
-                            onchange="updateUserField(${user.id}, 'name', this.value)"
-                        />
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-700">${user.email}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm space-y-1">
-                            ${user.age_grade_level ? `<div><span class="font-medium text-gray-600">Age/Grade:</span> <span class="text-gray-800">${user.age_grade_level}</span></div>` : ''}
-                            ${user.learning_style ? `<div><span class="font-medium text-gray-600">Style:</span> <span class="text-gray-800">${user.learning_style}</span></div>` : ''}
-                            ${user.familiarity ? `<div><span class="font-medium text-gray-600">Familiarity:</span> <span class="text-gray-800">${user.familiarity}</span></div>` : ''}
-                            ${user.goals ? `<div class="text-xs text-gray-500 italic mt-1">"${user.goals.substring(0, 50)}${user.goals.length > 50 ? '...' : ''}"</div>` : ''}
-                            ${!user.age_grade_level && !user.learning_style && !user.familiarity && !user.goals ? '<span class="text-gray-400">No profile data</span>' : ''}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <div class="flex gap-4 justify-center">
-                            <div>
-                                <div class="text-2xl font-bold text-blue-600">${user.classes_completed || 0}</div>
-                                <div class="text-xs text-gray-500">classes</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold text-blue-600">${user.modules_completed || 0}</div>
-                                <div class="text-xs text-gray-500">modules</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button onclick="viewStudentConversations(${user.id})" class="text-blue-600 hover:text-blue-800 font-medium mr-2">
-                            View History
-                        </button>
-                        <button onclick="deleteStudent(${user.id}, '${user.name}')" class="text-red-600 hover:text-red-800 font-medium">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-    } catch (error) {
-        console.error('Error loading users:', error);
-        const adminsTableBody = document.getElementById('admins-table-body');
-        const studentsTableBody = document.getElementById('students-table-body');
-        adminsTableBody.innerHTML = `
-            <tr>
-                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load administrators</td>
-            </tr>
-        `;
-        studentsTableBody.innerHTML = `
-            <tr>
-                <td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load students</td>
-            </tr>
-        `;
-    }
-}
-
 // Update user field (inline editing)
 async function updateUserField(userId, field, value) {
     try {
@@ -1664,8 +1711,141 @@ async function updateUserField(userId, field, value) {
         console.error('Error updating user:', error);
         NotificationSystem.error(`Failed to update user ${field}`);
         // Reload the table to revert the change
-        loadUsersTable();
+        loadAdminDashboard();
     }
+}
+
+// Show modal to add new user (admin or student)
+function showAddUserModal(role) {
+    const isAdmin = role === 'admin';
+    const title = isAdmin ? 'Add New Administrator' : 'Add New Student';
+    const buttonColor = isAdmin ? '#7C3AED' : '#2563EB';
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    `;
+
+    modal.innerHTML = `
+        <h3 style="margin: 0 0 20px 0; color: #1f1f1f; font-size: 20px; font-weight: 700;">${title}</h3>
+        <form id="add-user-form" style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Name</label>
+                <input type="text" id="new-user-name" required placeholder="Full name"
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Email</label>
+                <input type="email" id="new-user-email" required placeholder="user@example.com"
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px;">Password</label>
+                <input type="password" id="new-user-password" required placeholder="Minimum 6 characters"
+                    style="width: 100%; padding: 10px 12px; border: 2px solid #d4d4d4; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px;">
+                <button type="button" id="modal-cancel" style="
+                    padding: 10px 20px;
+                    border: 2px solid #d4d4d4;
+                    background: white;
+                    color: #2f2f2f;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 600;
+                ">Cancel</button>
+                <button type="submit" style="
+                    padding: 10px 20px;
+                    border: none;
+                    background: ${buttonColor};
+                    color: white;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 600;
+                ">Create ${isAdmin ? 'Admin' : 'Student'}</button>
+            </div>
+        </form>
+    `;
+
+    modal.querySelector('#modal-cancel').onclick = () => ModalSystem.close();
+    modal.querySelector('#add-user-form').onsubmit = async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('new-user-name').value.trim();
+        const email = document.getElementById('new-user-email').value.trim();
+        const password = document.getElementById('new-user-password').value;
+
+        try {
+            ModalSystem.loading(`Creating ${role}...`);
+
+            const response = await fetch(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                    is_admin: isAdmin
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'Failed to create user');
+            }
+
+            ModalSystem.close();
+            NotificationSystem.success(`${isAdmin ? 'Administrator' : 'Student'} created successfully!`);
+            loadAdminDashboard();
+        } catch (error) {
+            ModalSystem.close();
+            NotificationSystem.error(error.message);
+        }
+    };
+
+    ModalSystem.open(modal);
+    setTimeout(() => document.getElementById('new-user-name').focus(), 100);
+}
+
+// Delete user (works for both students and admins)
+function deleteUser(userId, userName, role) {
+    const roleLabel = role === 'admin' ? 'administrator' : 'student';
+
+    ModalSystem.confirm(
+        `Delete ${roleLabel}`,
+        `Are you sure you want to delete ${roleLabel} "${userName}"? This action cannot be undone and will remove all their data.`,
+        async () => {
+            try {
+                ModalSystem.loading('Deleting user...');
+
+                const response = await fetch(`${API_BASE}/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete user');
+                }
+
+                ModalSystem.close();
+                NotificationSystem.success(`${roleLabel} deleted successfully`);
+                loadAdminDashboard();
+            } catch (error) {
+                ModalSystem.close();
+                NotificationSystem.error(`Failed to delete ${roleLabel}: ${error.message}`);
+            }
+        }
+    );
 }
 
 // Chat Functions
@@ -1812,8 +1992,76 @@ function resetChatInterface() {
     currentChatConversationId = null;
 }
 
-function toggleMemoryPanel() {
-    NotificationSystem.info('Memory panel feature - Coming soon!\n\nThis will show:\n- Full memory context\n- 4-layer breakdown\n- Token usage\n- Optimization stats');
+async function toggleMemoryPanel() {
+    if (!currentModuleData) {
+        NotificationSystem.warning('Please select a module first');
+        return;
+    }
+
+    try {
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        // Fetch memory data
+        const [memoryRes, convsRes, moduleRes] = await Promise.all([
+            fetch(`${API_BASE}/memory/${user.id}`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/conversations?user_id=${user.id}&module_id=${currentModuleData.id}`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/modules/${currentModuleData.id}/corpus`, { headers: getAuthHeaders() })
+        ]);
+
+        const memories = await memoryRes.json();
+        const conversations = await convsRes.json();
+        const moduleCorpus = await moduleRes.json();
+
+        const memoryHtml = `
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Memory Context for ${currentModuleData.title}</h3>
+
+                <div class="bg-sage-lightest rounded-lg p-4">
+                    <h4 class="font-bold text-sage-darkest mb-2">📝 Your Profile</h4>
+                    <div class="text-sm text-gray-700">
+                        <p><strong>Name:</strong> ${user.name}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h4 class="font-bold text-blue-900 mb-2">🧠 Memories (${memories.length})</h4>
+                    <div class="space-y-2 max-h-40 overflow-y-auto">
+                        ${memories.length > 0 ? memories.map(m => `
+                            <div class="text-sm bg-white rounded p-2">
+                                <strong>${m.what_learned}</strong>
+                                <p class="text-gray-600 text-xs mt-1">${m.notes || 'No notes'}</p>
+                            </div>
+                        `).join('') : '<p class="text-sm text-gray-600">No memories yet</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-purple-50 rounded-lg p-4">
+                    <h4 class="font-bold text-purple-900 mb-2">💬 Conversations (${conversations.length})</h4>
+                    <div class="space-y-2 max-h-40 overflow-y-auto">
+                        ${conversations.length > 0 ? conversations.slice(0, 5).map(c => `
+                            <div class="text-sm bg-white rounded p-2">
+                                <strong>${c.title || 'Untitled'}</strong>
+                                <p class="text-gray-600 text-xs">${new Date(c.created_at).toLocaleDateString()}</p>
+                            </div>
+                        `).join('') : '<p class="text-sm text-gray-600">No conversations yet</p>'}
+                    </div>
+                </div>
+
+                <div class="bg-green-50 rounded-lg p-4">
+                    <h4 class="font-bold text-green-900 mb-2">📚 Module Corpus (${moduleCorpus.entries ? moduleCorpus.entries.length : 0})</h4>
+                    <p class="text-sm text-gray-700">Knowledge base entries loaded for this module</p>
+                </div>
+            </div>
+        `;
+
+        ModalSystem.custom('Memory Context', memoryHtml);
+
+    } catch (error) {
+        console.error('Error loading memory context:', error);
+        NotificationSystem.error('Failed to load memory context');
+    }
 }
 
 function exportConversation() {
@@ -1874,8 +2122,24 @@ async function loadConversationMessages(conversationId) {
     }
 }
 
+// Store all modules globally for filtering
+let allChatModules = [];
+let selectedChatClass = null;
+
 async function loadChatProviders() {
     try {
+        // Check if user is admin or student
+        const userRes = await fetch(`${API_BASE}/users/me`, { headers: getAuthHeaders() });
+        const user = await userRes.json();
+
+        // Hide AI model selector for students (only admins can choose the model)
+        const modelContainer = document.getElementById('chat-model-selector-container');
+        if (user && !user.is_admin) {
+            modelContainer.style.display = 'none';
+        } else {
+            modelContainer.style.display = 'block';
+        }
+
         const response = await fetch(`${API_BASE}/providers`);
         const data = await response.json();
 
@@ -1890,21 +2154,32 @@ async function loadChatProviders() {
             select.appendChild(option);
         });
 
-        // Load modules
-        const modulesResponse = await fetch(`${API_BASE}/modules`);
-        const modulesData = await modulesResponse.json();
+        // Load classes
+        const classesResponse = await fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() });
+        const classesData = await classesResponse.json();
 
-        const moduleSelect = document.getElementById('chat-module-select');
-        moduleSelect.innerHTML = '<option value="">Select Module...</option>';
+        const classSelect = document.getElementById('chat-class-select');
+        classSelect.innerHTML = '<option value="">All Classes</option>';
 
-        modulesData.modules.forEach(module => {
+        classesData.forEach(cls => {
             const option = document.createElement('option');
-            option.value = module.id;
-            option.textContent = module.title;
-            moduleSelect.appendChild(option);
+            option.value = cls.id;
+            option.textContent = cls.title;
+            classSelect.appendChild(option);
         });
 
+        // Load modules
+        const modulesResponse = await fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() });
+        const modulesData = await modulesResponse.json();
+
+        // Store all modules for filtering
+        allChatModules = modulesData.modules || modulesData;
+
+        // Populate module dropdown (initially show all)
+        updateChatModuleDropdown();
+
         // Enable chat when module is selected
+        const moduleSelect = document.getElementById('chat-module-select');
         moduleSelect.addEventListener('change', function() {
             const chatInput = document.getElementById('chat-input');
             const sendBtn = document.getElementById('send-btn');
@@ -1925,6 +2200,43 @@ async function loadChatProviders() {
     } catch (error) {
         console.error('Error loading chat providers:', error);
     }
+}
+
+function chatClassChanged() {
+    const classSelect = document.getElementById('chat-class-select');
+    selectedChatClass = classSelect.value ? parseInt(classSelect.value) : null;
+    updateChatModuleDropdown();
+}
+
+function updateChatModuleDropdown() {
+    const moduleSelect = document.getElementById('chat-module-select');
+    const currentModuleId = moduleSelect.value;
+
+    // Filter modules by class if a class is selected
+    const filteredModules = selectedChatClass
+        ? allChatModules.filter(m => m.class_id === selectedChatClass)
+        : allChatModules;
+
+    moduleSelect.innerHTML = '<option value="">Select Module...</option>';
+
+    filteredModules.forEach(module => {
+        const option = document.createElement('option');
+        option.value = module.id;
+        option.textContent = module.title;
+        // Restore selection if the module is still in the filtered list
+        if (module.id == currentModuleId) {
+            option.selected = true;
+        }
+        moduleSelect.appendChild(option);
+    });
+
+    // If no modules after filtering, show message
+    if (filteredModules.length === 0) {
+        moduleSelect.innerHTML = '<option value="">No modules in this class</option>';
+    }
+
+    // Trigger change event to update chat state
+    moduleSelect.dispatchEvent(new Event('change'));
 }
 
 function startNewChat() {
@@ -2542,10 +2854,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     await populateMemoryFilters();
                     await loadMemorySummaries();
                 }, 200);
-            } else if (section === 'users') {
-                setTimeout(async () => {
-                    await loadUsersTable();
-                }, 100);
             } else if (section === 'chat') {
                 setTimeout(loadChatProviders, 100);
             }
@@ -4076,11 +4384,13 @@ async function loadMemoryInspector() {
 function inspectorClassChanged() {
     const classId = parseInt(document.getElementById('inspector-class').value);
     inspectorData.selectedClass = classId;
+    inspectorData.selectedModule = null;
+    inspectorData.selectedStudent = null;
 
     const moduleSelect = document.getElementById('inspector-module');
     const studentSelect = document.getElementById('inspector-student');
 
-    if (!classId) {
+    if (!classId || isNaN(classId)) {
         moduleSelect.disabled = true;
         moduleSelect.innerHTML = '<option value="">Select class first...</option>';
         studentSelect.disabled = true;
@@ -4088,24 +4398,41 @@ function inspectorClassChanged() {
         return;
     }
 
+    // Reset dependent dropdowns
+    studentSelect.disabled = true;
+    studentSelect.innerHTML = '<option value="">Select module first...</option>';
+
     // Load modules for this class
     loadInspectorModules(classId);
 }
 
 async function loadInspectorModules(classId) {
     try {
-        // Note: You'll need to add a filter by class_id to your modules endpoint
         const response = await fetch(`${API_BASE}/modules`, {
             headers: getAuthHeaders()
         });
-        const allModules = await response.json();
 
-        // For now, show all modules (you can filter by class_id when that's implemented)
+        if (!response.ok) throw new Error('Failed to load modules');
+
+        const data = await response.json();
+        // Handle both array format and {modules: []} format
+        const allModules = Array.isArray(data) ? data : (data.modules || []);
+
+        // Filter modules by class_id if available
+        const filteredModules = allModules.filter(mod => mod.class_id === classId);
+        const modulesToShow = filteredModules.length > 0 ? filteredModules : allModules;
+
         const moduleSelect = document.getElementById('inspector-module');
         moduleSelect.disabled = false;
         moduleSelect.innerHTML = '<option value="">Select a module...</option>';
 
-        allModules.forEach(mod => {
+        if (modulesToShow.length === 0) {
+            moduleSelect.innerHTML = '<option value="">No modules found</option>';
+            moduleSelect.disabled = true;
+            return;
+        }
+
+        modulesToShow.forEach(mod => {
             const option = document.createElement('option');
             option.value = mod.id;
             option.textContent = mod.title;
@@ -4113,15 +4440,21 @@ async function loadInspectorModules(classId) {
         });
     } catch (error) {
         console.error('Error loading modules:', error);
+        NotificationSystem.error('Failed to load modules');
+        const moduleSelect = document.getElementById('inspector-module');
+        moduleSelect.disabled = true;
+        moduleSelect.innerHTML = '<option value="">Error loading modules</option>';
     }
 }
 
 function inspectorModuleChanged() {
     const moduleId = parseInt(document.getElementById('inspector-module').value);
     inspectorData.selectedModule = moduleId;
+    inspectorData.selectedStudent = null;
 
-    if (!moduleId) {
-        const studentSelect = document.getElementById('inspector-student');
+    const studentSelect = document.getElementById('inspector-student');
+
+    if (!moduleId || isNaN(moduleId)) {
         studentSelect.disabled = true;
         studentSelect.innerHTML = '<option value="">Select module first...</option>';
         return;
@@ -4136,13 +4469,25 @@ async function loadInspectorStudents() {
         const response = await fetch(`${API_BASE}/users`, {
             headers: getAuthHeaders()
         });
-        const users = await response.json();
+
+        if (!response.ok) throw new Error('Failed to load users');
+
+        const data = await response.json();
+        // Handle both array format and {users: []} format
+        const users = Array.isArray(data) ? data : (data.users || []);
+        const students = users.filter(u => !u.is_admin);
 
         const studentSelect = document.getElementById('inspector-student');
         studentSelect.disabled = false;
         studentSelect.innerHTML = '<option value="">Select a student...</option>';
 
-        users.filter(u => !u.is_admin).forEach(user => {
+        if (students.length === 0) {
+            studentSelect.innerHTML = '<option value="">No students found</option>';
+            studentSelect.disabled = true;
+            return;
+        }
+
+        students.forEach(user => {
             const option = document.createElement('option');
             option.value = user.id;
             option.textContent = `${user.name} (${user.email})`;
@@ -4150,6 +4495,10 @@ async function loadInspectorStudents() {
         });
     } catch (error) {
         console.error('Error loading students:', error);
+        NotificationSystem.error('Failed to load students');
+        const studentSelect = document.getElementById('inspector-student');
+        studentSelect.disabled = true;
+        studentSelect.innerHTML = '<option value="">Error loading students</option>';
     }
 }
 
@@ -4169,59 +4518,78 @@ async function loadInspectorData() {
 
     // Fetch data based on what's selected
     try {
-        const promises = [
-            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/course-corpus`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/progress/tables/all`, { headers: getAuthHeaders() })
-        ];
+        // Fetch required data
+        const [classesData, corpusDataRaw] = await Promise.all([
+            fetch(`${API_BASE}/classes`, { headers: getAuthHeaders() }).then(r => r.json()),
+            fetch(`${API_BASE}/course-corpus`, { headers: getAuthHeaders() }).then(r => r.json()).catch(() => ({ entries: [] }))
+        ]);
 
-        // Add module data if module is selected
-        if (inspectorData.selectedModule) {
-            promises.push(fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }));
-            promises.push(fetch(`${API_BASE}/modules/${inspectorData.selectedModule}/corpus`, { headers: getAuthHeaders() }));
-            promises.push(fetch(`${API_BASE}/documents?module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }));
-        }
+        const corpusData = corpusDataRaw;
 
-        // Add student data if student is selected
-        if (inspectorData.selectedStudent) {
-            promises.push(fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }));
-            if (inspectorData.selectedModule) {
-                promises.push(fetch(`${API_BASE}/conversations?user_id=${inspectorData.selectedStudent}&module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }));
-            }
-            promises.push(fetch(`${API_BASE}/memory/${inspectorData.selectedStudent}`, { headers: getAuthHeaders() }));
-        }
-
-        const responses = await Promise.all(promises);
-        const [classRes, corpusRes, tablesRes, ...rest] = responses;
-
-        const classes = await classRes.json();
-        const corpusData = await corpusRes.json();
-        const tablesData = await tablesRes.json();
-
+        // Handle API response formats
+        const classes = Array.isArray(classesData) ? classesData : (classesData.classes || []);
         const classObj = classes.find(c => c.id === inspectorData.selectedClass);
+
         let user = null, module = null, survey = null;
         let moduleCorpus = [], documents = [], conversations = [], memories = [];
 
-        let restIndex = 0;
+        // Fetch module data if module is selected
         if (inspectorData.selectedModule) {
-            const modulesData = await rest[restIndex++].json();
-            const moduleCorpusData = await rest[restIndex++].json();
-            const docsData = await rest[restIndex++].json();
+            try {
+                const [modulesDataRaw, moduleCorpusDataRaw, docsDataRaw] = await Promise.all([
+                    fetch(`${API_BASE}/modules`, { headers: getAuthHeaders() }).then(r => r.json()),
+                    fetch(`${API_BASE}/modules/${inspectorData.selectedModule}/corpus`, { headers: getAuthHeaders() }).then(r => r.json()).catch(() => ({ entries: [] })),
+                    fetch(`${API_BASE}/documents?module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }).then(r => r.json()).catch(() => [])
+                ]);
 
-            module = modulesData.find(m => m.id === inspectorData.selectedModule);
-            moduleCorpus = moduleCorpusData.entries || [];
-            documents = docsData;
+                // Handle API response formats
+                const modulesData = Array.isArray(modulesDataRaw) ? modulesDataRaw : (modulesDataRaw.modules || []);
+                module = modulesData.find(m => m.id === inspectorData.selectedModule);
+                moduleCorpus = moduleCorpusDataRaw.entries || moduleCorpusDataRaw || [];
+                documents = Array.isArray(docsDataRaw) ? docsDataRaw : (docsDataRaw.documents || []);
+            } catch (error) {
+                console.warn('Error loading module data:', error);
+            }
         }
 
+        // Fetch student data if student is selected
         if (inspectorData.selectedStudent) {
-            const usersData = await rest[restIndex++].json();
-            user = usersData.find(u => u.id === inspectorData.selectedStudent);
-            survey = tablesData.tables?.onboarding_surveys?.data?.find(s => s.user_id === inspectorData.selectedStudent);
+            try {
+                const usersDataRaw = await fetch(`${API_BASE}/users`, { headers: getAuthHeaders() }).then(r => r.json());
+                const usersData = Array.isArray(usersDataRaw) ? usersDataRaw : (usersDataRaw.users || []);
+                user = usersData.find(u => u.id === inspectorData.selectedStudent);
 
-            if (inspectorData.selectedModule) {
-                conversations = await rest[restIndex++].json();
+                // Try to fetch survey data (optional)
+                try {
+                    const surveyRes = await fetch(`${API_BASE}/surveys/${inspectorData.selectedStudent}`, { headers: getAuthHeaders() });
+                    if (surveyRes.ok) {
+                        survey = await surveyRes.json();
+                    }
+                } catch (e) {
+                    console.warn('Survey data not available');
+                }
+
+                // Fetch conversations if module is selected (optional)
+                if (inspectorData.selectedModule) {
+                    try {
+                        const convsData = await fetch(`${API_BASE}/conversations?user_id=${inspectorData.selectedStudent}&module_id=${inspectorData.selectedModule}`, { headers: getAuthHeaders() }).then(r => r.json());
+                        conversations = Array.isArray(convsData) ? convsData : (convsData.conversations || []);
+                    } catch (e) {
+                        console.warn('Conversations data not available');
+                    }
+                }
+
+                // Fetch memories (optional)
+                try {
+                    const memoriesData = await fetch(`${API_BASE}/memory/${inspectorData.selectedStudent}`, { headers: getAuthHeaders() }).then(r => r.json());
+                    memories = Array.isArray(memoriesData) ? memoriesData : (memoriesData.memories || []);
+                } catch (e) {
+                    console.warn('Memories data not available');
+                    memories = [];
+                }
+            } catch (error) {
+                console.warn('Error loading student data:', error);
             }
-            memories = await rest[restIndex++].json();
         }
 
         // Store data globally for layer views
@@ -4230,7 +4598,7 @@ async function loadInspectorData() {
             classObj,
             module,
             survey,
-            classCorpus: corpusData.entries || [],
+            classCorpus: corpusData.entries || corpusData || [],
             moduleCorpus,
             documents,
             conversations,
@@ -4238,7 +4606,8 @@ async function loadInspectorData() {
         };
 
         // Build and display assembled prompt
-        displayAssembledPrompt(user, classObj, module, survey, corpusData.entries, moduleCorpus, conversations, memories);
+        const classCorpus = corpusData.entries || corpusData || [];
+        displayAssembledPrompt(user, classObj, module, survey, classCorpus, moduleCorpus, conversations, memories);
 
         // Show appropriate layer by default
         if (inspectorData.selectedStudent) {
