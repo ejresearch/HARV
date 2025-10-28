@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harv Simple - No Auth</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- View Selector at Top -->
+    <div style="background: linear-gradient(135deg, #B5C080 0%, #9CAA5A 100%); padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0 0 15px 0;">🎓 Harv Simple</h1>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button onclick="showStudentView()" id="btn-student" class="view-btn active">
+                👨‍🎓 Student View
+            </button>
+            <button onclick="showTeacherView()" id="btn-teacher" class="view-btn">
+                👩‍🏫 Teacher View
+            </button>
+        </div>
+    </div>
+
+    <!-- Student View -->
+    <div id="student-view" class="view-container">
+        <div class="content">
+            <div class="chat-layout">
+                <!-- Module Selector -->
+                <div class="module-selector">
+                    <h3>Select Module</h3>
+                    <div id="student-module-list" class="module-list">
+                        <p class="loading">Loading modules...</p>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="chat-area">
+                    <div id="chat-placeholder" class="chat-placeholder">
+                        <h2>👋 Welcome Student!</h2>
+                        <p>Select a module to start learning</p>
+                    </div>
+
+                    <div id="chat-active" class="chat-active" style="display: none;">
+                        <div class="chat-header">
+                            <h3 id="current-module-title">Module Name</h3>
+                            <button onclick="endChat()" class="btn-secondary">End Chat</button>
+                        </div>
+
+                        <div id="chat-messages" class="chat-messages"></div>
+
+                        <form class="chat-input-form" onsubmit="sendMessage(event)">
+                            <input type="text" id="chat-input" placeholder="Type your message..." required>
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher View -->
+    <div id="teacher-view" class="view-container" style="display: none;">
+        <div class="content">
+            <h2>Teacher Dashboard</h2>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-modules">-</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-conversations">-</div>
+                    <div class="stat-label">Conversations</div>
+                </div>
+            </div>
+
+            <!-- Module Management -->
+            <div class="admin-section">
+                <div class="admin-section-header">
+                    <h3>Manage Modules</h3>
+                    <button onclick="showCreateModule()" class="btn-primary">+ New Module</button>
+                </div>
+                <div id="teacher-modules-list" class="admin-list">
+                    <p class="loading">Loading modules...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Creating/Editing Modules -->
+    <div id="module-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Create Module</h3>
+                <button onclick="closeModuleModal()" class="close-btn">&times;</button>
+            </div>
+            <form id="module-form" onsubmit="handleModuleSubmit(event)">
+                <input type="hidden" id="module-id">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="module-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="module-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Content (Key Concepts)</label>
+                    <textarea id="module-content" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Socratic Prompt (Teaching Instructions)</label>
+                    <textarea id="module-socratic" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModuleModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app_no_auth.js"></script>
+
+    <style>
+        .view-btn {
+            padding: 12px 30px;
+            background: white;
+            color: #7A8C42;
+            border: 3px solid white;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .view-btn.active {
+            background: #C07047;
+            color: white;
+            border-color: #C07047;
+        }
+        .view-container {
+            min-height: calc(100vh - 150px);
+        }
+    </style>
+</body>
+</html>

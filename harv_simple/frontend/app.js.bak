@@ -1,0 +1,354 @@
+// API Configuration
+const API_BASE = 'http://localhost:8000';
+
+// Global State
+let currentConversation = null;
+let currentModuleId = null;
+let currentView = 'student';
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    showStudentView();
+    loadModules();
+});
+
+// ============================================================================
+// VIEW SWITCHING
+// ============================================================================
+
+function showStudentView() {
+    currentView = 'student';
+    document.getElementById('student-view').style.display = 'block';
+    document.getElementById('teacher-view').style.display = 'none';
+
+    document.getElementById('btn-student').classList.add('active');
+    document.getElementById('btn-teacher').classList.remove('active');
+
+    loadModules();
+}
+
+function showTeacherView() {
+    currentView = 'teacher';
+    document.getElementById('student-view').style.display = 'none';
+    document.getElementById('teacher-view').style.display = 'block';
+
+    document.getElementById('btn-teacher').classList.add('active');
+    document.getElementById('btn-student').classList.remove('active');
+
+    loadTeacherData();
+}
+
+// ============================================================================
+// MODULE FUNCTIONS
+// ============================================================================
+
+async function loadModules() {
+    try {
+        const response = await fetch(`${API_BASE}/public/modules`);
+
+        if (!response.ok) throw new Error('Failed to load modules');
+
+        const modules = await response.json();
+
+        // Update student view
+        const studentList = document.getElementById('student-module-list');
+        if (modules.length === 0) {
+            studentList.innerHTML = '<p class="empty">No modules available</p>';
+        } else {
+            studentList.innerHTML = modules.map(mod => `
+                <div class="module-item" onclick="startChat(${mod.id}, '${escapeHtml(mod.title)}')">
+                    <div class="module-title">${escapeHtml(mod.title)}</div>
+                    <div class="module-desc">${escapeHtml(mod.description || '')}</div>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        showToast('Error loading modules: ' + error.message, 'error');
+    }
+}
+
+// ============================================================================
+// CHAT FUNCTIONS
+// ============================================================================
+
+function startChat(moduleId, moduleTitle) {
+    currentModuleId = moduleId;
+    currentConversation = null;
+
+    // Hide placeholder, show chat
+    document.getElementById('chat-placeholder').style.display = 'none';
+    document.getElementById('chat-active').style.display = 'flex';
+
+    // Set module title
+    document.getElementById('current-module-title').textContent = moduleTitle;
+
+    // Clear messages
+    document.getElementById('chat-messages').innerHTML = '';
+
+    // Focus input
+    document.getElementById('chat-input').focus();
+}
+
+function endChat() {
+    currentModuleId = null;
+    currentConversation = null;
+
+    document.getElementById('chat-placeholder').style.display = 'flex';
+    document.getElementById('chat-active').style.display = 'none';
+}
+
+async function sendMessage(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+
+    if (!message || !currentModuleId) return;
+
+    // Clear input
+    input.value = '';
+
+    // Add user message to chat
+    addMessageToChat('user', message);
+
+    // Show loading indicator
+    const loadingId = addMessageToChat('assistant', 'Thinking...', true);
+
+    try {
+        const response = await fetch(`${API_BASE}/public/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                module_id: currentModuleId,
+                message: message,
+                conversation_id: currentConversation
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to send message');
+        }
+
+        const data = await response.json();
+
+        // Update conversation ID
+        currentConversation = data.conversation_id;
+
+        // Remove loading message
+        document.getElementById(loadingId).remove();
+
+        // Add AI response
+        addMessageToChat('assistant', data.response);
+
+    } catch (error) {
+        // Remove loading message
+        document.getElementById(loadingId).remove();
+
+        showToast('Error: ' + error.message, 'error');
+        addMessageToChat('assistant', 'Sorry, I encountered an error. Please try again.');
+    }
+}
+
+function addMessageToChat(role, content, isLoading = false) {
+    const messagesDiv = document.getElementById('chat-messages');
+    const messageId = 'msg-' + Date.now();
+
+    const messageEl = document.createElement('div');
+    messageEl.id = messageId;
+    messageEl.className = `message message-${role}`;
+    if (isLoading) messageEl.classList.add('loading');
+
+    messageEl.innerHTML = `
+        <div class="message-content">${escapeHtml(content)}</div>
+    `;
+
+    messagesDiv.appendChild(messageEl);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    return messageId;
+}
+
+// ============================================================================
+// TEACHER FUNCTIONS
+// ============================================================================
+
+async function loadTeacherData() {
+    // Load stats
+    try {
+        const response = await fetch(`${API_BASE}/stats/public`);
+        if (response.ok) {
+            const stats = await response.json();
+            document.getElementById('stat-modules').textContent = stats.total_modules;
+            document.getElementById('stat-conversations').textContent = stats.total_conversations;
+        }
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+
+    // Load modules for teacher
+    await loadTeacherModules();
+}
+
+async function loadTeacherModules() {
+    try {
+        const response = await fetch(`${API_BASE}/public/modules`);
+
+        if (!response.ok) throw new Error('Failed to load modules');
+
+        const modules = await response.json();
+
+        const list = document.getElementById('teacher-modules-list');
+        if (modules.length === 0) {
+            list.innerHTML = '<p class="empty">No modules yet</p>';
+        } else {
+            list.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${modules.map(mod => `
+                            <tr>
+                                <td><strong>${escapeHtml(mod.title)}</strong></td>
+                                <td>${escapeHtml(mod.description || 'No description')}</td>
+                                <td>
+                                    <button onclick="editModule(${mod.id})" class="btn-small">Edit</button>
+                                    <button onclick="deleteModule(${mod.id})" class="btn-small btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+    } catch (error) {
+        showToast('Error loading modules: ' + error.message, 'error');
+    }
+}
+
+function showCreateModule() {
+    document.getElementById('modal-title').textContent = 'Create Module';
+    document.getElementById('module-form').reset();
+    document.getElementById('module-id').value = '';
+    document.getElementById('module-modal').style.display = 'flex';
+}
+
+async function editModule(moduleId) {
+    try {
+        const response = await fetch(`${API_BASE}/modules/${moduleId}/public`);
+
+        if (!response.ok) throw new Error('Failed to load module');
+
+        const module = await response.json();
+
+        document.getElementById('modal-title').textContent = 'Edit Module';
+        document.getElementById('module-id').value = module.id;
+        document.getElementById('module-title').value = module.title;
+        document.getElementById('module-description').value = module.description || '';
+        document.getElementById('module-content').value = module.content || '';
+        document.getElementById('module-socratic').value = module.socratic_prompt || '';
+        document.getElementById('module-modal').style.display = 'flex';
+    } catch (error) {
+        showToast('Error loading module: ' + error.message, 'error');
+    }
+}
+
+async function handleModuleSubmit(event) {
+    event.preventDefault();
+
+    const moduleId = document.getElementById('module-id').value;
+    const data = {
+        title: document.getElementById('module-title').value,
+        description: document.getElementById('module-description').value,
+        content: document.getElementById('module-content').value,
+        socratic_prompt: document.getElementById('module-socratic').value
+    };
+
+    try {
+        const url = moduleId
+            ? `${API_BASE}/modules/${moduleId}/public`
+            : `${API_BASE}/public/modules`;
+
+        const response = await fetch(url, {
+            method: moduleId ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Failed to save module');
+
+        showToast(moduleId ? 'Module updated!' : 'Module created!', 'success');
+        closeModuleModal();
+        loadTeacherModules();
+        loadModules();
+    } catch (error) {
+        showToast('Error saving module: ' + error.message, 'error');
+    }
+}
+
+async function deleteModule(moduleId) {
+    if (!confirm('Are you sure you want to delete this module?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/modules/${moduleId}/public`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) throw new Error('Failed to delete module');
+
+        showToast('Module deleted', 'success');
+        loadTeacherModules();
+        loadModules();
+    } catch (error) {
+        showToast('Error deleting module: ' + error.message, 'error');
+    }
+}
+
+function closeModuleModal() {
+    document.getElementById('module-modal').style.display = 'none';
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('module-modal');
+    if (event.target === modal) {
+        closeModuleModal();
+    }
+}

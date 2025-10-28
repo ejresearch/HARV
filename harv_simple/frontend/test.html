@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Test</title>
+    <style>
+        body { font-family: Arial; padding: 40px; max-width: 600px; margin: 0 auto; }
+        button { padding: 10px 20px; margin: 10px 0; }
+        pre { background: #f4f4f4; padding: 15px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Harv Simple - Login Test</h1>
+
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="testModules()">Test Get Modules (after login)</button>
+
+    <div id="output"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let authToken = null;
+
+        function log(message, isError = false) {
+            const output = document.getElementById('output');
+            const className = isError ? 'error' : 'success';
+            output.innerHTML += `<p class="${className}">${message}</p>`;
+        }
+
+        async function testLogin() {
+            document.getElementById('output').innerHTML = '';
+            log('Testing login...');
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'admin@harv.com',
+                        password: 'admin123'
+                    })
+                });
+
+                log(`Response status: ${response.status}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    log(`ERROR: ${JSON.stringify(error)}`, true);
+                    return;
+                }
+
+                const data = await response.json();
+                authToken = data.access_token;
+
+                log(`✓ Login successful!`);
+                log(`User: ${data.user.name} (${data.user.email})`);
+                log(`Token: ${authToken.substring(0, 50)}...`);
+
+            } catch (error) {
+                log(`ERROR: ${error.message}`, true);
+            }
+        }
+
+        async function testModules() {
+            if (!authToken) {
+                log('ERROR: Please login first!', true);
+                return;
+            }
+
+            log('Testing modules endpoint...');
+
+            try {
+                const response = await fetch(`${API_BASE}/modules`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                log(`Response status: ${response.status}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    log(`ERROR: ${JSON.stringify(error)}`, true);
+                    return;
+                }
+
+                const modules = await response.json();
+                log(`✓ Got ${modules.length} modules:`);
+                modules.forEach(m => {
+                    log(`  - ${m.title}`);
+                });
+
+            } catch (error) {
+                log(`ERROR: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harv Simple - AI Tutor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Auth Overlay (shown when not logged in) -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-container">
+            <h1>🎓 Harv Simple</h1>
+            <p class="subtitle">AI-Powered Socratic Tutoring</p>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>Login</h2>
+                <form onsubmit="handleLogin(event)">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p class="form-toggle">
+                    Don't have an account? <a href="#" onclick="showRegister()">Register</a>
+                </p>
+                <p class="demo-hint">Demo: admin@harv.com / admin123</p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form" style="display: none;">
+                <h2>Register</h2>
+                <form onsubmit="handleRegister(event)">
+                    <input type="text" id="register-name" placeholder="Full Name" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <button type="submit">Register</button>
+                </form>
+                <p class="form-toggle">
+                    Already have an account? <a href="#" onclick="showLogin()">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (shown when logged in) -->
+    <div id="main-app" class="main-app" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>🎓 Harv Simple</h1>
+                <div class="header-actions">
+                    <button onclick="toggleView()" id="view-toggle-btn" class="btn-view-toggle">
+                        <span id="view-toggle-text">👩‍🏫 Switch to Teacher View</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('chat')">Chat</button>
+            <button class="nav-tab" onclick="showSection('modules')">Modules</button>
+            <button id="admin-tab" class="nav-tab" onclick="showSection('admin')" style="display: none;">Admin</button>
+        </nav>
+
+        <!-- Content Sections -->
+        <main class="content">
+            <!-- Chat Section -->
+            <section id="section-chat" class="section active">
+                <div class="chat-layout">
+                    <!-- Module Selector -->
+                    <div class="module-selector">
+                        <h3>Select Module</h3>
+                        <div id="module-list" class="module-list">
+                            <p class="loading">Loading modules...</p>
+                        </div>
+                    </div>
+
+                    <!-- Chat Area -->
+                    <div class="chat-area">
+                        <div id="chat-placeholder" class="chat-placeholder">
+                            <h2>👋 Welcome to Harv</h2>
+                            <p>Select a module to start learning with your AI tutor</p>
+                        </div>
+
+                        <div id="chat-active" class="chat-active" style="display: none;">
+                            <div class="chat-header">
+                                <h3 id="current-module-title">Module Name</h3>
+                                <button onclick="endChat()" class="btn-secondary">End Chat</button>
+                            </div>
+
+                            <div id="chat-messages" class="chat-messages"></div>
+
+                            <form class="chat-input-form" onsubmit="sendMessage(event)">
+                                <input
+                                    type="text"
+                                    id="chat-input"
+                                    placeholder="Type your message..."
+                                    required
+                                >
+                                <button type="submit">Send</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modules Section -->
+            <section id="section-modules" class="section">
+                <div class="section-header">
+                    <h2>Learning Modules</h2>
+                </div>
+                <div id="modules-grid" class="modules-grid">
+                    <p class="loading">Loading modules...</p>
+                </div>
+            </section>
+
+            <!-- Admin Section -->
+            <section id="section-admin" class="section">
+                <div class="section-header">
+                    <h2>Admin Dashboard</h2>
+                </div>
+
+                <!-- Stats Cards -->
+                <div id="admin-stats" class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-users">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-modules">-</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-conversations">-</div>
+                        <div class="stat-label">Conversations</div>
+                    </div>
+                </div>
+
+                <!-- Module Management -->
+                <div class="admin-section">
+                    <div class="admin-section-header">
+                        <h3>Module Management</h3>
+                        <button onclick="showCreateModule()" class="btn-primary">+ New Module</button>
+                    </div>
+                    <div id="admin-modules-list" class="admin-list">
+                        <p class="loading">Loading modules...</p>
+                    </div>
+                </div>
+
+                <!-- User Management -->
+                <div class="admin-section">
+                    <h3>User Management</h3>
+                    <div id="admin-users-list" class="admin-list">
+                        <p class="loading">Loading users...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Creating/Editing Modules -->
+    <div id="module-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Create Module</h3>
+                <button onclick="closeModuleModal()" class="close-btn">&times;</button>
+            </div>
+            <form id="module-form" onsubmit="handleModuleSubmit(event)">
+                <input type="hidden" id="module-id">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="module-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="module-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Content (Key Concepts)</label>
+                    <textarea id="module-content" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Socratic Prompt (Teaching Instructions)</label>
+                    <textarea id="module-socratic" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModuleModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
