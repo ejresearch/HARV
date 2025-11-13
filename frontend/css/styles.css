@@ -2198,3 +2198,69 @@ textarea.form-control {
 .menu-nav-item span {
     flex: 1;
 }
+
+/* PDF Viewer Document Items */
+.document-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: white;
+    transition: all 0.2s;
+}
+
+.document-item.clickable {
+    cursor: pointer;
+}
+
+.document-item:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.document-item.clickable:hover {
+    border-color: #9CAA5A;
+    background: #f9fafb;
+}
+
+.document-item.clickable:active {
+    transform: translateY(0);
+}
+
+.document-item .doc-info {
+    flex: 1;
+}
+
+.document-item .doc-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.document-item .doc-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.document-item .module-badge,
+.document-item .course-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.document-item .module-badge {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.document-item .course-badge {
+    background: #fef3c7;
+    color: #92400e;
+}

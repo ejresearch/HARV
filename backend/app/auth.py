@@ -103,12 +103,13 @@ def authenticate_user(db: Session, email: str, password: str):
         user = get_user_by_email(db, email)
         if not user:
             # Prevent timing attacks
-            pwd_context.verify("dummy", "$2b$12$dummy.hash.to.prevent.timing.attacks")
+            dummy_hash = "$2b$12$dummy.hash.to.prevent.timing.attacksxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            verify_password("dummy", dummy_hash)
             return None
-            
+
         if not verify_password(password, user.hashed_password):
             return None
-            
+
         return user
     except Exception:
         return None

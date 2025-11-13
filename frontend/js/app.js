@@ -14,31 +14,45 @@ const sections = {
         content: `
             <div class="p-6 space-y-6">
                 <!-- Quick Actions Bar -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('classes')">
                         <div class="flex items-center gap-2 mb-2">
                             <i data-lucide="book-open" style="width: 20px; height: 20px; color: #C07047;"></i>
                             <div class="font-bold text-gray-900">Manage Classes</div>
                         </div>
-                        <div class="text-sm text-gray-600">Edit classes & modules</div>
+                        <div class="text-sm text-gray-600">Create & edit courses</div>
+                    </button>
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('class-hierarchy')">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="folder-tree" style="width: 20px; height: 20px; color: #9CAA5A;"></i>
+                            <div class="font-bold text-gray-900">Class Hierarchy</div>
+                        </div>
+                        <div class="text-sm text-gray-600">Browse course structure</div>
+                    </button>
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('learning-journeys')">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="graduation-cap" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Learning Journeys</div>
+                        </div>
+                        <div class="text-sm text-gray-600">Track student progress</div>
                     </button>
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('memory')">
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="brain" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <i data-lucide="brain" style="width: 20px; height: 20px; color: #9CAA5A;"></i>
                             <div class="font-bold text-gray-900">Memory Inspector</div>
                         </div>
-                        <div class="text-sm text-gray-600">View student learning</div>
+                        <div class="text-sm text-gray-600">Visualize 5-layer memory</div>
                     </button>
-                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('system')">
+                    <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('conversations')">
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="settings" style="width: 20px; height: 20px; color: #C07047;"></i>
-                            <div class="font-bold text-gray-900">Settings</div>
+                            <i data-lucide="message-square" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <div class="font-bold text-gray-900">Student Activity</div>
                         </div>
-                        <div class="text-sm text-gray-600">System configuration</div>
+                        <div class="text-sm text-gray-600">View conversations</div>
                     </button>
                     <button class="bg-white border-2 border-gray-300 rounded-lg p-4 hover:border-sage-medium hover:shadow-md transition-all text-left" onclick="switchSection('chat')">
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="message-circle" style="width: 20px; height: 20px; color: #C07047;"></i>
+                            <i data-lucide="message-circle" style="width: 20px; height: 20px; color: #9CAA5A;"></i>
                             <div class="font-bold text-gray-900">Test Chat</div>
                         </div>
                         <div class="text-sm text-gray-600">Try the AI tutor</div>
@@ -596,6 +610,7 @@ const sections = {
                     <div class="document-list">
                         <div class="list-header">
                             <h3>Documents</h3>
+                            <button onclick="openPDFViewer(1, 'Chapter 1 - What is Art History.pdf')" style="padding: 6px 12px; background: #C07047; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; margin-right: 8px;">🧪 Test PDF</button>
                             <span id="doc-count" class="doc-count">0 files</span>
                         </div>
                         <div id="documents-list-content">
@@ -636,100 +651,415 @@ const sections = {
         `
     },
     memory: {
-        title: '4-Layer Memory Inspector',
-        description: 'Drill down by Class → Module → Student to see exact prompts and data',
+        title: '🧠 Memory Inspector v2.0',
+        description: 'Visualize the 5-layer memory architecture with real-time context assembly',
         content: `
             <div class="p-6 space-y-6">
-                <!-- Hierarchical Selectors -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-5">Select Context to Inspect</h3>
+                <!-- Selector Card -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Select Context to Inspect</h3>
+                    <p class="text-sm text-gray-600 mb-5">Choose a class, module, student, and optionally a specific conversation to see how HARV builds memory context.</p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
                         <div>
-                            <label class="block font-semibold mb-2 text-gray-900">1. Class:</label>
-                            <select id="inspector-class" onchange="inspectorClassChanged()"
-                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Class</label>
+                            <select id="inspector-class-select" onchange="window.inspectorV2_classChanged?.()"
+                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none transition-all">
                                 <option value="">Select a class...</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2 text-gray-900">2. Module:</label>
-                            <select id="inspector-module" onchange="inspectorModuleChanged()"
-                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
-                                <option value="">Select class first...</option>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Module</label>
+                            <select id="inspector-module-select" onchange="window.inspectorV2_moduleChanged?.()" disabled
+                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none disabled:bg-gray-100 disabled:cursor-not-allowed transition-all">
+                                <option value="">Select a module...</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block font-semibold mb-2 text-gray-900">3. Student:</label>
-                            <select id="inspector-student" onchange="inspectorStudentChanged()"
-                                class="w-full px-4 py-2 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed" disabled>
-                                <option value="">Select module first...</option>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Student</label>
+                            <select id="inspector-student-select" onchange="window.inspectorV2_studentChanged?.()" disabled
+                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none disabled:bg-gray-100 disabled:cursor-not-allowed transition-all">
+                                <option value="">Select a student...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Conversation</label>
+                            <select id="inspector-conversation-select" disabled
+                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none disabled:bg-gray-100 disabled:cursor-not-allowed transition-all">
+                                <option value="">No filter (all)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="flex gap-3 items-center">
-                        <button onclick="loadInspectorData()"
-                            class="bg-sage-dark text-white px-6 py-3 rounded-lg hover:bg-sage-darkest transition-colors font-semibold">
-                            Analyze Memory Context
+                    <div class="flex gap-3">
+                        <button id="load-memory-btn" onclick="window.inspectorV2_loadMemory?.()" disabled
+                            class="bg-sage-medium text-white px-6 py-3 rounded-lg hover:bg-sage-dark transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                            <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
+                            Load Memory System
                         </button>
-                        <div class="flex-1 relative">
-                            <input type="text" id="inspector-search" placeholder="Or search by student name, email, conversation..."
-                                class="w-full pl-4 pr-24 py-3 border-2 border-sage-light rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-transparent outline-none">
-                            <button onclick="searchInspector()"
-                                class="absolute right-1 top-1/2 -translate-y-1/2 bg-sage-medium text-white px-4 py-2 rounded-lg hover:bg-sage-dark transition-colors">
-                                Search
-                            </button>
+                        <div class="text-sm text-gray-500 flex items-center">
+                            <span id="inspector-status-text">Select a class to begin</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Results Container -->
-                <div id="inspector-results" style="display: none;" class="space-y-6">
-                    <!-- Assembled Prompt Section -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Assembled Prompt for LLM</h3>
-                        <div id="assembled-prompt-display"
-                            class="bg-gray-900 text-sage-lighter p-5 rounded-lg overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono text-sm max-h-[500px] overflow-y-auto">
-                            <!-- Prompt will be shown here -->
-                        </div>
-                    </div>
+                <!-- Memory Inspector v2 Container -->
+                <div id="memory-inspector-v2-container">
+                    <!-- Context Metrics (rendered by JS) -->
+                    <div id="context-metrics-container" style="display: none;"></div>
 
-                    <!-- 4-Layer Data Breakdown -->
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-5">4-Layer Memory Breakdown</h3>
+                    <!-- 5-Layer Memory Display (rendered by JS) -->
+                    <div id="memory-layers-container" style="display: none;"></div>
 
-                        <!-- Layer Tabs -->
-                        <div class="flex gap-2 mb-5 border-b-2 border-gray-200">
-                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-sage-dark text-sage-dark" onclick="showInspectorLayer(1)" data-layer="1">
-                                Layer 1: Profile
-                            </button>
-                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(2)" data-layer="2">
-                                Layer 2: Class
-                            </button>
-                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(3)" data-layer="3">
-                                Layer 3: Module
-                            </button>
-                            <button class="inspector-tab px-5 py-3 font-semibold border-b-3 border-transparent text-gray-600 hover:text-sage-dark transition-colors" onclick="showInspectorLayer(4)" data-layer="4">
-                                Layer 4: Conversations
-                            </button>
-                        </div>
-
-                        <!-- Layer Content -->
-                        <div id="inspector-layer-content">
-                            <!-- Layer data will be shown here -->
-                        </div>
-                    </div>
+                    <!-- Assembled Prompt (rendered by JS) -->
+                    <div id="assembled-prompt-container" style="display: none;"></div>
                 </div>
 
                 <!-- Empty State -->
-                <div id="inspector-empty" class="text-center py-16 text-gray-500">
-                    <h3 class="text-xl font-bold mb-2">Select a Class, Module, and Student</h3>
-                    <p>Or use search to find specific conversations and see how the 4-layer memory system builds the LLM prompt</p>
+                <div id="memory-inspector-empty" class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-12 text-center">
+                    <div class="text-6xl mb-4">🧠</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Welcome to Memory Inspector v2.0</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">
+                        Select a class, module, and student above to visualize how HARV's 5-layer memory architecture
+                        assembles personalized learning contexts in real-time.
+                    </p>
+                    <div class="mt-6 grid grid-cols-5 gap-4 max-w-3xl mx-auto text-left">
+                        <div class="p-3 bg-blue-50 rounded-lg">
+                            <div class="font-semibold text-blue-900 text-sm">Layer 1: System</div>
+                            <div class="text-xs text-blue-700 mt-1">User profile & preferences</div>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded-lg">
+                            <div class="font-semibold text-green-900 text-sm">Layer 2: Module</div>
+                            <div class="text-xs text-green-700 mt-1">Module context & goals</div>
+                        </div>
+                        <div class="p-3 bg-yellow-50 rounded-lg">
+                            <div class="font-semibold text-yellow-900 text-sm">Layer 3: Conversation</div>
+                            <div class="text-xs text-yellow-700 mt-1">Session history</div>
+                        </div>
+                        <div class="p-3 bg-purple-50 rounded-lg">
+                            <div class="font-semibold text-purple-900 text-sm">Layer 4: Prior Knowledge</div>
+                            <div class="text-xs text-purple-700 mt-1">Learning progress</div>
+                        </div>
+                        <div class="p-3 bg-orange-50 rounded-lg">
+                            <div class="font-semibold text-orange-900 text-sm">Layer 5: Documents</div>
+                            <div class="text-xs text-orange-700 mt-1">Reference materials</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <script>
+            // Load Memory Inspector v2 JavaScript
+            (function() {
+                if (window.memoryInspectorV2Loaded) {
+                    console.log('[Memory Inspector] Already loaded, re-initializing...');
+                    if (window.inspectorV2_init) window.inspectorV2_init();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'js/memory_inspector_v2.js?v=' + Date.now();
+                script.onload = function() {
+                    console.log('[Memory Inspector] v2 JavaScript loaded successfully');
+                    window.memoryInspectorV2Loaded = true;
+                    // Initialize icons
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                };
+                script.onerror = function() {
+                    console.error('[Memory Inspector] Failed to load v2 JavaScript');
+                    document.getElementById('memory-inspector-empty').innerHTML = \`
+                        <div class="text-center py-12">
+                            <div class="text-6xl mb-4">⚠️</div>
+                            <h3 class="text-xl font-bold text-red-600 mb-2">Failed to Load Memory Inspector</h3>
+                            <p class="text-gray-600">Could not load required JavaScript file. Please refresh the page.</p>
+                        </div>
+                    \`;
+                };
+                document.head.appendChild(script);
+            })();
+            </script>
+        `
+    },
+    'class-hierarchy': {
+        title: '🏛️ Class Hierarchy',
+        description: 'Navigate your course structure with expandable class and module cards',
+        content: `
+            <div class="p-6 space-y-6">
+                <!-- Controls Card -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                    <div class="flex flex-wrap gap-4 items-center justify-between">
+                        <div class="flex-1 min-w-[300px]">
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="hierarchy-search"
+                                    placeholder="Search classes or modules..."
+                                    class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none transition-all"
+                                />
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl">🔍</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button id="expand-all-btn" onclick="window.hierarchyExpandAll?.()"
+                                class="bg-sage-medium text-white px-4 py-3 rounded-lg hover:bg-sage-dark transition-colors font-semibold flex items-center gap-2">
+                                <span>📖</span> Expand All
+                            </button>
+                            <button id="collapse-all-btn" onclick="window.hierarchyCollapseAll?.()"
+                                class="bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold flex items-center gap-2">
+                                <span>📕</span> Collapse All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 text-center">
+                        <div class="text-3xl font-bold text-sage-dark mb-1" id="total-classes">0</div>
+                        <div class="text-sm text-gray-600 font-semibold uppercase tracking-wide">Total Classes</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 text-center">
+                        <div class="text-3xl font-bold text-terracotta mb-1" id="total-modules">0</div>
+                        <div class="text-sm text-gray-600 font-semibold uppercase tracking-wide">Total Modules</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 text-center">
+                        <div class="text-3xl font-bold text-sage-dark mb-1" id="active-students">0</div>
+                        <div class="text-sm text-gray-600 font-semibold uppercase tracking-wide">Active Students</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 text-center">
+                        <div class="text-3xl font-bold text-terracotta mb-1" id="completion-rate">0%</div>
+                        <div class="text-sm text-gray-600 font-semibold uppercase tracking-wide">Avg Completion</div>
+                    </div>
+                </div>
+
+                <!-- Class Tree Container -->
+                <div id="class-tree-container" class="space-y-4">
+                    <!-- Classes will be rendered here by JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="hierarchy-empty-state" class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-12 text-center" style="display: none;">
+                    <div class="text-6xl mb-4">📚</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">No Classes Found</h3>
+                    <p class="text-gray-600">No classes match your search criteria</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="hierarchy-loading-state" class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-12 text-center">
+                    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-sage-medium border-r-transparent mb-4"></div>
+                    <p class="text-gray-600">Loading class hierarchy...</p>
+                </div>
+            </div>
+
+            <script>
+            // Load Class Hierarchy JavaScript
+            (function() {
+                if (window.classHierarchyLoaded) {
+                    console.log('[Class Hierarchy] Already loaded, re-initializing...');
+                    if (window.hierarchyInit) window.hierarchyInit();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'js/class_hierarchy.js?v=' + Date.now();
+                script.onload = function() {
+                    console.log('[Class Hierarchy] JavaScript loaded successfully');
+                    window.classHierarchyLoaded = true;
+                };
+                script.onerror = function() {
+                    console.error('[Class Hierarchy] Failed to load JavaScript');
+                    document.getElementById('hierarchy-loading-state').innerHTML = \`
+                        <div class="text-center py-12">
+                            <div class="text-6xl mb-4">⚠️</div>
+                            <h3 class="text-xl font-bold text-red-600 mb-2">Failed to Load Class Hierarchy</h3>
+                            <p class="text-gray-600">Could not load required JavaScript file. Please refresh the page.</p>
+                        </div>
+                    \`;
+                };
+                document.head.appendChild(script);
+            })();
+            </script>
+        `
+    },
+    'learning-journeys': {
+        title: '🎓 Learning Journeys',
+        description: 'Track student progress, performance metrics, and learning insights',
+        content: `
+            <div class="p-6 space-y-6">
+                <!-- Student Selector Card -->
+                <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Select Student</h3>
+                    <p class="text-sm text-gray-600 mb-4">Choose a student to view their learning journey, progress timeline, and insights.</p>
+
+                    <div class="flex gap-4 items-center">
+                        <div class="flex-1">
+                            <select id="student-select" onchange="window.journeysStudentChanged?.()"
+                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-medium focus:border-sage-medium outline-none transition-all text-lg">
+                                <option value="">Choose a student...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content (Hidden until student selected) -->
+                <div id="dashboard-content" style="display: none;">
+                    <!-- Student Overview -->
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 mb-6">
+                        <div class="flex items-start gap-6">
+                            <div class="text-6xl">👤</div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-1" id="student-name">Student Name</h2>
+                                <p class="text-gray-600 mb-2" id="student-email">email@example.com</p>
+                                <div class="text-sm text-gray-500">
+                                    <span id="student-level">Beginner</span> • <span id="student-style">Visual Learner</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-sage-dark" id="total-modules-enrolled">0</div>
+                                    <div class="text-xs text-gray-600 font-semibold uppercase">Modules</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-terracotta" id="modules-completed">0</div>
+                                    <div class="text-xs text-gray-600 font-semibold uppercase">Completed</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-sage-dark" id="hours-spent">0h</div>
+                                    <div class="text-xs text-gray-600 font-semibold uppercase">Time Spent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Metrics -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="text-3xl">📊</div>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-semibold">Overall Progress</div>
+                                    <div class="text-2xl font-bold text-sage-dark" id="overall-progress">0%</div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-200 rounded-full h-2">
+                                <div class="bg-sage-medium rounded-full h-2 transition-all duration-500" id="overall-progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <div class="flex items-center gap-3">
+                                <div class="text-3xl">⭐</div>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-semibold">Average Score</div>
+                                    <div class="text-2xl font-bold text-terracotta" id="average-score">0%</div>
+                                    <div class="text-xs text-gray-500" id="score-trend">No data yet</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <div class="flex items-center gap-3">
+                                <div class="text-3xl">🔥</div>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-semibold">Current Streak</div>
+                                    <div class="text-2xl font-bold text-sage-dark" id="current-streak">0 days</div>
+                                    <div class="text-xs text-gray-500" id="longest-streak">Longest: 0 days</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <div class="flex items-center gap-3">
+                                <div class="text-3xl">🧠</div>
+                                <div>
+                                    <div class="text-sm text-gray-600 font-semibold">Memory Insights</div>
+                                    <div class="text-2xl font-bold text-terracotta" id="insights-count">0</div>
+                                    <div class="text-xs text-gray-500">Generated summaries</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module Progress Timeline -->
+                    <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-900">📚 Module Progress Timeline</h3>
+                            <div class="flex gap-2">
+                                <button class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors bg-sage-medium text-white" data-filter="all" onclick="window.journeysSetFilter?.('all')">All</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors border-2 border-gray-300 text-gray-700 hover:border-sage-medium" data-filter="in-progress" onclick="window.journeysSetFilter?.('in-progress')">In Progress</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors border-2 border-gray-300 text-gray-700 hover:border-sage-medium" data-filter="completed" onclick="window.journeysSetFilter?.('completed')">Completed</button>
+                            </div>
+                        </div>
+                        <div id="timeline-container">
+                            <!-- Timeline items will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Insights and Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 Learning Insights</h3>
+                            <div id="insights-container">
+                                <!-- Insights will be rendered here -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">📈 Recent Activity</h3>
+                            <div id="activity-container">
+                                <!-- Activity will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State (Before student selection) -->
+                <div id="empty-state" class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-12 text-center">
+                    <div class="text-6xl mb-4">🎓</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Select a Student to View Their Learning Journey</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Choose a student from the dropdown above to see their progress, insights, and achievements</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="bg-white rounded-lg shadow-sm border-2 border-gray-300 p-12 text-center" style="display: none;">
+                    <div class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-sage-medium border-r-transparent mb-4"></div>
+                    <p class="text-gray-600">Loading learning journey...</p>
+                </div>
+            </div>
+
+            <script>
+            // Load Learning Journeys JavaScript
+            (function() {
+                if (window.learningJourneysLoaded) {
+                    console.log('[Learning Journeys] Already loaded, re-initializing...');
+                    if (window.journeysInit) window.journeysInit();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'js/learning_journeys.js?v=' + Date.now();
+                script.onload = function() {
+                    console.log('[Learning Journeys] JavaScript loaded successfully');
+                    window.learningJourneysLoaded = true;
+                };
+                script.onerror = function() {
+                    console.error('[Learning Journeys] Failed to load JavaScript');
+                    document.getElementById('empty-state').innerHTML = \`
+                        <div class="text-center py-12">
+                            <div class="text-6xl mb-4">⚠️</div>
+                            <h3 class="text-xl font-bold text-red-600 mb-2">Failed to Load Learning Journeys</h3>
+                            <p class="text-gray-600">Could not load required JavaScript file. Please refresh the page.</p>
+                        </div>
+                    \`;
+                };
+                document.head.appendChild(script);
+            })();
+            </script>
         `
     }
 };
@@ -805,8 +1135,18 @@ let isAuthenticated = false;
 
 // Helper function to get auth headers
 function getAuthHeaders() {
-    const token = localStorage.getItem('access_token') || authToken;
-    return token ? { 'Authorization': `Bearer ${token}` } : {};
+    // Check both 'access_token' (used by app) and 'authToken' (used by v2 components)
+    const token = localStorage.getItem('access_token') || localStorage.getItem('authToken') || authToken;
+
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return headers;
 }
 
 // Initialize app - check for existing authentication
@@ -3053,13 +3393,21 @@ function buildNavigationMenu() {
                 <i data-lucide="book-open" style="width: 20px; height: 20px;"></i>
                 <span>Classes & Modules</span>
             </button>
-            <button class="menu-nav-item" onclick="navigateTo('conversations')">
-                <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
-                <span>Student Activity</span>
+            <button class="menu-nav-item" onclick="navigateTo('class-hierarchy')">
+                <i data-lucide="folder-tree" style="width: 20px; height: 20px;"></i>
+                <span>Class Hierarchy</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('learning-journeys')">
+                <i data-lucide="graduation-cap" style="width: 20px; height: 20px;"></i>
+                <span>Learning Journeys</span>
             </button>
             <button class="menu-nav-item" onclick="navigateTo('memory')">
                 <i data-lucide="brain" style="width: 20px; height: 20px;"></i>
                 <span>Memory Inspector</span>
+            </button>
+            <button class="menu-nav-item" onclick="navigateTo('conversations')">
+                <i data-lucide="message-square" style="width: 20px; height: 20px;"></i>
+                <span>Student Activity</span>
             </button>
             <button class="menu-nav-item" onclick="navigateTo('chat')">
                 <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
@@ -3741,9 +4089,10 @@ async function loadDocuments() {
         listContainer.innerHTML = data.documents.map(doc => {
             const moduleBadge = doc.module_id ? `<span class="module-badge">Module ${doc.module_id}</span>` : '<span class="course-badge">Course</span>';
             const sizeKB = (doc.content_length / 1024).toFixed(1);
+            const isPDF = doc.filename.toLowerCase().endsWith('.pdf');
             return `
-                <div class="document-item" data-doc-id="${doc.id}" onclick="selectDocument(${doc.id}, event)">
-                    <div class="doc-info">
+                <div class="document-item ${isPDF ? 'clickable' : ''}" data-doc-id="${doc.id}" ${isPDF ? `onclick="openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')"` : ''}>
+                    <div class="doc-info" style="flex: 1; pointer-events: none;">
                         <div class="doc-name">${doc.filename}</div>
                         <div class="doc-meta">
                             ${moduleBadge}
@@ -3751,6 +4100,7 @@ async function loadDocuments() {
                             <span class="doc-date">${new Date(doc.uploaded_at).toLocaleDateString()}</span>
                         </div>
                     </div>
+                    ${isPDF ? `<button onclick="event.stopPropagation(); openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: #9CAA5A; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; white-space: nowrap; pointer-events: auto;">📄 Open</button>` : ''}
                 </div>
             `;
         }).join('');

@@ -412,12 +412,21 @@ async function loadClassDocuments() {
 
         const documents = await response.json();
 
-        const listHTML = documents.map(doc => `
-            <div style="padding: 15px; margin-bottom: 10px; background: var(--sage-lighter); border-radius: 6px;">
-                <div style="font-weight: 600; color: var(--sage-darkest); margin-bottom: 4px;">${doc.filename}</div>
-                <div style="font-size: 12px; color: var(--text-medium);">Uploaded: ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
-            </div>
-        `).join('');
+        const listHTML = documents.map(doc => {
+            const isPDF = doc.filename.toLowerCase().endsWith('.pdf');
+            return `
+                <div class="document-item clickable" style="padding: 15px; margin-bottom: 10px; background: var(--sage-lighter); border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px;"
+                     onclick="openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')"
+                     onmouseover="this.style.background='#f0f4e8'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';"
+                     onmouseout="this.style.background='var(--sage-lighter)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: var(--sage-darkest); margin-bottom: 4px;">${doc.filename}</div>
+                        <div style="font-size: 12px; color: var(--text-medium);">Uploaded: ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
+                    </div>
+                    ${isPDF ? `<button onclick="event.stopPropagation(); openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: #9CAA5A; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; white-space: nowrap; font-size: 14px;">📄 Open PDF</button>` : ''}
+                </div>
+            `;
+        }).join('');
 
         document.getElementById('class-documents-list').innerHTML = listHTML || '<p style="text-align: center; color: #95a5a6;">No documents</p>';
 
@@ -1207,12 +1216,21 @@ async function loadModuleDocuments() {
         const data = await response.json();
         const documents = data.documents || data;
 
-        const listHTML = documents.map(doc => `
-            <div style="padding: 15px; margin-bottom: 10px; background: var(--sage-lighter); border-radius: 6px;">
-                <div style="font-weight: 600; color: var(--sage-darkest); margin-bottom: 4px;">${doc.filename}</div>
-                <div style="font-size: 12px; color: var(--text-medium);">Uploaded: ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
-            </div>
-        `).join('');
+        const listHTML = documents.map(doc => {
+            const isPDF = doc.filename.toLowerCase().endsWith('.pdf');
+            return `
+                <div class="document-item clickable" style="padding: 15px; margin-bottom: 10px; background: var(--sage-lighter); border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px;"
+                     onclick="openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')"
+                     onmouseover="this.style.background='#f0f4e8'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';"
+                     onmouseout="this.style.background='var(--sage-lighter)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: var(--sage-darkest); margin-bottom: 4px;">${doc.filename}</div>
+                        <div style="font-size: 12px; color: var(--text-medium);">Uploaded: ${new Date(doc.uploaded_at).toLocaleDateString()}</div>
+                    </div>
+                    ${isPDF ? `<button onclick="event.stopPropagation(); openPDFViewer(${doc.id}, '${doc.filename.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: #9CAA5A; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; white-space: nowrap; font-size: 14px;">📄 Open PDF</button>` : ''}
+                </div>
+            `;
+        }).join('');
 
         document.getElementById('module-documents-list').innerHTML = listHTML || '<p style="text-align: center; color: #95a5a6;">No documents</p>';
 
