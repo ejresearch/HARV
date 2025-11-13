@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARV v2.0 - Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            animation: slideUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .nav-card:nth-child(1) { animation-delay: 0.1s; }
+        .nav-card:nth-child(2) { animation-delay: 0.2s; }
+        .nav-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .nav-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-memory {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .icon-hierarchy {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .icon-journeys {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-description {
+            font-size: 0.95rem;
+            color: #6B7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-features li {
+            font-size: 0.875rem;
+            color: #4B5563;
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .nav-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: bold;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats-banner {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out 0.4s;
+            animation-fill-mode: both;
+        }
+
+        .stat {
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-banner {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 HARV v2.0</h1>
+            <p>Hierarchical Adaptive Reinforcement for Verified-learning</p>
+            <div class="version-badge">✨ Enhanced Memory System • 5-Layer Architecture</div>
+        </div>
+
+        <!-- Navigation Grid -->
+        <div class="nav-grid">
+            <!-- Memory Inspector -->
+            <a href="memory_inspector_test.html" class="nav-card">
+                <div class="nav-icon icon-memory">🧠</div>
+                <div class="nav-title">Memory Inspector</div>
+                <div class="nav-description">
+                    Real-time visualization of the 5-layer memory architecture with all PHASE 1-5 enhancements
+                </div>
+                <ul class="nav-features">
+                    <li>System, Module, Conversation layers</li>
+                    <li>Prior Knowledge & Document intelligence</li>
+                    <li>Context metrics & assembled prompt</li>
+                    <li>Gold PHASE badges with shimmer</li>
+                </ul>
+                <button class="nav-btn">
+                    Open Memory Inspector →
+                </button>
+            </a>
+
+            <!-- Class Hierarchy -->
+            <a href="class_hierarchy.html" class="nav-card">
+                <div class="nav-icon icon-hierarchy">🏛️</div>
+                <div class="nav-title">Class Hierarchy</div>
+                <div class="nav-description">
+                    Explore your course structure with expandable class and module cards
+                </div>
+                <ul class="nav-features">
+                    <li>Tree view with expand/collapse</li>
+                    <li>Module cards with metadata</li>
+                    <li>Search & filter functionality</li>
+                    <li>Direct access to Memory Inspector</li>
+                </ul>
+                <button class="nav-btn">
+                    Open Class Hierarchy →
+                </button>
+            </a>
+
+            <!-- Learning Journeys -->
+            <a href="learning_journeys.html" class="nav-card">
+                <div class="nav-icon icon-journeys">🎓</div>
+                <div class="nav-title">Learning Journeys</div>
+                <div class="nav-description">
+                    Track student progress, performance metrics, and learning insights
+                </div>
+                <ul class="nav-features">
+                    <li>Progress timeline visualization</li>
+                    <li>Performance analytics</li>
+                    <li>AI-generated insights</li>
+                    <li>Recent activity tracking</li>
+                </ul>
+                <button class="nav-btn">
+                    Open Learning Journeys →
+                </button>
+            </a>
+        </div>
+
+        <!-- Stats Banner -->
+        <div class="stats-banner">
+            <div class="stat">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Components</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">5,600+</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Memory Layers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Dependencies</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

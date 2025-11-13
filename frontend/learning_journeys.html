@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Journeys - HARV v2.0</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Learning Journeys CSS -->
+    <link rel="stylesheet" href="css/learning_journeys.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="journeys-container">
+        <!-- Header -->
+        <div class="journeys-header">
+            <div class="header-content">
+                <h1>🎓 Learning Journeys</h1>
+                <p>Track student progress and learning insights across all modules</p>
+            </div>
+
+            <!-- Student Selector -->
+            <div class="student-selector">
+                <label for="student-select">Select Student:</label>
+                <select id="student-select" class="student-dropdown">
+                    <option value="">Choose a student...</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dashboard Content (Hidden until student selected) -->
+        <div id="dashboard-content" style="display: none;">
+
+            <!-- Student Overview -->
+            <div class="overview-section">
+                <div class="student-card">
+                    <div class="student-avatar">👤</div>
+                    <div class="student-info">
+                        <h2 id="student-name">Student Name</h2>
+                        <p id="student-email">email@example.com</p>
+                        <div class="student-meta">
+                            <span id="student-level">Beginner</span> •
+                            <span id="student-style">Visual Learner</span>
+                        </div>
+                    </div>
+                    <div class="student-stats">
+                        <div class="stat">
+                            <div class="stat-value" id="total-modules-enrolled">0</div>
+                            <div class="stat-label">Modules</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="modules-completed">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="hours-spent">0h</div>
+                            <div class="stat-label">Time Spent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Overview Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">📊</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Overall Progress</div>
+                        <div class="metric-value" id="overall-progress">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="overall-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">⭐</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Average Score</div>
+                        <div class="metric-value" id="average-score">0%</div>
+                        <div class="metric-subtext" id="score-trend">No data yet</div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">🔥</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Current Streak</div>
+                        <div class="metric-value" id="current-streak">0 days</div>
+                        <div class="metric-subtext" id="longest-streak">Longest: 0 days</div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">🧠</div>
+                    <div class="metric-content">
+                        <div class="metric-label">Memory Insights</div>
+                        <div class="metric-value" id="insights-count">0</div>
+                        <div class="metric-subtext">Generated summaries</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module Progress Timeline -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>📚 Module Progress Timeline</h3>
+                    <div class="section-actions">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                </div>
+                <div id="timeline-container" class="timeline-container">
+                    <!-- Timeline items will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Learning Insights -->
+            <div class="insights-grid">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>💡 Learning Insights</h3>
+                    </div>
+                    <div id="insights-container" class="insights-list">
+                        <!-- Insights will be rendered here -->
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>📈 Recent Activity</h3>
+                    </div>
+                    <div id="activity-container" class="activity-list">
+                        <!-- Activity will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart Placeholder -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>📊 Performance Over Time</h3>
+                </div>
+                <div class="chart-placeholder">
+                    <div class="chart-icon">📈</div>
+                    <p>Performance analytics coming soon</p>
+                    <small>Track scores, engagement, and learning velocity</small>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Empty State (Before student selection) -->
+        <div id="empty-state" class="empty-state-large">
+            <div class="empty-icon">🎓</div>
+            <h2>Select a Student to View Their Learning Journey</h2>
+            <p>Choose a student from the dropdown above to see their progress, insights, and achievements</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading learning journey...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        function getAuthHeaders() {
+            const token = localStorage.getItem('authToken');
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
+        }
+    </script>
+    <script src="js/learning_journeys.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Hierarchy - HARV v2.0</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Class Hierarchy CSS -->
+    <link rel="stylesheet" href="css/class_hierarchy.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="hierarchy-container">
+        <!-- Header -->
+        <div class="hierarchy-header">
+            <div class="header-content">
+                <h1>🏛️ Class Hierarchy</h1>
+                <p>Explore your course structure and module organization</p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="header-controls">
+                <div class="search-box">
+                    <input
+                        type="text"
+                        id="hierarchy-search"
+                        placeholder="Search classes or modules..."
+                        class="search-input"
+                    />
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <button id="expand-all-btn" class="control-btn">
+                    <span>📖</span> Expand All
+                </button>
+
+                <button id="collapse-all-btn" class="control-btn">
+                    <span>📕</span> Collapse All
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="total-classes">0</div>
+                <div class="stat-label">Total Classes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-modules">0</div>
+                <div class="stat-label">Total Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="active-students">0</div>
+                <div class="stat-label">Active Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completion-rate">0%</div>
+                <div class="stat-label">Avg Completion</div>
+            </div>
+        </div>
+
+        <!-- Class Tree Container -->
+        <div id="class-tree-container" class="tree-container">
+            <!-- Classes will be rendered here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-icon">📚</div>
+            <h3>No Classes Found</h3>
+            <p>No classes match your search criteria</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading class hierarchy...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        function getAuthHeaders() {
+            const token = localStorage.getItem('authToken');
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
+        }
+    </script>
+    <script src="js/class_hierarchy.js"></script>
+</body>
+</html>
