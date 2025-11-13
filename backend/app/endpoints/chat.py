@@ -228,10 +228,11 @@ async def enhanced_chat(
 async def get_enhanced_memory(
     module_id: int,
     user_id: int,
+    conversation_id: Optional[int] = None,  # PHASE 5: Added conversation_id
     db: Session = Depends(get_db)
 ):
     """Get enhanced memory data for GUI display"""
-    
+
     if not ENHANCED_MEMORY_AVAILABLE:
         return {
             "error": "Enhanced memory system not available",
@@ -250,12 +251,13 @@ async def get_enhanced_memory(
                 "cross_module": False
             }
         }
-    
+
     try:
         memory_assembler = DynamicMemoryAssembler(db)
         memory_context = memory_assembler.assemble_dynamic_context(
             user_id=user_id,
-            module_id=module_id
+            module_id=module_id,
+            conversation_id=str(conversation_id) if conversation_id else None  # PHASE 5: Pass conversation_id
         )
 
         print(f"Memory context assembled for Module {module_id}: {memory_context['context_metrics']['total_chars']} chars")

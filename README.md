@@ -6,15 +6,17 @@
 
 ## 🎓 Overview
 
-HARV is a complete AI tutoring platform designed for the **Communication Media & Society** course. It uses OpenAI's GPT-4 with an enhanced memory system to provide personalized, context-aware teaching through strategic questioning rather than direct answers.
+HARV is a general-purpose AI tutoring platform that uses OpenAI's GPT-4 with an enhanced 4-layer memory architecture to provide personalized, context-aware teaching through strategic questioning rather than direct answers.
 
 ### Key Features:
-- ✅ **16 Pre-loaded Modules** covering communication theory, media history, ethics, and more
-- ✅ **4-Layer Memory System** for contextual, personalized teaching
-- ✅ **Socratic Method** - teaches through guided discovery, not lectures
+- ✅ **Enhanced 4-Layer Memory System** - Dynamic context assembly with cross-module learning
+- ✅ **Class Inheritance Architecture** - Create classes with modules that inherit shared knowledge
+- ✅ **Document Intelligence** - Course materials automatically inform AI responses
+- ✅ **Cross-Module Memory** - Student learning carries across all modules in a class
+- ✅ **Socratic Method** - Teaches through guided discovery, not lectures
 - ✅ **Complete Admin Interface** - 10 pages for course management
-- ✅ **Real-time Analytics** - track student progress and engagement
-- ✅ **Dark Mode** - accessible, modern UI design
+- ✅ **Real-time Analytics** - Track student progress and engagement
+- ✅ **Dark Mode** - Accessible, modern UI design
 
 ---
 
@@ -28,7 +30,7 @@ Harv_2/
 ├── backend/                     # FastAPI backend (1,671 lines)
 │   ├── README.md               # Backend documentation
 │   ├── app/                    # Application code
-│   │   ├── main.py            # FastAPI app & 16 modules
+│   │   ├── main.py            # FastAPI app initialization
 │   │   ├── models.py          # SQLAlchemy ORM (9 tables)
 │   │   ├── auth.py            # JWT authentication
 │   │   ├── memory_context_enhanced.py  # 4-layer memory system
@@ -56,6 +58,8 @@ Harv_2/
 │
 └── docs/                       # Complete documentation (260KB)
     ├── README.md              # Documentation index (this is the master guide)
+    ├── MEMORY_ARCHITECTURE.md # ⭐ Enhanced memory system guide
+    ├── TESTING_GUIDE.md       # ⭐ Memory system test results
     ├── ADMIN_SPEC.md          # Admin UI specifications (117KB)
     ├── ADMIN_SPEC_PART2.md    # Sections 7-9 specs
     ├── DATABASE_SCHEMA.md     # Database documentation
@@ -114,6 +118,7 @@ Open http://localhost:8080 in your browser.
 **For Developers:**
 - [Backend README](./backend/README.md) - Backend architecture & API
 - [Frontend README](./frontend/README.md) - Frontend structure & features
+- [Memory Architecture](./docs/MEMORY_ARCHITECTURE.md) - **⭐ Enhanced 4-layer memory system**
 - [Database Schema](./docs/DATABASE_SCHEMA.md) - Complete schema with examples
 - [Frontend Structure](./docs/STRUCTURE.md) - File organization
 
@@ -123,6 +128,7 @@ Open http://localhost:8080 in your browser.
 - [Frontend Pages](./docs/FRONTEND_PAGES.md) - All required pages
 
 **For QA/Testing:**
+- [Testing Guide](./docs/TESTING_GUIDE.md) - **⭐ Memory system test results**
 - [Spec Coverage](./docs/SPEC_COVERAGE.md) - Implementation status (100%)
 - [Completion Summary](./docs/COMPLETION_SUMMARY.md) - Testing checklist
 
@@ -143,11 +149,47 @@ Open http://localhost:8080 in your browser.
 - **Dark Mode** - Theme toggle with localStorage persistence
 - **No Build Step** - Pure HTML/CSS/JS
 
-### 4-Layer Memory System
-1. **System Data** - User profile and learning style (from onboarding)
-2. **Module Data** - Current module's teaching configuration
-3. **Conversation Data** - Active dialogue context
-4. **Prior Knowledge** - Cross-module learning history
+### Enhanced 4-Layer Memory System (v2.0)
+
+HARV's memory architecture dynamically assembles context from multiple database sources to create rich, personalized teaching experiences:
+
+1. **System Data Layer**
+   - Student learning profile (style, pace, background)
+   - Cross-module activity tracking
+   - Mastered concepts across all modules
+
+2. **Module Data Layer** ⭐ *Enhanced with Class Inheritance*
+   - Parent Class context (teaching philosophy, learning objectives)
+   - ClassCorpus (shared knowledge available to all modules in a class)
+   - Module-specific teaching configuration
+   - Module corpus entries
+
+3. **Conversation Data Layer** ⭐ *Enhanced with Smart Summarization*
+   - Recent messages (full context, last 10 messages)
+   - Older messages (intelligently summarized with key insights)
+   - Engagement metrics and understanding indicators
+   - Breakthrough moment detection
+
+4. **Prior Knowledge Layer** ⭐ *Enhanced with Real Learning Insights*
+   - MemorySummary insights from completed modules
+   - What the student learned and how they learned it
+   - Key concepts mastered in other modules
+   - Cross-module concept connections
+
+5. **Document Intelligence Layer** ⭐ *New in v2.0*
+   - Class-wide documents (syllabus, study guides)
+   - Module-specific materials
+   - Intelligent content chunking (2000 chars per doc)
+   - Automatic injection into AI context
+
+**Key Capabilities:**
+- ✅ **Cascading Configuration:** Class settings inherit to all modules
+- ✅ **Smart Context Assembly:** 2000-5000 character optimized prompts
+- ✅ **Cross-Module Learning:** Student insights carry between modules
+- ✅ **Document-Informed Teaching:** AI uses actual course materials
+- ✅ **Conversation Continuity:** Long dialogues maintain context through summarization
+
+See [MEMORY_ARCHITECTURE.md](./docs/MEMORY_ARCHITECTURE.md) for complete technical details.
 
 ---
 
@@ -264,8 +306,12 @@ curl http://localhost:8000/modules
 
 ## 🚧 Roadmap
 
-### Phase 1: Current (✅ Complete)
-- ✅ Backend API with 4-layer memory system
+### Phase 1: Core Platform (✅ Complete)
+- ✅ Backend API with enhanced 4-layer memory system
+- ✅ Class inheritance architecture
+- ✅ Document intelligence integration
+- ✅ Cross-module learning tracking
+- ✅ Conversation summarization
 - ✅ Admin interface with 10 pages
 - ✅ Chart.js visualizations
 - ✅ Dark mode theming
@@ -294,8 +340,8 @@ curl http://localhost:8000/modules
 ## 👥 Team
 
 **Developed by:** YT Research
-**Platform:** HARV AI Socratic Tutoring
-**Course:** Communication Media & Society
+**Platform:** HARV AI Socratic Tutoring Platform
+**Version:** 2.0 (Enhanced Memory System)
 
 ---
 
@@ -326,12 +372,16 @@ Developed by YT Research for educational purposes.
 **Project Status:** ✅ **100% Complete - Production Ready**
 
 **What's Done:**
-- ✅ Complete backend with 4-layer memory system
+- ✅ Complete backend with enhanced 4-layer memory system (v2.0)
+- ✅ Class inheritance with cascading configuration
+- ✅ Document intelligence and content injection
+- ✅ Cross-module learning insights
+- ✅ Smart conversation summarization
 - ✅ Complete frontend with 10 admin pages
 - ✅ Chart.js visualizations (3 charts)
 - ✅ Dark mode theming
 - ✅ API integration layer
-- ✅ Comprehensive documentation (260KB)
+- ✅ Comprehensive documentation (300KB+)
 
 **Next Steps:**
 1. Connect frontend forms to API endpoints
@@ -340,5 +390,5 @@ Developed by YT Research for educational purposes.
 
 ---
 
-*Last Updated: 2025-09-30*
-*Documentation: [`docs/README.md`](./docs/README.md)*
+*Last Updated: 2025-11-13 (v2.0 Enhanced Memory System)*
+*Documentation: [`docs/README.md`](./docs/README.md) | [Memory Architecture](./docs/MEMORY_ARCHITECTURE.md)*
