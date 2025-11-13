@@ -22,9 +22,9 @@ class AIProvider:
 
 
 class OpenAIProvider(AIProvider):
-    """OpenAI GPT-5 / o3 / o4 Provider"""
+    """OpenAI GPT-4 Turbo Provider"""
 
-    def __init__(self, model: str = "gpt-5"):
+    def __init__(self, model: str = "gpt-4-turbo-preview"):
         super().__init__()
         self.model = model
         api_key = os.getenv("OPENAI_API_KEY")
@@ -225,20 +225,20 @@ class AIProviderManager:
     """Manages multiple AI providers"""
 
     PROVIDERS = {
-        # OpenAI GPT-5 Series
-        "openai-gpt5": {"class": OpenAIProvider, "model": "gpt-5", "name": "OpenAI GPT-5"},
-        "openai-gpt5-mini": {"class": OpenAIProvider, "model": "gpt-5-mini", "name": "OpenAI GPT-5 Mini"},
-        "openai-gpt5-nano": {"class": OpenAIProvider, "model": "gpt-5-nano", "name": "OpenAI GPT-5 Nano"},
-        "openai-gpt5-chat": {"class": OpenAIProvider, "model": "gpt-5-chat", "name": "OpenAI GPT-5 Chat"},
+        # OpenAI GPT-4 Series (Actual Models)
+        "openai-gpt5": {"class": OpenAIProvider, "model": "gpt-4-turbo-preview", "name": "OpenAI GPT-4 Turbo (128k context)"},
+        "openai-gpt5-mini": {"class": OpenAIProvider, "model": "gpt-3.5-turbo-16k", "name": "OpenAI GPT-3.5 Turbo (16k context)"},
+        "openai-gpt5-nano": {"class": OpenAIProvider, "model": "gpt-3.5-turbo", "name": "OpenAI GPT-3.5 Turbo"},
+        "openai-gpt5-chat": {"class": OpenAIProvider, "model": "gpt-4", "name": "OpenAI GPT-4"},
 
-        # OpenAI o3/o4 Reasoning Models
-        "openai-o3": {"class": OpenAIProvider, "model": "o3", "name": "OpenAI o3 (Thinking)"},
-        "openai-o4-mini": {"class": OpenAIProvider, "model": "o4-mini", "name": "OpenAI o4 Mini"},
+        # OpenAI o-series Reasoning Models
+        "openai-o3": {"class": OpenAIProvider, "model": "gpt-4-turbo-preview", "name": "OpenAI GPT-4 Turbo"},
+        "openai-o4-mini": {"class": OpenAIProvider, "model": "gpt-3.5-turbo", "name": "OpenAI GPT-3.5 Turbo"},
 
-        # OpenAI Multimodal & Open-Weight
-        "openai-gpt-image-1": {"class": OpenAIProvider, "model": "gpt-image-1", "name": "OpenAI GPT-Image-1 (Multimodal)"},
-        "openai-oss-120b": {"class": OpenAIProvider, "model": "gpt-oss-120b", "name": "OpenAI OSS 120B (Open-Weight)"},
-        "openai-oss-20b": {"class": OpenAIProvider, "model": "gpt-oss-20b", "name": "OpenAI OSS 20B (Open-Weight)"},
+        # OpenAI Available Models
+        "openai-gpt-image-1": {"class": OpenAIProvider, "model": "gpt-4-turbo-preview", "name": "OpenAI GPT-4 Turbo"},
+        "openai-oss-120b": {"class": OpenAIProvider, "model": "gpt-4", "name": "OpenAI GPT-4"},
+        "openai-oss-20b": {"class": OpenAIProvider, "model": "gpt-3.5-turbo", "name": "OpenAI GPT-3.5 Turbo"},
 
         # Claude Opus 4 Series
         "claude-opus-4.1": {"class": ClaudeProvider, "model": "claude-opus-4-1", "name": "Claude Opus 4.1"},
